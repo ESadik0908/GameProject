@@ -5,13 +5,16 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     private float horizontal;
-    private float speed = 8f;
-    private float jumpingPower = 16f;
     private bool isFacingRight = true;
 
     private float cyoteTime = 0.2f;
     private float cyoteTimeCounter;
 
+    private float jumpBufferTime = 0.2f;
+    private float jumpBufferCounter;
+
+    [SerializeField] private float speed = 8f;
+    [SerializeField] private float jumpingPower = 16f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
@@ -36,10 +39,21 @@ public class PlayerMovement : MonoBehaviour
             cyoteTimeCounter -= Time.deltaTime;
         }
 
+        if (Input.GetButtonDown("Jump"))
+        {
+            jumpBufferCounter = jumpBufferTime;
+        }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
 
-        if (Input.GetButtonDown("Jump") && cyoteTimeCounter > 0f)
+
+        if (jumpBufferCounter > 0f && cyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+
+            jumpBufferCounter = 0;
         }
 
         if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
