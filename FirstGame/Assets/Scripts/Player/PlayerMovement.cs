@@ -13,16 +13,23 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
+    [SerializeField] private int doubleJump;
+
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-    // Start is called before the first frame update
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
+
+
+        if (isGrounded())
+        {
+            doubleJump = 0;
+        }
     }
 
     // Update is called once per frame
@@ -33,10 +40,17 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded())
         {
             cyoteTimeCounter = cyoteTime;
+            doubleJump = 0;
         }
         else
         {
             cyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && doubleJump < 2)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            doubleJump += 1;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -52,6 +66,8 @@ public class PlayerMovement : MonoBehaviour
         if (jumpBufferCounter > 0f && cyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+
+            doubleJump += 1;
 
             jumpBufferCounter = 0;
         }
