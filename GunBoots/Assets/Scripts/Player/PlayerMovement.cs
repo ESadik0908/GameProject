@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferTime = 0.2f;
     private float jumpBufferCounter;
 
-    [SerializeField] private int doubleJump;
+    [SerializeField] private int extraJumps;
 
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
         if (isGrounded())
         {
-            doubleJump = 0;
+            extraJumps = 0;
         }
     }
 
@@ -40,17 +40,11 @@ public class PlayerMovement : MonoBehaviour
         if (isGrounded())
         {
             cyoteTimeCounter = cyoteTime;
-            doubleJump = 0;
+            extraJumps = 1;
         }
         else
         {
             cyoteTimeCounter -= Time.deltaTime;
-        }
-
-        if (Input.GetButtonDown("Jump") && doubleJump < 2)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            doubleJump += 1;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -62,12 +56,15 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-
+        if (Input.GetButtonDown("Jump") && extraJumps > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            extraJumps -= 1;
+        }
+        
         if (jumpBufferCounter > 0f && cyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-
-            doubleJump += 1;
 
             jumpBufferCounter = 0;
         }
