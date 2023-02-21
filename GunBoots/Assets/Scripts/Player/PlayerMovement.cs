@@ -7,13 +7,13 @@ public class PlayerMovement : MonoBehaviour
     private float horizontal;
     private bool isFacingRight = true;
 
-    private float cyoteTime = 0.2f;
+    private float cyoteTime = 0.1f;
     private float cyoteTimeCounter;
 
-    private float jumpBufferTime = 0.2f;
+    private float jumpBufferTime = 0.3f;
     private float jumpBufferCounter;
 
-    [SerializeField] private int extraJumps;
+    [SerializeField] private int doubleJump;
 
     [SerializeField] private float speed = 8f;
     [SerializeField] private float jumpingPower = 16f;
@@ -24,11 +24,10 @@ public class PlayerMovement : MonoBehaviour
     private void FixedUpdate()
     {
         rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-
-
+        
         if (isGrounded())
         {
-            extraJumps = 0;
+            doubleJump = 2;
         }
     }
 
@@ -37,14 +36,20 @@ public class PlayerMovement : MonoBehaviour
     {
         horizontal = Input.GetAxisRaw("Horizontal");
 
+        #region Jumping
         if (isGrounded())
         {
             cyoteTimeCounter = cyoteTime;
-            extraJumps = 1;
         }
         else
         {
             cyoteTimeCounter -= Time.deltaTime;
+        }
+
+        if (Input.GetButtonDown("Jump") && doubleJump > 0)
+        {
+            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
+            doubleJump -= 1;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -56,12 +61,7 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && extraJumps > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            extraJumps -= 1;
-        }
-        
+        //If you oare on the ground and the jump buffer is ready then jump
         if (jumpBufferCounter > 0f && cyoteTimeCounter > 0f)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
             cyoteTimeCounter = 0f;
         }
+        #endregion
 
         Flip();
     }
