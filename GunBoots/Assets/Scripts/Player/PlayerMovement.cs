@@ -2,71 +2,92 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-
+[RequireComponent(typeof(Controller2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    private float horizontal;
-    private bool isFacingRight = true;
 
-    [SerializeField] private float speed = 8f;
-    [SerializeField] private Rigidbody2D rb;
-    [SerializeField] private Transform groundCheck;
-    [SerializeField] private LayerMask groundLayer;
+    [SerializeField] private float jumpHeight = 4f;
+    [SerializeField] private float timeToApex = 0.4f;
+    [SerializeField] private float moveSpeed = 6;
+    [SerializeField] private float accelerationTimeAir = 0.2f;
+    [SerializeField] private float accelerationTimeGround = 0.1f;
 
-    private void Start()
+    private float moveSmoothing;
+    private float gravity;
+    private float jumpForce;
+
+    private bool jump = false;
+
+    private float cyoteTime = 0.2f;
+    private float cyoteTimeCounter;
+
+    private float jumpBufferTime = 0.3f;
+    private float jumpBufferCounter;
+
+    Vector2 input;
+
+    Vector3 velocity;
+
+    Controller2D controller;
+
+    void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        controller = GetComponent<Controller2D>();
+
+        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
+        jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        rb.velocity = new Vector2(horizontal * speed, rb.velocity.y);
-        
-    }
-     
-    // Update is called once per frame
-    void Update()
-    {
-        
-        horizontal = Input.GetAxisRaw("Horizontal");
+        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        //Stop the player from sliding down hills when not moving
-        #region stickToGround
-        if (horizontal == 0 && isGrounded() && !Input.GetButtonDown("Jump"))
+        if (controller.collisions.below)
         {
-            rb.constraints = RigidbodyConstraints2D.FreezePositionX | RigidbodyConstraints2D.FreezeRotation;
-            rb.constraints = ~RigidbodyConstraints2D.FreezePositionY;
+            cyoteTimeCounter = cyoteTime;
         }
         else
         {
-            rb.constraints = RigidbodyConstraints2D.None | RigidbodyConstraints2D.FreezeRotation;
+            cyoteTimeCounter -= Time.deltaTime;
         }
 
-        #endregion
-
-
-        Flip();
-    }
-
-
-    //Flip the player sprite based on the players movement direction
-    private void Flip()
-    {
-        if (isFacingRight && horizontal < 0f || !isFacingRight && horizontal > 0f)
+        if (Input.GetButtonDown("Jump"))
         {
-            isFacingRight = !isFacingRight;
-            Vector3 localScale = transform.localScale;
-            localScale.x *= -1f;
-            transform.localScale = localScale;
+            jumpBufferCounter = jumpBufferTime;
         }
+        else
+        {
+            jumpBufferCounter -= Time.deltaTime;
+        }
+
+        if (jumpBufferCounter > 0 && (controller.collisions.below || cyoteTimeCounter > 0))
+        {
+            cyoteTimeCounter = 0;
+            jump = true;
+        }      
     }
 
-    private bool isGrounded()
+    void FixedUpdate()
     {
+        if(controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
+        }
         
-        return Physics2D.OverlapCircle(groundCheck.position, 0.2f, groundLayer);
+        if (jump)
+        {
+            velocity.y = jumpForce;
+            jump = false;
+        }
+
+        if (Input.GetButtonUp("Jump") && velocity.y > 0)
+        {
+            velocity.y = velocity.y * 0.5f;
+        }
+
+        float targetVelocityX = input.x * moveSpeed;
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref moveSmoothing, (controller.collisions.below)?accelerationTimeGround:accelerationTimeAir);
+        velocity.y += gravity * Time.deltaTime;
+        controller.Move(velocity * Time.deltaTime);
     }
-
-
 }
