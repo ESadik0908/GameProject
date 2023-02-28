@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class DoubleJump : MonoBehaviour
+public class NormalJump : MonoBehaviour
 {
     private float cyoteTime = 0.1f;
     private float cyoteTimeCounter;
@@ -12,25 +12,27 @@ public class DoubleJump : MonoBehaviour
     private float jumpBufferTime = 0.3f;
     private float jumpBufferCounter;
 
-    [SerializeField] private int doubleJump;
+    private bool jump = false;
 
     [SerializeField] private float jumpingPower = 16f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
 
-    // Start is called before the first frame update
-    private void FixedUpdate()
+    private void Awake()
     {
-        if (cyoteTimeCounter > 0f)
-        {
-            doubleJump = 2;
-        }
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
+
+        if (Input.GetButtonDown("Jump") && isGrounded())
+        {
+            jump = true;
+        }
+
         #region Jumping
         if (isGrounded())
         {
@@ -41,13 +43,7 @@ public class DoubleJump : MonoBehaviour
             cyoteTimeCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && doubleJump > 0)
-        {
-            rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
-            doubleJump -= 1;
-        }
-
-        if (Input.GetButtonDown("Jump"))
+        if (jump)
         {
             jumpBufferCounter = jumpBufferTime;
         }
@@ -62,6 +58,7 @@ public class DoubleJump : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0;
+            jump = false;
         }
 
         if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
@@ -69,6 +66,7 @@ public class DoubleJump : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.5f);
 
             cyoteTimeCounter = 0f;
+            jump = false;
         }
         #endregion
     }

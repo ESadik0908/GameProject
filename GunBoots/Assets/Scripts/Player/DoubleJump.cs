@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 
-public class DoubleJump : MonoBehaviour
+public class DoubleJump : MonoBehaviour 
 {
     private float cyoteTime = 0.1f;
     private float cyoteTimeCounter;
@@ -12,12 +12,20 @@ public class DoubleJump : MonoBehaviour
     private float jumpBufferTime = 0.3f;
     private float jumpBufferCounter;
 
+    private bool jump = false;
+
     [SerializeField] private int doubleJump;
+
 
     [SerializeField] private float jumpingPower = 16f;
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private LayerMask groundLayer;
+
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody2D>();
+    }
 
     // Start is called before the first frame update
     private void FixedUpdate()
@@ -32,6 +40,11 @@ public class DoubleJump : MonoBehaviour
     void Update()
     {
         #region Jumping
+        if (Input.GetButtonDown("Jump") && (isGrounded() || doubleJump > 0))
+        {
+            jump = true;
+        }
+
         if (isGrounded())
         {
             cyoteTimeCounter = cyoteTime;
@@ -41,13 +54,14 @@ public class DoubleJump : MonoBehaviour
             cyoteTimeCounter -= Time.deltaTime;
         }
 
-        if (Input.GetButtonDown("Jump") && doubleJump > 0)
+        if (jump && doubleJump > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
             doubleJump -= 1;
+            jump = false;
         }
 
-        if (Input.GetButtonDown("Jump"))
+        if (jump)
         {
             jumpBufferCounter = jumpBufferTime;
         }
@@ -62,6 +76,7 @@ public class DoubleJump : MonoBehaviour
             rb.velocity = new Vector2(rb.velocity.x, jumpingPower);
 
             jumpBufferCounter = 0;
+            jump = false;
         }
 
         if(Input.GetButtonUp("Jump") && rb.velocity.y > 0f)
