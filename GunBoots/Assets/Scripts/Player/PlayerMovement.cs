@@ -5,7 +5,7 @@ using UnityEngine;
 [RequireComponent(typeof(Controller2D))]
 public class PlayerMovement : MonoBehaviour
 {
-
+    //Player movement stats  that can be changed in the editor
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float timeToApex = 0.4f;
     [SerializeField] private float moveSpeed = 6;
@@ -42,6 +42,8 @@ public class PlayerMovement : MonoBehaviour
     {
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
+        //A jump implimented with cyote time and jump buffering, this makes the controls feel more forgiving
+        #region Jump
         if (controller.collisions.below)
         {
             cyoteTimeCounter = cyoteTime;
@@ -64,7 +66,13 @@ public class PlayerMovement : MonoBehaviour
         {
             cyoteTimeCounter = 0;
             jump = true;
-        }      
+        }
+
+        if (Input.GetButtonUp("Jump") && velocity.y > 0)
+        {
+            velocity.y = velocity.y * 0.5f;
+        }
+        #endregion
     }
 
     void FixedUpdate()
@@ -79,14 +87,11 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = jumpForce;
             jump = false;
         }
-
-        if (Input.GetButtonUp("Jump") && velocity.y > 0)
-        {
-            velocity.y = velocity.y * 0.5f;
-        }
-
+        
+        //Player movement in the x axis with smoothing so the player doesn't come to a sudden stop when changing direction
         float targetVelocityX = input.x * moveSpeed;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref moveSmoothing, (controller.collisions.below)?accelerationTimeGround:accelerationTimeAir);
+
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
     }

@@ -28,6 +28,7 @@ public class Controller2D : MonoBehaviour
         CalculateRaySpacing();
     }
 
+    //Called every fixed update in the player movement script. This resets the players collision variables and checks for colissions.
     public void Move(Vector3 velocity)
     {
         UpdateRaycastOrigins();
@@ -50,6 +51,9 @@ public class Controller2D : MonoBehaviour
         transform.Translate(velocity);
     }
 
+    #region Collisions
+    //Cast rays in the direction of movement on the x axis with a length based on the current x velocity. If they hit something determine the angle of the ground.
+    //if this angle is within the climbable range then use the climbslope function. Set the x velocity to 0 if the hit is close to the player and change the y velocity if the player is climbing a slope.
     void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
@@ -97,6 +101,9 @@ public class Controller2D : MonoBehaviour
         }
     }
 
+
+    //Generate rays from the player in the direction of y movement based on the players y velocity. If the ray hits something change the y velocity based on the distance to the hit.
+    //If the player is climbing a slope then calculate the x velocity based on the slope angle and the y velocity
     void VerticalCollisions(ref Vector3 velocity)
     {
         float directionY = Mathf.Sign(velocity.y);
@@ -143,7 +150,11 @@ public class Controller2D : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    #region Slopes
+    //When climbing a slope the y velocity is checked against a target so the player moves at constant speed.
+    //This function also sets the below bool to true so we are able to still jump since the ray when climbing is the rear ray on the player.
     void ClimbSlope(ref Vector3 velocity, float slopeAngle)
     {
         float moveDistance = Mathf.Abs(velocity.x);
@@ -159,6 +170,8 @@ public class Controller2D : MonoBehaviour
         }
     }
 
+
+    // when decending a slope set the x and y velocity based on the angle of the slope and set below to true to allow jumping.
     void DecendSlope (ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
@@ -174,7 +187,8 @@ public class Controller2D : MonoBehaviour
             {
                 if(Mathf.Sign(hit.normal.x) == directionX)
                 {
-                    if (hit.distance - skinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x)){
+                    if (hit.distance - skinWidth <= Mathf.Tan(slopeAngle * Mathf.Deg2Rad) * Mathf.Abs(velocity.x))
+                    {
                         float moveDistance = Mathf.Abs(velocity.x);
                         float decendVelocityY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;
                         velocity.x = Mathf.Cos(slopeAngle * Mathf.Deg2Rad) * moveDistance * Mathf.Sign(velocity.x);
@@ -188,7 +202,9 @@ public class Controller2D : MonoBehaviour
             }
         }
     }
+    #endregion
 
+    //Generate ray origins from each corner of the players bounds
     void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
@@ -200,6 +216,8 @@ public class Controller2D : MonoBehaviour
         raycastOrigins.topRight = new Vector2(bounds.max.x, bounds.max.y);
     }
 
+
+    //Evenly space the rays based on the number of chosen rays with a minimum of 2 rays for horizontal and vertical axis
     void CalculateRaySpacing()
     {
         Bounds bounds = collider.bounds;
@@ -212,12 +230,16 @@ public class Controller2D : MonoBehaviour
         verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
 
+    #region PlayerData
+    //store the points for the ray origins
     struct RaycastOrigins
     {
         public Vector2 topLeft, topRight;
         public Vector2 bottomLeft, bottomRight;
     }
 
+
+    //general data about the players colission used for grounding and colissions
     public struct CollisionInfo
     {
         public bool above, below;
@@ -238,5 +260,5 @@ public class Controller2D : MonoBehaviour
             slopeAngle = 0;
         }
     }
-
+    #endregion
 }
