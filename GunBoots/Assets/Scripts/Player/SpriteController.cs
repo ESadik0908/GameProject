@@ -6,15 +6,16 @@ public class SpriteController : MonoBehaviour
 {
     [SerializeField] Material material;
 
+    //Change player colour based on state
     private void EnterState(PlayerState newState)
     {
         if (newState == PlayerState.EXTRAJUMPS)
         {
-            material.color = Color.green;
+            material.color = new Color(1.00f, 0.30f, 0.30f);
         }
         if (newState == PlayerState.HOVER)
         {
-            material.color = Color.red;
+            material.color = new Color(0.67f, 1.00f, 0.60f);
         }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Controller2D))]
+//The player can hover after jumping by holding down spacebar/jump key
 public class HoverJump : MonoBehaviour
 {
     PlayerMovement playerMovement;

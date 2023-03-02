@@ -8,7 +8,8 @@ public enum PlayerState
     HOVER  = 1
 }
 
-public class PlayerMoveState : MonoBehaviour
+//Controller for the players movement state, only extra jumps and hover are here but I will also add a dash
+public class PlayerStateController : MonoBehaviour
 {
     [SerializeField] private PlayerState startingState;
 
@@ -21,6 +22,7 @@ public class PlayerMoveState : MonoBehaviour
         EnterPlayerState(startingState);
     }
 
+    //Change the player state when they are in a state change area and press I, eventually this will be used to change state based on current item
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.I) && changeableArea == true)

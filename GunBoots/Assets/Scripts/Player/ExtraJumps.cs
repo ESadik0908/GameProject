@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Controller2D))]
+//Player state where they can have extra jumps after the initial jump
 public class ExtraJumps : MonoBehaviour
 {
     PlayerMovement playerMovement;
