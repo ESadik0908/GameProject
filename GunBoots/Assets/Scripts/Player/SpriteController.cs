@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class SpriteController : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] Material material;
 
-    // Update is called once per frame
-    void Update()
+    private void EnterState(PlayerState newState)
     {
-        
+        if (newState == PlayerState.EXTRAJUMPS)
+        {
+            material.color = Color.green;
+        }
+        if (newState == PlayerState.HOVER)
+        {
+            material.color = Color.red;
+        }
     }
 }
