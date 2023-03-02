@@ -14,6 +14,8 @@ public class PlayerMoveState : MonoBehaviour
 
     private PlayerState currentState;
 
+    [SerializeField] private bool changeableArea = false;
+
     private void Start()
     {
         EnterPlayerState(startingState);
@@ -21,7 +23,7 @@ public class PlayerMoveState : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I))
+        if (Input.GetKeyDown(KeyCode.I) && changeableArea == true)
         {
             switch (currentState)
             {
@@ -44,9 +46,25 @@ public class PlayerMoveState : MonoBehaviour
         EnterPlayerState(newState);
     }
 
-    private void EnterPlayerState( PlayerState newState)
+    private void EnterPlayerState(PlayerState newState)
     {
         SendMessage("EnterState", newState, SendMessageOptions.DontRequireReceiver);
         currentState = newState;
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Change area")
+        {
+            changeableArea = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Change area")
+        {
+            changeableArea = false;
+        }
     }
 }
