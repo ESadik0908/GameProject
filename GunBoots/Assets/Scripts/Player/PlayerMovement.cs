@@ -13,7 +13,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float accelerationTimeGround = 0.1f;
 
     private float moveSmoothing;
-    private float gravity;
+    public float gravity;
     private float jumpForce;
 
     private bool jump = false;
@@ -26,7 +26,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 input;
 
-    Vector3 velocity;
+    public Vector3 velocity;
 
     Controller2D controller;
 
@@ -34,8 +34,7 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<Controller2D>();
 
-        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
-        jumpForce = Mathf.Abs(gravity) * timeToApex;
+        ResetGravity();
     }
 
     private void Update()
@@ -94,5 +93,16 @@ public class PlayerMovement : MonoBehaviour
 
         velocity.y += gravity * Time.deltaTime;
         controller.Move(velocity * Time.deltaTime);
+    }
+
+    void Jump()
+    {
+        jump = true;
+    }
+
+    void ResetGravity()
+    {
+        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
+        jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 }
