@@ -1087,12 +1087,12 @@ GameObject:
   - component: {fileID: 1901424429}
   - component: {fileID: 1901424428}
   - component: {fileID: 1901424427}
+  - component: {fileID: 1901424434}
   - component: {fileID: 1901424426}
   - component: {fileID: 1901424425}
   - component: {fileID: 1901424431}
   - component: {fileID: 1901424432}
   - component: {fileID: 1901424433}
-  - component: {fileID: 1901424434}
   - component: {fileID: 1901424435}
   m_Layer: 6
   m_Name: Player
@@ -1270,7 +1270,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   startingState: 0
-  currentState: 0
   changeableArea: 0
 --- !u!50 &1901424434
 Rigidbody2D:
