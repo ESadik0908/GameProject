@@ -5,29 +5,50 @@ using UnityEngine;
 [RequireComponent(typeof(Controller2D))]
 public class ExtraJumps : MonoBehaviour
 {
-    Controller2D controller;
+    PlayerMovement playerMovement;
 
-    [SerializeField] int jumpCountReset = 2;
-    int jumpCount;
+    int jumpCountReset = 2;
+    [SerializeField] int jumpCount;
+
+    [SerializeField] private bool activeState = false;
 
     void Start()
     {
-        controller = GetComponent<Controller2D>();
+        playerMovement = GetComponent<PlayerMovement>();
         jumpCount = jumpCountReset;
-
     }
 
     private void Update()
     {
-        if (!controller.collisions.below && Input.GetButtonDown("Jump") && jumpCount != 0)
+        if (!activeState) return;
+
+        if (playerMovement.cyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0)
         {
             SendMessage("Jump");
             jumpCount -= 1;
         }
 
-        if (controller.collisions.below)
+        if (playerMovement.cyoteTimeCounter > 0)
         {
             jumpCount = jumpCountReset;
+        }
+    }
+
+    private void ExitState(PlayerState oldState)
+    {
+        if (oldState == PlayerState.EXTRAJUMPS)
+        {
+            Debug.Log("Exit Hover Mode");
+            activeState = false;
+        }
+    }
+
+    private void EnterState(PlayerState newState)
+    {
+        if (newState == PlayerState.EXTRAJUMPS)
+        {
+            Debug.Log("Enter hover mode");
+            activeState = true;
         }
     }
 }

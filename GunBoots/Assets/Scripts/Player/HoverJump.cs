@@ -5,7 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Controller2D))]
 public class HoverJump : MonoBehaviour
 {
-    Controller2D controller;
     PlayerMovement playerMovement;
 
     float hoverTimeReset = 2f;
@@ -13,16 +12,19 @@ public class HoverJump : MonoBehaviour
 
     private bool hovering;
 
+    [SerializeField] private bool activeState = false;
+
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
-        controller = GetComponent<Controller2D>();
         hoverTime = hoverTimeReset;
     }
 
     private void Update()
     {
-        if(!controller.collisions.below && hoverTime > 0 && Input.GetButtonDown("Jump"))
+        if (!activeState) return;
+
+        if(playerMovement.cyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {
             playerMovement.gravity = -1f;
             playerMovement.velocity.y = 0;
@@ -34,7 +36,7 @@ public class HoverJump : MonoBehaviour
             SendMessage("ResetGravity");
         }
 
-        if (controller.collisions.below)
+        if (playerMovement.cyoteTimeCounter > 0)
         {
             hoverTime = hoverTimeReset;
         }
@@ -42,6 +44,24 @@ public class HoverJump : MonoBehaviour
         if (hovering)
         {
             hoverTime -= Time.deltaTime;
+        }
+    }
+
+    private void ExitState(PlayerState oldState)
+    {
+        if(oldState == PlayerState.HOVER)
+        {
+            Debug.Log("Exit Hover Mode");
+            activeState = false;
+        } 
+    }
+
+    private void EnterState(PlayerState newState)
+    {
+        if(newState == PlayerState.HOVER)
+        {
+            Debug.Log("Enter hover mode");
+            activeState = true;
         }
     }
 }

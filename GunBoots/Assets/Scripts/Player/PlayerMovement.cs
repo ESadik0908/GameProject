@@ -19,7 +19,7 @@ public class PlayerMovement : MonoBehaviour
     private bool jump = false;
 
     private float cyoteTime = 0.2f;
-    private float cyoteTimeCounter;
+    public float cyoteTimeCounter;
 
     private float jumpBufferTime = 0.3f;
     private float jumpBufferCounter;
