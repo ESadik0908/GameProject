@@ -4,9 +4,10 @@ using UnityEngine;
 
 public enum PlayerState
 {
-    EXTRAJUMPS = 0,
-    HOVER  = 1,
-    DASH = 2
+    NONE = 0,
+    EXTRAJUMPS = 1,
+    HOVER  = 2,
+    DASH = 3
 }
 
 //Controller for the players movement state, only extra jumps and hover are here but I will also add a dash

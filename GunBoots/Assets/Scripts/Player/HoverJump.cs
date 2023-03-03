@@ -27,8 +27,7 @@ public class HoverJump : MonoBehaviour
 
         if(playerMovement.cyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {
-            playerMovement.gravity = -1f;
-            playerMovement.velocity.y = 0;
+            SendMessage("Hover");
             hovering = true;
         }
         if (Input.GetButtonUp("Jump") || hoverTime <= 0)

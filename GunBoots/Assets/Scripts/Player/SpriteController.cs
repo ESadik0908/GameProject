@@ -17,5 +17,13 @@ public class SpriteController : MonoBehaviour
         {
             material.color = new Color(0.67f, 1.00f, 0.60f);
         }
+        if (newState == PlayerState.DASH)
+        {
+            material.color = new Color(0.24f, 0.87f, 0.87f);
+        }
+        if (newState == PlayerState.NONE)
+        {
+            material.color = new Color(0.63f, 0.63f, 0.63f);
+        }
     }
 }
