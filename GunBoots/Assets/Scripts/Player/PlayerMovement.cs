@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 input;
 
-    public Vector3 velocity;
+    Vector3 velocity;
 
     Controller2D controller;
 
@@ -121,7 +121,7 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = 0;
     }
 
-    IEnumerator Dash()
+    IEnumerator DashHandler()
     {
         gravity = 0f;
         velocity.y = 0f;
@@ -129,10 +129,14 @@ public class PlayerMovement : MonoBehaviour
         Vector2 oldVel = velocity;
         velocity.x += 30 * facing;
 
-        yield return new WaitForSeconds(0.3f);
-
-        velocity.x = oldVel.x;
+        yield return new WaitForSeconds(0.3f);        
 
         ResetGravity();
+    }
+
+    void Dash()
+    {
+        StopCoroutine("DashHandler");
+        StartCoroutine("DashHandler");
     }
 }

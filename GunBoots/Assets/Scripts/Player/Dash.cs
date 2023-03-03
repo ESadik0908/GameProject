@@ -8,7 +8,7 @@ public class Dash : MonoBehaviour
     PlayerMovement playerMovement;
 
     float dashBuffer = 0.2f;
-    float dashBufferCounter;
+    [SerializeField] float dashBufferCounter;
 
     [SerializeField] int dashCountReset = 2;
     [SerializeField] int dashCount;
@@ -18,32 +18,33 @@ public class Dash : MonoBehaviour
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+    }
 
-        dashBuffer = dashBufferCounter;
+    private void Awake()
+    {
+        dashBufferCounter = 0;
     }
 
     private void Update()
     {
         if (!activeState) return;
 
-        if(dashCount > 0  && dashBufferCounter <= 0f && Input.GetKeyDown(KeyCode.LeftControl))
+        if (dashBufferCounter > 0)
+        {
+            dashBufferCounter -= Time.deltaTime;
+        }
+
+        if (dashCount > 0  && dashBufferCounter <= 0f && Input.GetKeyDown(KeyCode.LeftControl))
         {
             SendMessage("Dash");
-            dashBufferCounter = dashBuffer;
             dashCount -= 1;
+            dashBufferCounter = dashBuffer;
         }
         
         if(playerMovement.cyoteTimeCounter > 0)
         {
             dashCount = dashCountReset;
         }
-
-        if(dashBufferCounter > 0)
-        {
-            dashBufferCounter -= Time.deltaTime;
-        }
-
-        
     }
 
     private void ExitState(PlayerState oldState)
