@@ -5,7 +5,8 @@ using UnityEngine;
 public enum PlayerState
 {
     EXTRAJUMPS = 0,
-    HOVER  = 1
+    HOVER  = 1,
+    DASH = 2
 }
 
 //Controller for the players movement state, only extra jumps and hover are here but I will also add a dash
@@ -15,7 +16,9 @@ public class PlayerStateController : MonoBehaviour
 
     private PlayerState currentState;
 
-    [SerializeField] private bool changeableArea = false;
+    [SerializeField] private bool extraJumpsChange = false;
+    [SerializeField] private bool hoverChange = false;
+    [SerializeField] private bool dashChange = false;
 
     private void Start()
     {
@@ -25,20 +28,17 @@ public class PlayerStateController : MonoBehaviour
     //Change the player state when they are in a state change area and press I, eventually this will be used to change state based on current item
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.I) && changeableArea == true)
+        if (Input.GetKeyDown(KeyCode.E) && extraJumpsChange == true)
         {
-            switch (currentState)
-            {
-                case PlayerState.HOVER:
-                    ChangeState(PlayerState.EXTRAJUMPS);
-                    break;
-                case PlayerState.EXTRAJUMPS:
-                    ChangeState(PlayerState.HOVER);
-                    break;
-                default:
-                    Debug.Log("Warning player is not in a valid state");
-                    break;
-            }
+            ChangeState(PlayerState.EXTRAJUMPS);
+        }
+        if (Input.GetKeyDown(KeyCode.E) && hoverChange == true)
+        {
+            ChangeState(PlayerState.HOVER);
+        }
+        if (Input.GetKeyDown(KeyCode.E) && dashChange == true)
+        {
+            ChangeState(PlayerState.DASH);
         }
     }
 
@@ -56,17 +56,33 @@ public class PlayerStateController : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Change area")
+        if (collision.gameObject.tag == "ExtraJumpsPickup")
         {
-            changeableArea = true;
+            extraJumpsChange = true;
+        }
+        if (collision.gameObject.tag == "HoverPickup")
+        {
+            hoverChange = true;
+        }
+        if (collision.gameObject.tag == "DashPickup")
+        {
+            dashChange = true;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Change area")
+        if (collision.gameObject.tag == "ExtraJumpsPickup")
         {
-            changeableArea = false;
+            extraJumpsChange = false;
+        }
+        if (collision.gameObject.tag == "HoverPickup")
+        {
+            hoverChange = false;
+        }
+        if (collision.gameObject.tag == "DashPickup")
+        {
+            dashChange = false;
         }
     }
 }
