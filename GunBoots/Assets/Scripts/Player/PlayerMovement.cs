@@ -24,9 +24,11 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferTime = 0.3f;
     private float jumpBufferCounter;
 
+    [SerializeField] float facing;
+
     Vector2 input;
 
-    Vector3 velocity;
+    public Vector3 velocity;
 
     Controller2D controller;
 
@@ -35,11 +37,18 @@ public class PlayerMovement : MonoBehaviour
         controller = GetComponent<Controller2D>();
 
         ResetGravity();
+
+        facing = 1;
     }
 
     private void Update()
     {
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
+
+        if(input.x != 0 && Mathf.Sign(input.x) != facing)
+        {
+            facing = Mathf.Sign(input.x);
+        }
 
         //A jump implimented with cyote time and jump buffering, this makes the controls feel more forgiving
         #region Jump
@@ -110,5 +119,20 @@ public class PlayerMovement : MonoBehaviour
     {
         gravity = -1f;
         velocity.y = 0;
+    }
+
+    IEnumerator Dash()
+    {
+        gravity = 0f;
+        velocity.y = 0f;
+
+        Vector2 oldVel = velocity;
+        velocity.x += 30 * facing;
+
+        yield return new WaitForSeconds(0.3f);
+
+        velocity.x = oldVel.x;
+
+        ResetGravity();
     }
 }
