@@ -7,19 +7,29 @@ public class Dash : MonoBehaviour
 {
     PlayerMovement playerMovement;
 
+    [SerializeField] GameObject bombClone;
+    GameObject bomb;
+
+    private bool activeState = false;
+
+
     float dashBuffer = 0.2f;
     float dashBufferCounter;
 
     [SerializeField] int dashCountReset = 2;
     int dashCount;
 
-    private bool activeState = false;
+    bool isDashing = false;
 
     [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};
 
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
+
+        bomb = Instantiate(bombClone, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
+
+        bomb.SetActive(false);
     }
 
     private void Awake()
@@ -36,8 +46,19 @@ public class Dash : MonoBehaviour
             dashBufferCounter -= Time.deltaTime;
         }
 
-        if (dashCount > 0  && dashBufferCounter <= 0f && Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyDown(KeyCode.LeftControl))
         {
+            dashBufferCounter = dashBuffer;
+        }
+
+        if (!isDashing && dashCount > 0  && dashBufferCounter > 0f)
+        {
+            if (playerMovement.cyoteTimeCounter < 0)
+            {
+                Bomb();
+            }
+            
+
             SendMessage("Dash", dashStats);
             dashCount -= 1;
             dashBufferCounter = dashBuffer;
@@ -47,6 +68,13 @@ public class Dash : MonoBehaviour
         {
             dashCount = dashCountReset;
         }
+    }
+
+    IEnumerator Bomb()
+    { 
+        bomb.transform.position = transform.position;
+        bomb.SetActive(true);
+        yield return null;
     }
 
     private void ExitState(PlayerState oldState)
@@ -65,5 +93,10 @@ public class Dash : MonoBehaviour
             Debug.Log("Enter dash mode");
             activeState = true;
         }
+    }
+
+    void ToggleDashing()
+    {
+        isDashing = !isDashing;
     }
 }

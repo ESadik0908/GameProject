@@ -26,6 +26,8 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
+    bool isDashing = false;
+
     float facing;
 
     Vector2 input;
@@ -45,6 +47,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (isDashing) return;
         input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
         if(input.x != 0 && Mathf.Sign(input.x) != facing)
@@ -125,6 +128,8 @@ public class PlayerMovement : MonoBehaviour
 
     IEnumerator DashHandler(float[] dashStats)
     {
+        SendMessage("ToggleDashing");
+        isDashing = true;
         float dashSpeed = dashStats[0];
         float dashDuration = dashStats[1];
         float gravityResetDelay = dashStats[2];
@@ -149,10 +154,11 @@ public class PlayerMovement : MonoBehaviour
 
             yield return null;
         }
-
+        isDashing = false;
         yield return new WaitForSeconds(gravityResetDelay);
 
         ResetGravity();
+        SendMessage("ToggleDashing");
     }
 
     void Dash(float[] dashStats)

@@ -34,7 +34,7 @@ public class ShotgunJump : MonoBehaviour
 
         for(int i = 0; i < shotCount + 1; i++)
         {
-            bullets[i] = Instantiate(bulletClone, new Vector3 (transform.position.x + (i * 5), transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
+            bullets[i] = Instantiate(bulletClone, new Vector3 (transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
             bullets[i].SetActive(false);
         }
         jumpCount = jumpCountReset;
