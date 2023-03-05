@@ -9,8 +9,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float timeToApex = 0.4f;
     [SerializeField] private float moveSpeed = 6;
-    [SerializeField] private float accelerationTimeAir = 0.2f;
-    [SerializeField] private float accelerationTimeGround = 0.1f;
+
+
+    private float accelerationTimeAir = 0.2f;
+    private float accelerationTimeGround = 0.1f;
 
     private float moveSmoothing;
     private float gravity;
@@ -21,10 +23,10 @@ public class PlayerMovement : MonoBehaviour
     private float cyoteTime = 0.2f;
     public float cyoteTimeCounter;
 
-    private float jumpBufferTime = 0.3f;
+    private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
-    [SerializeField] float facing;
+    float facing;
 
     Vector2 input;
 
@@ -121,22 +123,41 @@ public class PlayerMovement : MonoBehaviour
         velocity.y = 0;
     }
 
-    IEnumerator DashHandler()
+    IEnumerator DashHandler(float[] dashStats)
     {
+        float dashSpeed = dashStats[0];
+        float dashDuration = dashStats[1];
+        float gravityResetDelay = dashStats[2];
+
+        Debug.Log(dashDuration);
+
         gravity = 0f;
         velocity.y = 0f;
 
         Vector2 oldVel = velocity;
-        velocity.x += 30 * facing;
+        while (dashDuration > 0)
+        {
+            velocity.x = dashSpeed * facing;
+            dashDuration -= Time.deltaTime;
+            Debug.Log(dashDuration);
 
-        yield return new WaitForSeconds(0.3f);        
+            // Check for collisions with walls
+            if (controller.collisions.left || controller.collisions.right)
+            {
+                break;
+            }
+
+            yield return null;
+        }
+
+        yield return new WaitForSeconds(gravityResetDelay);
 
         ResetGravity();
     }
 
-    void Dash()
+    void Dash(float[] dashStats)
     {
-        StopCoroutine("DashHandler");
-        StartCoroutine("DashHandler");
+        StopCoroutine(DashHandler(dashStats));
+        StartCoroutine(DashHandler(dashStats));
     }
 }

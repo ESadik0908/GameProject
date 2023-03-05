@@ -8,12 +8,14 @@ public class Dash : MonoBehaviour
     PlayerMovement playerMovement;
 
     float dashBuffer = 0.2f;
-    [SerializeField] float dashBufferCounter;
+    float dashBufferCounter;
 
     [SerializeField] int dashCountReset = 2;
-    [SerializeField] int dashCount;
+    int dashCount;
 
-    [SerializeField] private bool activeState = false;
+    private bool activeState = false;
+
+    [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};
 
     void Start()
     {
@@ -36,7 +38,7 @@ public class Dash : MonoBehaviour
 
         if (dashCount > 0  && dashBufferCounter <= 0f && Input.GetKeyDown(KeyCode.LeftControl))
         {
-            SendMessage("Dash");
+            SendMessage("Dash", dashStats);
             dashCount -= 1;
             dashBufferCounter = dashBuffer;
         }

@@ -204,6 +204,7 @@ public class Controller2D : MonoBehaviour
     }
     #endregion
 
+    #region RayCasting
     //Generate ray origins from each corner of the players bounds
     void UpdateRaycastOrigins()
     {
@@ -229,6 +230,7 @@ public class Controller2D : MonoBehaviour
         horizontalRaySpacing = bounds.size.y / (horizontalRayCount - 1);
         verticalRaySpacing = bounds.size.x / (verticalRayCount - 1);
     }
+    #endregion
 
     #region PlayerData
     //store the points for the ray origins
