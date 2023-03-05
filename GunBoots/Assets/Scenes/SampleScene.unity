@@ -1732,7 +1732,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -1908,12 +1908,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bombClone: {fileID: 6077302836250855532, guid: e523d7534baf8ae40a619704cf712c56, type: 3}
-  bombCount: 4
-  bombSpacing: 0
+  bombCount: 8
+  spawnDelay: 0.07
   dashCountReset: 2
   dashStats:
-  - 10
-  - 1
+  - 25
+  - 0.2
   - 0.2
 --- !u!1 &1930011042 stripped
 GameObject:
