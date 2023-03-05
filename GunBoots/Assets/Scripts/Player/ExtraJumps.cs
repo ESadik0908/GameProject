@@ -11,10 +11,15 @@ public class ExtraJumps : MonoBehaviour
 
     Vector2 centerRay;
 
+
     int jumpCountReset = 2;
     [SerializeField] int jumpCount;
 
     [SerializeField] private bool activeState = false;
+
+    [SerializeField] int shotCount = 3;
+    [SerializeField] float spread = 30f;
+
 
     void Start()
     {
@@ -22,6 +27,7 @@ public class ExtraJumps : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
 
         jumpCount = jumpCountReset;
+
     }
 
     private void Update()
@@ -30,21 +36,24 @@ public class ExtraJumps : MonoBehaviour
 
         if (playerMovement.cyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0)
         {
+            
             UpdateRaycastOrigins();
 
             Vector2 rayOrigin = centerRay;
 
             RaycastHit2D centerHit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity);
 
-            Vector2 dirLeft = Quaternion.Euler(0, 0, -30) * Vector2.down;
-            RaycastHit2D leftHit = Physics2D.Raycast(rayOrigin, dirLeft, Mathf.Infinity);
+            for (int i = 0; i < shotCount; i++)
+            {
+                Vector2 dirLeft = Quaternion.Euler(0, 0, Random.Range(-spread, spread)) * Vector2.down;
+                RaycastHit2D leftHit = Physics2D.Raycast(rayOrigin, dirLeft, Mathf.Infinity);
 
-            Vector2 dirRight = Quaternion.Euler(0, 0, 30) * Vector2.down;
-            RaycastHit2D rightHit = Physics2D.Raycast(rayOrigin, dirRight, Mathf.Infinity);
+                Debug.DrawRay(rayOrigin, dirLeft * leftHit.distance, Random.ColorHSV(), 5f);
+            }
 
-            Debug.DrawRay(rayOrigin, Vector2.down * centerHit.distance, Color.green);
-            Debug.DrawRay(rayOrigin, Vector2.down * leftHit.distance, Color.green);
-            Debug.DrawRay(rayOrigin, Vector2.down * rightHit.distance, Color.green);
+            Debug.DrawRay(rayOrigin, Vector2.down * centerHit.distance, Color.green, 5f);
+
+
 
             SendMessage("Jump");
             jumpCount -= 1;
