@@ -30,7 +30,11 @@ public class LaserJump : MonoBehaviour
 
     private void Update()
     {
-        if (!activeState) return;
+        if (!activeState)
+        {
+            laser.SetActive(false);
+            return;
+        }
         UpdateRaycastOrigins();
         if (playerMovement.cyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {

@@ -72,9 +72,9 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (jumpBufferCounter > 0 && (controller.collisions.below || cyoteTimeCounter > 0))
+        if (jumpBufferCounter > 0 && cyoteTimeCounter > 0)
         {
-            cyoteTimeCounter = 0;
+            cyoteTimeCounter = 0.001f;
             jump = true;
         }
 
