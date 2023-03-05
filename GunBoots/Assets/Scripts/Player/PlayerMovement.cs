@@ -134,7 +134,6 @@ public class PlayerMovement : MonoBehaviour
         float dashDuration = dashStats[1];
         float gravityResetDelay = dashStats[2];
 
-        Debug.Log(dashDuration);
 
         gravity = 0f;
         velocity.y = 0f;
@@ -144,7 +143,6 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.x = dashSpeed * facing;
             dashDuration -= Time.deltaTime;
-            Debug.Log(dashDuration);
 
             // Check for collisions with walls
             if (controller.collisions.left || controller.collisions.right)

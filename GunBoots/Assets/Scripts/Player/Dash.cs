@@ -8,10 +8,12 @@ public class Dash : MonoBehaviour
     PlayerMovement playerMovement;
 
     [SerializeField] GameObject bombClone;
-    GameObject bomb;
+    GameObject[] bombs;
+
+    [SerializeField] int bombCount = 8;
+    [SerializeField] float spawnDelay;
 
     private bool activeState = false;
-
 
     float dashBuffer = 0.2f;
     float dashBufferCounter;
@@ -21,15 +23,23 @@ public class Dash : MonoBehaviour
 
     bool isDashing = false;
 
-    [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};
+    
+    [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
 
     void Start()
-    {
+    { 
         playerMovement = GetComponent<PlayerMovement>();
-
-        bomb = Instantiate(bombClone, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
-
-        bomb.SetActive(false);
+        bombs = new GameObject[bombCount];
+        for (int i = 0; i < bombCount; i++)
+        {
+            bombs[i] = Instantiate(bombClone, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
+            bombs[i].SetActive(false);
+        }
+        // Check if bombs array needs to be resized
+        if (bombs.Length != bombCount)
+        {
+            System.Array.Resize(ref bombs, bombCount);
+        }
     }
 
     private void Awake()
@@ -41,10 +51,9 @@ public class Dash : MonoBehaviour
     {
         if (!activeState) return;
 
-        if (dashBufferCounter > 0)
-        {
-            dashBufferCounter -= Time.deltaTime;
-        }
+        
+        dashBufferCounter -= Time.deltaTime;
+        
 
         if (Input.GetKeyDown(KeyCode.LeftControl))
         {
@@ -55,7 +64,7 @@ public class Dash : MonoBehaviour
         {
             if (playerMovement.cyoteTimeCounter < 0)
             {
-                Bomb();
+                StartCoroutine(Bomb());
             }
             
 
@@ -71,11 +80,35 @@ public class Dash : MonoBehaviour
     }
 
     IEnumerator Bomb()
-    { 
-        bomb.transform.position = transform.position;
-        bomb.SetActive(true);
+    {
+        if (dashCount == 2)
+        {
+            for (int i = 0; i < bombCount / 2; i++)
+            {
+                Vector3 bombPosition = new Vector3(transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) /2), transform.position.z);
+                bombs[i].SetActive(true);
+                bombs[i].transform.position = bombPosition;
+                yield return new WaitForSeconds(spawnDelay);
+            }
+        }
+        else if (dashCount == 1)
+        {
+            for (int i = bombCount / 2; i < bombCount; i++)
+            {
+                Vector3 bombPosition = new Vector3 (transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) / 2), transform.position.z);
+                bombs[i].SetActive(true);
+                bombs[i].transform.position = bombPosition;
+                yield return new WaitForSeconds(spawnDelay);
+            }
+        }
+
         yield return null;
     }
+
+
+
+
+
 
     private void ExitState(PlayerState oldState)
     {

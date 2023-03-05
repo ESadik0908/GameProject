@@ -18,10 +18,10 @@ public class ShotgunJump : MonoBehaviour
 
     [SerializeField] private bool activeState = false;
 
-    [SerializeField] int shotCount = 3;
+    [SerializeField] int shotCount = 4;
     [SerializeField] float spread = 30f;
-    [SerializeField] GameObject bulletClone;
 
+    [SerializeField] GameObject bulletClone;
     GameObject[] bullets;
 
 
@@ -30,9 +30,9 @@ public class ShotgunJump : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
 
-        bullets = new GameObject[shotCount + 1];
+        bullets = new GameObject[shotCount];
 
-        for(int i = 0; i < shotCount + 1; i++)
+        for(int i = 0; i < shotCount; i++)
         {
             bullets[i] = Instantiate(bulletClone, new Vector3 (transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
             bullets[i].SetActive(false);
