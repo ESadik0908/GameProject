@@ -64,8 +64,10 @@ public class LaserJump : MonoBehaviour
                 // Draw the ray up to the point where it hits an object
                 Debug.DrawRay(rayOrigin, Vector2.down * hit.distance, Color.green);
 
-                // Do something with the hit information
-                Debug.Log("Hit object: " + hit.collider.gameObject.name);
+                if(hit.collider.gameObject.tag == "Enemy")
+                {
+                    Debug.Log("Hit");
+                }
 
 
                 Vector3 laserSize = laser.transform.localScale;

@@ -4,7 +4,7 @@ using UnityEngine;
 
 [RequireComponent(typeof(Controller2D))]
 //Player state where they can have extra jumps after the initial jump
-public class ExtraJumps : MonoBehaviour
+public class ShotgunJump : MonoBehaviour
 {
     PlayerMovement playerMovement;
     BoxCollider2D collider;
@@ -62,42 +62,31 @@ public class ExtraJumps : MonoBehaviour
     IEnumerator Shoot()
     {
         UpdateRaycastOrigins();
-
         Vector2 rayOrigin = centerRay;
-
-        RaycastHit2D centerHit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity);
-
-        bullets[0].SetActive(true);
-
-        Vector3 bulletSize = bullets[0].transform.localScale;
-
-        bullets[0].transform.position = new Vector3(rayOrigin.x, rayOrigin.y, centerHit.transform.position.z);
-
-        bullets[0].transform.localScale = new Vector3(bulletSize.x, centerHit.distance, bulletSize.z);
 
         for (int i = 0; i < shotCount; i++)
         {
-            Vector2 curDir = Quaternion.Euler(0, 0, Random.Range(-spread, spread)) * Vector2.down;
+            Vector2 curDir = i == 0 ? Vector2.down : (Vector2)(Quaternion.Euler(0, 0, Random.Range(-spread, spread)) * (Vector3)Vector2.down);
+
             RaycastHit2D curHit = Physics2D.Raycast(rayOrigin, curDir, Mathf.Infinity);
 
             Debug.DrawRay(rayOrigin, curDir * curHit.distance, Random.ColorHSV(), 5f);
 
-            bullets[i + 1].SetActive(true);
-
-            bulletSize = bullets[i + 1].transform.localScale;
-
-            bullets[i + 1].transform.position = new Vector3(centerRay.x, centerRay.y, curHit.transform.position.z);
-
-            bullets[i + 1].transform.localScale = new Vector3(bulletSize.x, curHit.distance, bulletSize.z);
-
+            bullets[i].SetActive(true);
+            Vector3 bulletSize = bullets[i].transform.localScale;
+            bulletSize = bullets[i].transform.localScale;
+            bullets[i].transform.position = new Vector3(centerRay.x, centerRay.y, curHit.transform.position.z);
+            bullets[i].transform.localScale = new Vector3(bulletSize.x, curHit.distance + 0.1f, bulletSize.z);
             Quaternion rotation = Quaternion.FromToRotation(Vector2.down, curDir);
+            bullets[i].transform.rotation = rotation;
 
-            bullets[i + 1].transform.rotation = rotation;
+            if (curHit.collider.gameObject.tag == "Enemy")
+            {
+                Debug.Log("Hit");
+            }
         }
 
-        Debug.DrawRay(rayOrigin, Vector2.down * centerHit.distance, Color.green, 5f);
-
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(0.05f);
 
         for (int i = 0; i < shotCount + 1; i++)
         {
