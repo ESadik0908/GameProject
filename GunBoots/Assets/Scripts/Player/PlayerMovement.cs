@@ -28,7 +28,7 @@ public class PlayerMovement : MonoBehaviour
 
     bool isDashing = false;
 
-    float facing;
+    public float facing { get; private set; }
 
     Vector2 input;
 
