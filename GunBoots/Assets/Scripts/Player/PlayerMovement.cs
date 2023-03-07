@@ -109,24 +109,24 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
     }
 
-    void Jump()
+    public void Jump()
     {
         jump = true;
     }
 
-    void ResetGravity()
+    public void ResetGravity()
     {
         gravity = -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
         jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 
-    void Hover()
+    public void Hover()
     {
         gravity = -1f;
         velocity.y = 0;
     }
 
-    IEnumerator DashHandler(float[] dashStats)
+    public IEnumerator Dash(float[] dashStats)
     {
         SendMessage("ToggleDashing");
         isDashing = true;
@@ -157,11 +157,5 @@ public class PlayerMovement : MonoBehaviour
 
         ResetGravity();
         SendMessage("ToggleDashing");
-    }
-
-    void Dash(float[] dashStats)
-    {
-        StopCoroutine(DashHandler(dashStats));
-        StartCoroutine(DashHandler(dashStats));
     }
 }

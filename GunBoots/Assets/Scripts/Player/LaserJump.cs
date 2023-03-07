@@ -38,14 +38,14 @@ public class LaserJump : MonoBehaviour
         UpdateRaycastOrigins();
         if (playerMovement.cyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {
-            SendMessage("Hover");
+            playerMovement.Hover();
             hovering = true;
         }
         if (Input.GetButtonUp("Jump") || hoverTime <= 0)
         {
             hovering = false;
-            
-            SendMessage("ResetGravity");
+
+            playerMovement.ResetGravity();
         }
 
         if (playerMovement.cyoteTimeCounter > 0)

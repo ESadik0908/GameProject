@@ -1909,10 +1909,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bombClone: {fileID: 6077302836250855532, guid: e523d7534baf8ae40a619704cf712c56, type: 3}
   bombCount: 8
-  spawnDelay: 0.07
+  spawnDelay: 0.05
   dashCountReset: 2
   dashStats:
-  - 25
+  - 20
   - 0.2
   - 0.2
 --- !u!1 &1930011042 stripped

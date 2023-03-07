@@ -3,12 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Controller2D))]
+[RequireComponent(typeof(PlayerMovement))]
 public class Dash : MonoBehaviour
 {
     PlayerMovement playerMovement;
+    Controller2D controller;
 
     [SerializeField] GameObject bombClone;
     GameObject[] bombs;
+    private IEnumerator bombCoroutine;
 
     [SerializeField] int bombCount = 8;
     [SerializeField] float spawnDelay;
@@ -23,12 +26,16 @@ public class Dash : MonoBehaviour
 
     bool isDashing = false;
 
+    private IEnumerator dashCoroutine;
+
     
     [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
 
     void Start()
-    { 
+    {
         playerMovement = GetComponent<PlayerMovement>();
+        controller = GetComponent<Controller2D>();
+        dashCoroutine = playerMovement.Dash(dashStats);
         bombs = new GameObject[bombCount];
         for (int i = 0; i < bombCount; i++)
         {
@@ -60,20 +67,34 @@ public class Dash : MonoBehaviour
             dashBufferCounter = dashBuffer;
         }
 
-        if (!isDashing && dashCount > 0  && dashBufferCounter > 0f)
+        if(!(controller.collisions.left || controller.collisions.right))
         {
-            if (playerMovement.cyoteTimeCounter < 0)
+            if (!isDashing && dashCount > 0 && dashBufferCounter > 0f)
             {
-                StartCoroutine(Bomb());
+                bombCoroutine = Bomb();
+                if (playerMovement.cyoteTimeCounter < 0)
+                {
+                    StartCoroutine(bombCoroutine);
+                }
+                StopCoroutine(dashCoroutine);
+                dashCoroutine = playerMovement.Dash(dashStats);
+                StartCoroutine(dashCoroutine);
+                dashCount -= 1;
+                dashBufferCounter = dashBuffer;
             }
-            
-
-            SendMessage("Dash", dashStats);
-            dashCount -= 1;
-            dashBufferCounter = dashBuffer;
         }
         
-        if(playerMovement.cyoteTimeCounter > 0)
+
+        if (controller.collisions.right || controller.collisions.left)
+        { 
+            if (bombCoroutine == null)
+            {
+                bombCoroutine = Bomb();
+            } 
+            StopCoroutine(bombCoroutine);
+        }
+
+        if (playerMovement.cyoteTimeCounter > 0)
         {
             dashCount = dashCountReset;
         }
@@ -85,30 +106,25 @@ public class Dash : MonoBehaviour
         {
             for (int i = 0; i < bombCount / 2; i++)
             {
+                yield return new WaitForSeconds(spawnDelay);
                 Vector3 bombPosition = new Vector3(transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) /2), transform.position.z);
                 bombs[i].SetActive(true);
-                bombs[i].transform.position = bombPosition;
-                yield return new WaitForSeconds(spawnDelay);
+                bombs[i].transform.position = bombPosition; 
             }
         }
         else if (dashCount == 1)
         {
             for (int i = bombCount / 2; i < bombCount; i++)
             {
+                yield return new WaitForSeconds(spawnDelay);
                 Vector3 bombPosition = new Vector3 (transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) / 2), transform.position.z);
                 bombs[i].SetActive(true);
                 bombs[i].transform.position = bombPosition;
-                yield return new WaitForSeconds(spawnDelay);
             }
         }
 
         yield return null;
     }
-
-
-
-
-
 
     private void ExitState(PlayerState oldState)
     {
