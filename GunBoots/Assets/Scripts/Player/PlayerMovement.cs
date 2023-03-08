@@ -20,8 +20,8 @@ public class PlayerMovement : MonoBehaviour
 
     private bool jump = false;
 
-    private float cyoteTime = 0.2f;
-    public float cyoteTimeCounter;
+    private float coyoteTime = 0.2f;
+    public float coyoteTimeCounter;
 
     private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
@@ -32,7 +32,7 @@ public class PlayerMovement : MonoBehaviour
 
     Vector2 input;
 
-    Vector3 velocity;
+    public Vector3 velocity;
 
     Controller2D controller;
 
@@ -59,11 +59,11 @@ public class PlayerMovement : MonoBehaviour
         #region Jump
         if (controller.collisions.below)
         {
-            cyoteTimeCounter = cyoteTime;
+            coyoteTimeCounter = coyoteTime;
         }
         else
         {
-            cyoteTimeCounter -= Time.deltaTime;
+            coyoteTimeCounter -= Time.deltaTime;
         }
 
         if (Input.GetButtonDown("Jump"))
@@ -75,9 +75,9 @@ public class PlayerMovement : MonoBehaviour
             jumpBufferCounter -= Time.deltaTime;
         }
 
-        if (jumpBufferCounter > 0 && cyoteTimeCounter > 0)
+        if (jumpBufferCounter > 0 && coyoteTimeCounter > 0)
         {
-            cyoteTimeCounter = 0.001f;
+            coyoteTimeCounter = 0.001f;
             jump = true;
         }
 
@@ -105,7 +105,10 @@ public class PlayerMovement : MonoBehaviour
         float targetVelocityX = input.x * moveSpeed;
         velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref moveSmoothing, (controller.collisions.below)?accelerationTimeGround:accelerationTimeAir);
 
-        velocity.y += gravity * Time.deltaTime;
+        if(velocity.y > -50)
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
         controller.Move(velocity * Time.deltaTime);
     }
 

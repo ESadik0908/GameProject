@@ -72,7 +72,7 @@ public class Dash : MonoBehaviour
             if (!isDashing && dashCount > 0 && dashBufferCounter > 0f)
             {
                 bombCoroutine = Bomb();
-                if (playerMovement.cyoteTimeCounter < 0)
+                if (playerMovement.coyoteTimeCounter < 0)
                 {
                     StartCoroutine(bombCoroutine);
                 }
@@ -94,7 +94,7 @@ public class Dash : MonoBehaviour
             StopCoroutine(bombCoroutine);
         }
 
-        if (playerMovement.cyoteTimeCounter > 0)
+        if (playerMovement.coyoteTimeCounter > 0)
         {
             dashCount = dashCountReset;
         }

@@ -36,7 +36,7 @@ public class LaserJump : MonoBehaviour
             return;
         }
         UpdateRaycastOrigins();
-        if (playerMovement.cyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
+        if (playerMovement.coyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {
             playerMovement.Hover();
             hovering = true;
@@ -48,7 +48,7 @@ public class LaserJump : MonoBehaviour
             playerMovement.ResetGravity();
         }
 
-        if (playerMovement.cyoteTimeCounter > 0)
+        if (playerMovement.coyoteTimeCounter > 0)
         {
             hoverTime = hoverTimeReset;
         }

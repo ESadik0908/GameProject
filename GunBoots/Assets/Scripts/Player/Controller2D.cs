@@ -23,9 +23,10 @@ public class Controller2D : MonoBehaviour
     public CollisionInfo collisions;
 
     void Start()
-    {
+    { 
         collider = GetComponent<BoxCollider2D>();
         CalculateRaySpacing();
+
     }
 
     //Called every fixed update in the player movement script. This resets the players collision variables and checks for colissions.

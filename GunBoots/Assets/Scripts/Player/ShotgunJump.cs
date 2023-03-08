@@ -44,7 +44,7 @@ public class ShotgunJump : MonoBehaviour
     {
         if (!activeState) return;
 
-        if (playerMovement.cyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0)
+        if (playerMovement.coyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0)
         {
 
             StartCoroutine(Shoot());
@@ -53,7 +53,7 @@ public class ShotgunJump : MonoBehaviour
             jumpCount -= 1;
         }
 
-        if (playerMovement.cyoteTimeCounter > 0)
+        if (playerMovement.coyoteTimeCounter > 0)
         {
             jumpCount = jumpCountReset;
         }
@@ -88,7 +88,7 @@ public class ShotgunJump : MonoBehaviour
 
         yield return new WaitForSeconds(0.05f);
 
-        for (int i = 0; i < shotCount + 1; i++)
+        for (int i = 0; i < shotCount; i++)
         {
             bullets[i].SetActive(false);
         }
