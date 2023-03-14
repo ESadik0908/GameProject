@@ -18,7 +18,7 @@ public class PlayerMovement : MonoBehaviour
     private float gravity;
     private float jumpForce;
 
-    private bool jump = false;
+    public bool jump = false;
 
     private float coyoteTime = 0.2f;
     public float coyoteTimeCounter;
@@ -30,7 +30,7 @@ public class PlayerMovement : MonoBehaviour
 
     public float facing { get; private set; }
 
-    private Vector2 input;
+    private float input;
 
     private Vector3 velocity;
 
@@ -40,6 +40,8 @@ public class PlayerMovement : MonoBehaviour
     {
         controller = GetComponent<Controller2D>();
 
+        FindAnyObjectByType<Player>().loadEvent += loadPlayer;
+
         ResetGravity();
 
         facing = 1;
@@ -48,45 +50,17 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (isDashing) return;
-        input = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
 
-        if(input.x != 0 && Mathf.Sign(input.x) != facing)
+        input = Input.GetAxisRaw("Horizontal");
+
+        if (input != 0 && Mathf.Sign(input) != facing)
         {
-            facing = Mathf.Sign(input.x);
+            facing = Mathf.Sign(input);
         }
 
         //A jump implimented with cyote time and jump buffering, this makes the controls feel more forgiving
-        #region Jump
-        JumpCheck();
-        #endregion
-    }
 
-    void FixedUpdate()
-    {
-        if(controller.collisions.above || controller.collisions.below)
-        {
-            velocity.y = 0;
-        }
-        
-        if (jump)
-        {
-            velocity.y = jumpForce;
-            jump = false;
-        }
-        
-        //Player movement in the x axis with smoothing so the player doesn't come to a sudden stop when changing direction
-        float targetVelocityX = input.x * moveSpeed;
-        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref moveSmoothing, (controller.collisions.below)?accelerationTimeGround:accelerationTimeAir);
-
-        if(velocity.y > -50)
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
-        controller.Move(velocity * Time.deltaTime);
-    }
-
-    private void JumpCheck()
-    {
+        #region Jumping
         if (controller.collisions.below)
         {
             coyoteTimeCounter = coyoteTime;
@@ -115,11 +89,33 @@ public class PlayerMovement : MonoBehaviour
         {
             velocity.y = velocity.y * 0.5f;
         }
+        #endregion
     }
 
-    public void Jump()
+    void FixedUpdate()
     {
-        jump = true;
+        if(controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
+        }
+        
+        if (jump)
+        {
+            velocity.y = jumpForce;
+            jump = false;
+        }
+        
+        //Player movement in the x axis with smoothing so the player doesn't come to a sudden stop when changing direction
+
+        float targetVelocityX = input * moveSpeed;
+        velocity.x = Mathf.SmoothDamp(velocity.x, targetVelocityX, ref moveSmoothing, (controller.collisions.below)?accelerationTimeGround:accelerationTimeAir);
+
+        if(velocity.y > -50)
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        controller.Move(velocity * Time.deltaTime);
     }
 
     public void ResetGravity()
@@ -170,5 +166,10 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 getVelocity()
     {
         return velocity;
+    }
+
+    private void loadPlayer(Player player)
+    {
+        ResetGravity();
     }
 }

@@ -15,15 +15,17 @@ public class PlayerStateController : MonoBehaviour
 {
     [SerializeField] private PlayerState startingState;
 
-    private PlayerState currentState;
+    public PlayerState currentState { get; private set; }
 
     [SerializeField] private bool extraJumpsChange = false;
     [SerializeField] private bool hoverChange = false;
     [SerializeField] private bool dashChange = false;
 
+    Player player;
+
     private void Start()
     {
-        EnterPlayerState(startingState);
+        FindAnyObjectByType<Player>().loadEvent += loadState;
     }
 
     //Change the player state when they are in a state change area and press I, eventually this will be used to change state based on current item
@@ -41,6 +43,11 @@ public class PlayerStateController : MonoBehaviour
         {
             ChangeState(PlayerState.DASH);
         }
+    }
+
+    public void loadState(Player player)
+    {
+        ChangeState(player.state);
     }
 
     private void ChangeState(PlayerState newState)

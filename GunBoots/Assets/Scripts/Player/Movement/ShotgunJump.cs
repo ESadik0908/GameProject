@@ -46,7 +46,7 @@ public class ShotgunJump : MonoBehaviour
         {
 
             StartCoroutine(Shoot());
-            playerMovement.Jump(); 
+            playerMovement.jump = true; 
             jumpCount -= 1;
         }
 
