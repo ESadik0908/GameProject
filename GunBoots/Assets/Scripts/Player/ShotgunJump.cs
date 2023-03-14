@@ -86,7 +86,7 @@ public class ShotgunJump : MonoBehaviour
             }
         }
 
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.07f);
 
         for (int i = 0; i < shotCount; i++)
         {

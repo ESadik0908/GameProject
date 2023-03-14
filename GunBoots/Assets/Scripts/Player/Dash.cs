@@ -6,32 +6,32 @@ using UnityEngine;
 [RequireComponent(typeof(PlayerMovement))]
 public class Dash : MonoBehaviour
 {
-    PlayerMovement playerMovement;
-    Controller2D controller;
+    private PlayerMovement playerMovement;
+    private Controller2D controller;
 
-    [SerializeField] GameObject bombClone;
-    GameObject[] bombs;
+    [SerializeField] private GameObject bombClone;
+    private GameObject[] bombs;
     private IEnumerator bombCoroutine;
 
-    [SerializeField] int bombCount = 8;
-    [SerializeField] float spawnDelay;
+    [SerializeField] private int bombCount = 8;
+    [SerializeField] private float spawnDelay;
 
     private bool activeState = false;
 
-    float dashBuffer = 0.2f;
-    float dashBufferCounter;
+    private float dashBuffer = 0.2f;
+    private float dashBufferCounter;
 
-    [SerializeField] int dashCountReset = 2;
-    int dashCount;
+    [SerializeField] private int dashCountReset = 2;
+    private int dashCount;
 
-    bool isDashing = false;
+    private bool isDashing = false;
 
     private IEnumerator dashCoroutine;
 
     
-    [SerializeField] float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
+    [SerializeField] private float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
 
-    void Start()
+    private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         controller = GetComponent<Controller2D>();
@@ -100,7 +100,7 @@ public class Dash : MonoBehaviour
         }
     }
 
-    IEnumerator Bomb()
+    private IEnumerator Bomb()
     {
         if (dashCount == 2)
         {
@@ -144,7 +144,7 @@ public class Dash : MonoBehaviour
         }
     }
 
-    void ToggleDashing()
+    private void ToggleDashing()
     {
         isDashing = !isDashing;
     }

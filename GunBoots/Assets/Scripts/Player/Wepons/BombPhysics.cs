@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class BombPhysics : MonoBehaviour
 {
-    Rigidbody2D rigidbody2D;
-    void Start()
+    private Rigidbody2D rigidbody2D;
+    private void Start()
     {
         
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         
     }

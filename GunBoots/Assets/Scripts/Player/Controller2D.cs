@@ -8,18 +8,18 @@ public class Controller2D : MonoBehaviour
 
     public LayerMask collisionMask;
 
-    const float skinWidth = .015f;
+    private const float skinWidth = .015f;
     public int horizontalRayCount = 4;
     public int verticalRayCount = 4;
 
-    float maxClimbAngle = 80f;
-    float maxDecendAngle = 70f;
+    private float maxClimbAngle = 80f;
+    private float maxDecendAngle = 70f;
 
-    float horizontalRaySpacing;
-    float verticalRaySpacing;
+    private float horizontalRaySpacing;
+    private float verticalRaySpacing;
 
-    BoxCollider2D collider;
-    RaycastOrigins raycastOrigins;
+    private BoxCollider2D collider;
+    private RaycastOrigins raycastOrigins;
     public CollisionInfo collisions;
 
     void Start()
@@ -55,7 +55,7 @@ public class Controller2D : MonoBehaviour
     #region Collisions
     //Cast rays in the direction of movement on the x axis with a length based on the current x velocity. If they hit something determine the angle of the ground.
     //if this angle is within the climbable range then use the climbslope function. Set the x velocity to 0 if the hit is close to the player and change the y velocity if the player is climbing a slope.
-    void HorizontalCollisions(ref Vector3 velocity)
+    private void HorizontalCollisions(ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
         float rayLength = Mathf.Abs(velocity.x) + skinWidth;
@@ -105,7 +105,7 @@ public class Controller2D : MonoBehaviour
 
     //Generate rays from the player in the direction of y movement based on the players y velocity. If the ray hits something change the y velocity based on the distance to the hit.
     //If the player is climbing a slope then calculate the x velocity based on the slope angle and the y velocity
-    void VerticalCollisions(ref Vector3 velocity)
+    private void VerticalCollisions(ref Vector3 velocity)
     {
         float directionY = Mathf.Sign(velocity.y);
         float rayLength = Mathf.Abs(velocity.y) + skinWidth;
@@ -156,7 +156,7 @@ public class Controller2D : MonoBehaviour
     #region Slopes
     //When climbing a slope the y velocity is checked against a target so the player moves at constant speed.
     //This function also sets the below bool to true so we are able to still jump since the ray when climbing is the rear ray on the player.
-    void ClimbSlope(ref Vector3 velocity, float slopeAngle)
+    private void ClimbSlope(ref Vector3 velocity, float slopeAngle)
     {
         float moveDistance = Mathf.Abs(velocity.x);
         float climbVelocityY = Mathf.Sin(slopeAngle * Mathf.Deg2Rad) * moveDistance;
@@ -173,7 +173,7 @@ public class Controller2D : MonoBehaviour
 
 
     // when decending a slope set the x and y velocity based on the angle of the slope and set below to true to allow jumping.
-    void DecendSlope (ref Vector3 velocity)
+    private void DecendSlope (ref Vector3 velocity)
     {
         float directionX = Mathf.Sign(velocity.x);
 
@@ -207,7 +207,7 @@ public class Controller2D : MonoBehaviour
 
     #region RayCasting
     //Generate ray origins from each corner of the players bounds
-    void UpdateRaycastOrigins()
+    private void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
         bounds.Expand(skinWidth * -2);
@@ -220,7 +220,7 @@ public class Controller2D : MonoBehaviour
 
 
     //Evenly space the rays based on the number of chosen rays with a minimum of 2 rays for horizontal and vertical axis
-    void CalculateRaySpacing()
+    private void CalculateRaySpacing()
     {
         Bounds bounds = collider.bounds;
         bounds.Expand(skinWidth * -2);
@@ -235,7 +235,7 @@ public class Controller2D : MonoBehaviour
 
     #region PlayerData
     //store the points for the ray origins
-    struct RaycastOrigins
+    private struct RaycastOrigins
     {
         public Vector2 topLeft, topRight;
         public Vector2 bottomLeft, bottomRight;

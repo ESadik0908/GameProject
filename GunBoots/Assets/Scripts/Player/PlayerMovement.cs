@@ -26,17 +26,17 @@ public class PlayerMovement : MonoBehaviour
     private float jumpBufferTime = 0.1f;
     private float jumpBufferCounter;
 
-    bool isDashing = false;
+    private bool isDashing = false;
 
     public float facing { get; private set; }
 
-    Vector2 input;
+    private Vector2 input;
 
     public Vector3 velocity;
 
-    Controller2D controller;
+    private Controller2D controller;
 
-    void Start()
+    private void Start()
     {
         controller = GetComponent<Controller2D>();
 
@@ -88,7 +88,7 @@ public class PlayerMovement : MonoBehaviour
         #endregion
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if(controller.collisions.above || controller.collisions.below)
         {
