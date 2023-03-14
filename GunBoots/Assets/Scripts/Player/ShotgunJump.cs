@@ -11,8 +11,6 @@ public class ShotgunJump : MonoBehaviour
 
     Vector2 centerRay;
 
-   
-
     int jumpCountReset = 2;
     [SerializeField] int jumpCount;
 
@@ -44,12 +42,11 @@ public class ShotgunJump : MonoBehaviour
     {
         if (!activeState) return;
 
-        if (playerMovement.coyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0)
+        if (playerMovement.coyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0) // Coyote timer is > 0 when player is grounded
         {
 
             StartCoroutine(Shoot());
-
-            playerMovement.Jump();
+            playerMovement.Jump(); 
             jumpCount -= 1;
         }
 
@@ -59,6 +56,8 @@ public class ShotgunJump : MonoBehaviour
         }
     }
 
+    //Generate shotCount random rays from the players feet to the closest hit object. The first ray is always straight down, the remaining rays
+    //are in a random angle between -spread and spread. Activate each bullet to one of the rays for 0.07s and then deactivate them.
     IEnumerator Shoot()
     {
         UpdateRaycastOrigins();

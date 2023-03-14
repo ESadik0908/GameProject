@@ -8,20 +8,20 @@ using UnityEngine;
 //The player can hover after jumping by holding down spacebar/jump key
 public class LaserJump : MonoBehaviour
 {
-    PlayerMovement playerMovement;
-    BoxCollider2D collider;
-    [SerializeField] GameObject laser;
+    private PlayerMovement playerMovement;
+    private BoxCollider2D collider;
+    [SerializeField] private GameObject laser;
 
-    float hoverTimeReset = 2f;
-    [SerializeField] float hoverTime;
+    private float hoverTimeReset = 2f;
+    [SerializeField] private float hoverTime;
 
-    Vector2 centerRay;
+    private Vector2 centerRay;
 
     private bool hovering;
 
     [SerializeField] private bool activeState = false;
 
-    void Start()
+    private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
@@ -107,7 +107,7 @@ public class LaserJump : MonoBehaviour
         }
     }
 
-    void UpdateRaycastOrigins()
+    private void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
         centerRay = new Vector2(bounds.center.x, bounds.min.y - 0.01f);
