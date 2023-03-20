@@ -92,7 +92,7 @@ public class PlayerMovement : MonoBehaviour
         #endregion
     }
 
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if(controller.collisions.above || controller.collisions.below)
         {
