@@ -1,18 +1,18 @@
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-using UnityEngine;
 
 public class PathRequestManager : MonoBehaviour
 {
 
-    Queue<PathRequest> pathRequests = new Queue<PathRequest>();
-    PathRequest currentPathRequest;
+    private Queue<PathRequest> pathRequestQueue = new Queue<PathRequest>();
+    private PathRequest currentPathRequest;
 
-    static PathRequestManager instance;
-    Pathfinding pathfinding;
+    private static PathRequestManager instance;
+    private Pathfinding pathfinding;
 
-    bool isProccessingPath;
+    private bool isProcessingPath;
 
     private void Awake()
     {
@@ -23,28 +23,28 @@ public class PathRequestManager : MonoBehaviour
     public static void RequestPath(Vector3 pathStart, Vector3 pathEnd, Action<Vector3[], bool> callback)
     {
         PathRequest newRequest = new PathRequest(pathStart, pathEnd, callback);
-        instance.pathRequests.Enqueue(newRequest);
-        instance.TryProccessNext();
+        instance.pathRequestQueue.Enqueue(newRequest);
+        instance.TryProcessNext();
     }
 
-    private void TryProccessNext()
+    private void TryProcessNext()
     {
-        if(!isProccessingPath && pathRequests.Count > 0)
+        if (!isProcessingPath && pathRequestQueue.Count > 0)
         {
-            currentPathRequest = pathRequests.Dequeue();
-            isProccessingPath = true;
+            currentPathRequest = pathRequestQueue.Dequeue();
+            isProcessingPath = true;
             pathfinding.StartFindPath(currentPathRequest.pathStart, currentPathRequest.pathEnd);
         }
     }
 
-    public void FinishedProccessingPath(Vector3[] path, bool success)
+    public void FinishedProcessingPath(Vector3[] path, bool success)
     {
         currentPathRequest.callback(path, success);
-        isProccessingPath = false;
-        TryProccessNext();
+        isProcessingPath = false;
+        TryProcessNext();
     }
 
-    struct PathRequest
+    private struct PathRequest
     {
         public Vector3 pathStart;
         public Vector3 pathEnd;
@@ -56,6 +56,6 @@ public class PathRequestManager : MonoBehaviour
             pathEnd = _end;
             callback = _callback;
         }
-    }
 
+    }
 }

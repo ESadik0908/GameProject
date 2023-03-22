@@ -1,14 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System.Collections;
 
 public class Unit : MonoBehaviour
 {
+
+
     public Transform target;
-    public float speed = 5;
-
+    [SerializeField] private float speed = 20;
     private Vector3[] path;
-
     private int targetIndex;
 
     private void Start()
@@ -21,6 +20,7 @@ public class Unit : MonoBehaviour
         if (pathSuccessful)
         {
             path = newPath;
+            targetIndex = 0;
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
@@ -29,7 +29,6 @@ public class Unit : MonoBehaviour
     private IEnumerator FollowPath()
     {
         Vector3 currentWaypoint = path[0];
-
         while (true)
         {
             if (transform.position == currentWaypoint)
@@ -42,12 +41,13 @@ public class Unit : MonoBehaviour
                 currentWaypoint = path[targetIndex];
             }
 
-            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed *Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, currentWaypoint, speed * Time.deltaTime);
             yield return null;
+
         }
     }
 
-    private void OnDrawGizmos()
+    public void OnDrawGizmos()
     {
         if (path != null)
         {
