@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
 
     private void Start()
     {
+        target = GameObject.FindWithTag("Player").transform;
         StartCoroutine("UpdatePath");
     }
 
@@ -36,7 +37,7 @@ public class Unit : MonoBehaviour
         {
             yield return new WaitForSeconds(.3f);
         }
-        PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+        PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
         float sqrMoveThreshhold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
 
         Vector3 targetPosOld = target.position;
@@ -45,7 +46,7 @@ public class Unit : MonoBehaviour
             yield return new WaitForSeconds(minPathUpdateTime);
             if((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshhold)
             {
-                PathRequestManager.RequestPath(transform.position, target.position, OnPathFound);
+                PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
                 targetPosOld = target.position;
             }
         }
@@ -76,20 +77,14 @@ public class Unit : MonoBehaviour
 
             if (followingPath)
             {
-                Quaternion targetRoatation = Quaternion.LookRotation(Vector3.forward, path.lookPoints[pathIndex] - transform.position);
-                transform.rotation = Quaternion.Lerp(transform.rotation, targetRoatation, Time.deltaTime * turnSpeed);
-                transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
+                transform.right = path.lookPoints[pathIndex] - transform.position;
+                
+                transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
             }
 
             yield return null;
         }
     }
 
-    public void OnDrawGizmos()
-    {
-        if (path != null)
-        {
-            path.DrawWithGizmos();
-        }
-    }
+    
 }
