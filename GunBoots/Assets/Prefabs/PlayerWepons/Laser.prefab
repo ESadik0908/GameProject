@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 1992036690078213340}
   - component: {fileID: 1992036690078213341}
   - component: {fileID: 1992036690078213342}
-  - component: {fileID: 1992036690078213343}
+  - component: {fileID: 6373747416266815388}
   m_Layer: 0
   m_Name: Laser
-  m_TagString: Laser
+  m_TagString: PlayerBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -95,7 +95,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -111,7 +111,7 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 0.0001}
   m_EdgeRadius: 0
---- !u!114 &1992036690078213343
+--- !u!114 &6373747416266815388
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1992036690078213337}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f93692bbceaf60c4881514709a67ea1b, type: 3}
+  m_Script: {fileID: 11500000, guid: 44d7fa1d298cc5b499c265167674b17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 8818829821804908883, guid: 590aeb8c93f2d2e48a35f305da64659b, type: 3}

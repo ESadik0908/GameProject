@@ -8,10 +8,8 @@ TagManager:
   - ExtraJumpsPickup
   - HoverPickup
   - DashPickup
-  - Laser
   - PlayerBullet
   - Enemy
-  - PlayerBomb
   layers:
   - Default
   - TransparentFX

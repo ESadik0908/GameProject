@@ -2,17 +2,42 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyHealth : MonoBehaviour
+public class EnemyHealthController : MonoBehaviour, IEnemyStats
 {
-    // Start is called before the first frame update
-    void Start()
+    public float health { get; private set; }
+
+    [SerializeField] private float tmp;
+
+    private float damageBuffer = 0.1f;
+
+    private void Start()
     {
-        
+        health = tmp;
     }
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        tmp = health;
+        if(damageBuffer > 0)
+        {
+            damageBuffer -= Time.deltaTime;
+        }
+    }
+
+    public void Damage(float damage)
+    {
+        if (damageBuffer < 0)
+        {
+            health -= damage;
+        }
+        if (health <= 0)
+        {
+            Die();
+        }
+    }
+
+    public void Die()
+    {
+        gameObject.SetActive(false);
     }
 }

@@ -21,6 +21,8 @@ GameObject:
   - component: {fileID: 8818829821804908874}
   - component: {fileID: 8818829821804908878}
   - component: {fileID: 8818829821804908877}
+  - component: {fileID: 4410360793958996465}
+  - component: {fileID: -1781901926373724487}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -269,6 +271,34 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   state: 0
+--- !u!114 &4410360793958996465
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818829821804908883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44d7fa1d298cc5b499c265167674b17e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initDamage: 1
+  initAmmo: 100
+--- !u!114 &-1781901926373724487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818829821804908883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c0c68d1a6551f94e982d5ebd322c4fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  initDamage: 20
+  initAmmo: 2
 --- !u!1 &8818829821871352428
 GameObject:
   m_ObjectHideFlags: 0

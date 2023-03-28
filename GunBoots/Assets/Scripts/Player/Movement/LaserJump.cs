@@ -21,10 +21,13 @@ public class LaserJump : MonoBehaviour
 
     [SerializeField] private bool activeState = false;
 
+    private LaserStats weponStats;
+
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
+        weponStats = GetComponent<LaserStats>();
         hoverTime = hoverTimeReset;
     }
 
@@ -64,17 +67,20 @@ public class LaserJump : MonoBehaviour
                 // Draw the ray up to the point where it hits an object
                 Debug.DrawRay(rayOrigin, Vector2.down * hit.distance, Color.green);
 
-                if(hit.collider.gameObject.tag == "Enemy")
+                if (hit.collider.gameObject.tag == "Enemy")
                 {
-                    Debug.Log("Hit");
+                    GameObject enemy = hit.collider.gameObject;
+                    if (enemy.TryGetComponent<EnemyHealthController>(out EnemyHealthController enemyHealth))
+                    {
+                        enemyHealth.Damage(weponStats.damage);
+                    }
                 }
-
-
+                
                 Vector3 laserSize = laser.transform.localScale;
 
                 laser.transform.position = new Vector3 (rayOrigin.x ,rayOrigin.y-(hit.distance /2), laser.transform.position.z);
 
-                laser.transform.localScale = new Vector3(laserSize.x, hit.distance, laserSize.z);
+                laser.transform.localScale = new Vector3(laserSize.x, hit.distance + 0.1f, laserSize.z);
             }
             else
             {

@@ -22,12 +22,13 @@ public class ShotgunJump : MonoBehaviour
     [SerializeField] GameObject bulletClone;
     GameObject[] bullets;
 
+    private ShotgunStats weponStats;
 
     void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
-
+        weponStats = GetComponent<ShotgunStats>();
         bullets = new GameObject[shotCount];
 
         for(int i = 0; i < shotCount; i++)
@@ -81,7 +82,11 @@ public class ShotgunJump : MonoBehaviour
 
             if (curHit.collider.gameObject.tag == "Enemy")
             {
-                Debug.Log("Hit");
+                GameObject enemy = curHit.collider.gameObject;
+                if (enemy.TryGetComponent<EnemyHealthController>(out EnemyHealthController enemyHealth))
+                {
+                    enemyHealth.Damage(weponStats.damage);
+                }
             }
         }
 

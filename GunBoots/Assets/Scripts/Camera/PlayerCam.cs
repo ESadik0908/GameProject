@@ -18,6 +18,7 @@ public class PlayerCam : MonoBehaviour
     private void Start()
     {
         playerMovement = player.GetComponent<PlayerMovement>();
+        player = GameObject.FindGameObjectWithTag("Player");
         transform.position = player.transform.position + offset;
     }
 

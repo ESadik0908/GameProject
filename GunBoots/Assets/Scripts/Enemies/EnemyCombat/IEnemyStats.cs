@@ -4,10 +4,7 @@ using UnityEngine;
 
 public interface IEnemyStats
 {
-    float health { get; set; }
-    
     void Damage(float damage);
 
     void Die();
-
 }
