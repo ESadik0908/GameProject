@@ -90,6 +90,7 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = velocity.y * 0.5f;
         }
         #endregion
+        
     }
 
     private void FixedUpdate()
