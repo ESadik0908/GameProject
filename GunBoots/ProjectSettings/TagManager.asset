@@ -10,6 +10,7 @@ TagManager:
   - DashPickup
   - PlayerBullet
   - Enemy
+  - Platform
   layers:
   - Default
   - TransparentFX

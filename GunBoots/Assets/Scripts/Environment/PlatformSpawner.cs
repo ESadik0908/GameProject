@@ -4,52 +4,71 @@ using UnityEngine;
 
 public class PlatformSpawner : MonoBehaviour
 {
-    [SerializeField] private GameObject platformPrefab;
+    public GameObject platformPrefab;
+    public Transform parentTransform;
+    public float minDistance;
+    public float maxDistanceX;
+    public float maxDistanceY;
+    public float minY;
+    public float maxY;
+    public float minX;
+    public float maxX;
 
-    [SerializeField] private int platformCount;
-    [SerializeField] private float spawnRangeX;
-    [SerializeField] private float spawnRangeY;
-    [SerializeField] private float minPlatformDistance;
-    [SerializeField] private float maxPlatformDistance;
+    public int numberOfPlatforms;
 
     private void Start()
     {
-        spawnPlatforms();
-    }
-
-    private bool CanSpawn(float min, float max, Vector3 platformA, Vector3 platformB)
-    {
-        bool res = Vector3.Distance(platformA, platformB) >= min && Vector3.Distance(platformA, platformB) <= max;
-        return res == true;
-    }
-
-    private void spawnPlatforms()
-    {
-        for(int i = 0; i < platformCount; i++)
+        for (int i = 0; i < numberOfPlatforms; i++)
         {
-            Vector3 spawnPos = new Vector3(Random.Range(-spawnRangeX, spawnRangeX), Random.Range(-spawnRangeY, spawnRangeY));
-
-            GameObject[] platforms = GameObject.FindGameObjectsWithTag("Platform");
-
-            bool canSpawn = false;
-            foreach(GameObject platform in platforms)
+            Vector3 randomPosition = GetRandomPosition();
+            while (CheckIfTooClose(randomPosition) && CheckIfTooFar(randomPosition))
             {
-                Vector3 platformPos = platform.transform.position;
-
-                if(!CanSpawn(minPlatformDistance, maxPlatformDistance, spawnPos, platformPos))
-                {
-                    canSpawn = false;
-                    break;
-                }
+                randomPosition = GetRandomPosition();
             }
 
-            if(canSpawn == true)
-            {
-                Instantiate(platformPrefab, spawnPos, Quaternion.identity);
-            }else
-            {
-                i--;
-            }
+            Instantiate(platformPrefab, randomPosition, Quaternion.identity, parentTransform);
         }
     }
+
+    private Vector3 GetRandomPosition()
+    {
+        float randomX = Random.Range(minX, maxX);
+        float randomY = Random.Range(minY, maxY);
+        return transform.position + new Vector3(randomX, randomY, parentTransform.position.z);
+    }
+
+    private bool CheckIfTooClose(Vector3 position)
+    {
+        foreach (Transform child in parentTransform)
+        {
+            if (Vector3.Distance(position, child.position) < minDistance)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private bool CheckIfTooFar(Vector3 position)
+    {
+        foreach (Transform child in parentTransform)
+        {
+            if (Mathf.Abs(child.position.x - position.x) < maxDistanceX)
+            {
+                return true;
+            }
+            if (Mathf.Abs(child.position.x - position.x) < maxDistanceX){
+                if(Mathf.Abs(child.position.y - position.y) > maxDistanceY)
+                {
+                    return true;
+                }
+            }
+            //if (Vector3.Distance(position, child.position) > maxDistance)
+            //{
+            //    return true;
+            //}
+        }
+        return false;
+    }
 }
+
