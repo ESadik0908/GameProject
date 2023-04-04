@@ -19,7 +19,7 @@ public class Controller2D : MonoBehaviour
     private float verticalRaySpacing;
 
     private BoxCollider2D collider;
-    private RaycastOrigins raycastOrigins;
+    public RaycastOrigins raycastOrigins;
     public CollisionInfo collisions;
 
     void Start()
@@ -235,7 +235,7 @@ public class Controller2D : MonoBehaviour
 
     #region PlayerData
     //store the points for the ray origins
-    private struct RaycastOrigins
+    public struct RaycastOrigins
     {
         public Vector2 topLeft, topRight;
         public Vector2 bottomLeft, bottomRight;

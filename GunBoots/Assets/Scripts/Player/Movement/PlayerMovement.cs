@@ -172,4 +172,9 @@ public class PlayerMovement : MonoBehaviour
     {
         ResetGravity();
     }
+
+    public float getGravity()
+    {
+        return -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
+    }
 }
