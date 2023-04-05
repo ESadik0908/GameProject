@@ -14,6 +14,13 @@ public class UIController : MonoBehaviour
     [SerializeField] private GameObject bombAmmo;
     private Text bombAmmoCount;
 
+    [SerializeField] private GameObject playerHealth;
+    private Slider playerHealthSlider;
+    [SerializeField] private Gradient healthBarGradient;
+    private Image healthBar;
+    private Text healthText;
+
+
     private GameObject player;
     private PlayerStatsTracker playerStats;
    
@@ -27,10 +34,20 @@ public class UIController : MonoBehaviour
         shotgunAmmoCount = shotgunAmmo.GetComponentInChildren<Text>();
 
         bombAmmoCount = bombAmmo.GetComponentInChildren<Text>();
+
+        playerHealthSlider = playerHealth.GetComponentInChildren<Slider>();
+        healthBar = playerHealth.GetComponentInChildren<Image>();
+        healthText = playerHealth.GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
     void Update()
+    {
+        UpdateHealth();
+        UpdateAmmo();             
+    }
+
+    private void UpdateAmmo()
     {
         if (playerStats.stateController.currentState == PlayerState.HOVER)
         {
@@ -62,7 +79,16 @@ public class UIController : MonoBehaviour
         {
             bombAmmo.SetActive(false);
         }
+    }
 
+    private void UpdateHealth()
+    {
+        playerHealthSlider.maxValue = playerStats.maxHealth;
+        playerHealthSlider.value = playerStats.health;
+
+        healthBar.color = healthBarGradient.Evaluate(playerHealthSlider.normalizedValue);
+
+        healthText.text = (playerHealthSlider.value.ToString() + " / " + playerHealthSlider.maxValue.ToString());
 
     }
 }

@@ -6,6 +6,8 @@ public interface IEnemyStats
 {
     Vector3 Position { get; }
 
+    float contactDamage { get; }
+
     void Damage(float damage);
 
     void Die();

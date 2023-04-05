@@ -84,7 +84,7 @@ public class ShotgunJump : MonoBehaviour
             if (curHit.collider.gameObject.tag == "Enemy")
             {
                 GameObject enemy = curHit.collider.gameObject;
-                if (enemy.TryGetComponent<EnemyHealthController>(out EnemyHealthController enemyHealth))
+                if (enemy.TryGetComponent<EnemyStatController>(out EnemyStatController enemyHealth))
                 {
                     enemyHealth.Damage(weponStats.damage);
                 }
