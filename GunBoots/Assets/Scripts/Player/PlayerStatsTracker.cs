@@ -8,7 +8,7 @@ public class PlayerStatsTracker : MonoBehaviour
     private ShotgunJump shotgun;
     private LaserJump laser;
 
-    private PlayerStateController stateController;
+    public PlayerStateController stateController { get; private set; }
 
     public float ammo;
     public float maxAmmo;

@@ -22,6 +22,8 @@ public class BasicMovement : MonoBehaviour
 
     private Vector2[] origins;
 
+    [SerializeField] private float speed;
+
     private void Start()
     {
         player = GameObject.Find("Player");
@@ -44,8 +46,8 @@ public class BasicMovement : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity);
         
-        velocity.x = facing * 1;
-        if (hit.distance != 0)
+        velocity.x = facing * speed;
+        if (hit.distance > 1)
         {
             velocity.x = 0;
         }
@@ -64,7 +66,7 @@ public class BasicMovement : MonoBehaviour
     private void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
-        bottomLeft = new Vector2(bounds.min.x, bounds.min.y - 0.01f);
-        bottomRight = new Vector2(bounds.max.x, bounds.min.y - 0.01f);
+        bottomLeft = new Vector2(bounds.min.x + 0.1f, bounds.min.y - 0.01f);
+        bottomRight = new Vector2(bounds.max.x - 0.1f, bounds.min.y - 0.01f);
     }
 }

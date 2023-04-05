@@ -17,8 +17,8 @@ public class PlayerCam : MonoBehaviour
 
     private void Start()
     {
-        playerMovement = player.GetComponent<PlayerMovement>();
         player = GameObject.FindGameObjectWithTag("Player");
+        playerMovement = player.GetComponent<PlayerMovement>();
         transform.position = player.transform.position + offset;
     }
 
@@ -46,7 +46,7 @@ public class PlayerCam : MonoBehaviour
         }
         target = player.transform.position + offset;
 
-        // Use SmoothDamp instead of Lerp
+        
         transform.position = Vector3.SmoothDamp(transform.position, target, ref velocity, camFollowTime);
     }
 }

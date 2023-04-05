@@ -11,18 +11,15 @@ public class BombPhysics : MonoBehaviour
     private void OnEnable()
     {
         explosionHandler = GetComponent<ExplosionHandler>();
+        Vector3 euler = transform.eulerAngles;
+        euler.z = Random.Range(0f, 360f);
+        transform.eulerAngles = euler;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         explosionHandler.Explode();
         StartCoroutine(TempAnim());
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red; // set the color of the sphere
-        Gizmos.DrawWireSphere(transform.position, explosionHandler.range); // draw the sphere
     }
 
     private IEnumerator TempAnim()
