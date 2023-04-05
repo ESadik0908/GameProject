@@ -39,7 +39,7 @@ Transform:
   m_GameObject: {fileID: 8818829821804908883}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 20.89, y: -24.64, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8818829821871352419}
@@ -219,7 +219,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac9e8d5c7be956e438cc49a0861a5b19, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  laser: {fileID: 0}
+  laser: {fileID: 1992036690078213337, guid: 0aad35c983f193543b19bb687c83027c, type: 3}
   hoverTime: 0
   activeState: 0
 --- !u!114 &8818829821804908874

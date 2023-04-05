@@ -26,6 +26,7 @@ public class PlayerStateController : MonoBehaviour
     private void Start()
     {
         FindAnyObjectByType<Player>().loadEvent += loadState;
+        ChangeState(startingState);
     }
 
     //Change the player state when they are in a state change area and press I, eventually this will be used to change state based on current item

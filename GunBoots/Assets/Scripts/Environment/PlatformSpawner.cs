@@ -6,67 +6,114 @@ public class PlatformSpawner : MonoBehaviour
 {
     public GameObject platformPrefab;
     public Transform parentTransform;
-    public float minDistance;
-    public float maxDistanceX;
-    public float maxDistanceY;
-    public float minY;
-    public float maxY;
-    public float minX;
-    public float maxX;
+
+    public float platformDist;
+
+    private List<GameObject> openList = new List<GameObject>();
+    private List<GameObject> closedList = new List<GameObject>();
+
+    [SerializeField] private float minX, maxX;
+    [SerializeField] private float minY, maxY;
 
     public int numberOfPlatforms;
 
     private void Start()
     {
-        for (int i = 0; i < numberOfPlatforms; i++)
-        {
-            Vector3 randomPosition = GetRandomPosition();
-            while (CheckIfTooClose(randomPosition) && CheckIfTooFar(randomPosition))
-            {
-                randomPosition = GetRandomPosition();
-            }
-
-            Instantiate(platformPrefab, randomPosition, Quaternion.identity, parentTransform);
-        }
+        GameObject firstPlatform = Instantiate(platformPrefab, parentTransform.position, Quaternion.identity, parentTransform);
+        openList.Add(firstPlatform);
+        GeneratePlatforms();
     }
 
-    private Vector3 GetRandomPosition()
+    private void GeneratePlatforms()
     {
-        float randomX = Random.Range(minX, maxX);
-        float randomY = Random.Range(minY, maxY);
-        return transform.position + new Vector3(randomX, randomY, parentTransform.position.z);
-    }
-
-    private bool CheckIfTooClose(Vector3 position)
-    {
-        foreach (Transform child in parentTransform)
+        while(closedList.Count < numberOfPlatforms)
         {
-            if (Vector3.Distance(position, child.position) < minDistance)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
+            List<GameObject> newPlatforms = new List<GameObject>();
+            int openListCount = openList.Count;
 
-    private bool CheckIfTooFar(Vector3 position)
-    {
-        foreach (Transform child in parentTransform)
-        {
-            if (Mathf.Abs(child.position.x - position.x) < maxDistanceX)
+            for (int j = 0; j < openListCount; j++)
             {
-                return true;
-            }
-            if (Mathf.Abs(child.position.x - position.x) < maxDistanceX){
-                if(Mathf.Abs(child.position.y - position.y) > maxDistanceY)
+                GameObject platform = openList[j];
+
+                Vector3 platform1Pos =  new Vector3(
+                        platform.transform.position.x + Random.Range(minX, maxX),
+                        platform.transform.position.y + Random.Range(minY, maxY),
+                        platform.transform.position.z
+                        );
+                if (!CheckExistingPlatform(platform1Pos))
                 {
-                    return true;
+                    GameObject platform1 = Instantiate(platformPrefab, platform1Pos, Quaternion.identity, parentTransform);
+                    newPlatforms.Add(platform1);
                 }
+
+                Vector3 platform2Pos = new Vector3(
+                        platform.transform.position.x - Random.Range(minX, maxX),
+                        platform.transform.position.y + Random.Range(minY, maxY),
+                        platform.transform.position.z
+                        );
+
+                if (!CheckExistingPlatform(platform2Pos))
+                {
+                    GameObject platform2 = Instantiate(platformPrefab, platform2Pos, Quaternion.identity, parentTransform);
+                    newPlatforms.Add(platform2);
+                }
+                
+
+                Vector3 platform3Pos = new Vector3(
+                        platform.transform.position.x + Random.Range(minX, maxX),
+                        platform.transform.position.y - Random.Range(minY, maxY),
+                        platform.transform.position.z
+                        );
+
+                if (!CheckExistingPlatform(platform3Pos))
+                {
+                    GameObject platform3 = Instantiate(platformPrefab, platform3Pos, Quaternion.identity, parentTransform);
+                    newPlatforms.Add(platform3);
+                }
+
+                
+
+                Vector3 platform4Pos = new Vector3(
+                        platform.transform.position.x - Random.Range(minX, maxX),
+                        platform.transform.position.y - Random.Range(minY, maxY),
+                        platform.transform.position.z
+                        );
+
+                if (!CheckExistingPlatform(platform4Pos))
+                {
+                    GameObject platform4 = Instantiate(platformPrefab, platform4Pos, Quaternion.identity, parentTransform);
+                    newPlatforms.Add(platform4);
+                }
+
+                
+
+                closedList.Add(platform);
             }
-            //if (Vector3.Distance(position, child.position) > maxDistance)
-            //{
-            //    return true;
-            //}
+
+            foreach (GameObject platform in newPlatforms)
+            {
+                openList.Add(platform);
+            }
+
+            openList.RemoveRange(0, openListCount);
+        }
+    }
+
+    private bool CheckExistingPlatform(Vector3 newPlatform)
+    {
+        foreach (GameObject existingPlatform in openList)
+        {
+            if (Vector3.Distance(existingPlatform.transform.position, newPlatform) < platformDist)
+            {
+                return true;
+            }
+        }
+        foreach (GameObject existingPlatform in closedList)
+        {
+            if (Vector3.Distance(existingPlatform.transform.position, newPlatform) < platformDist)
+            {
+                return true;
+            }
         }
         return false;
     }
