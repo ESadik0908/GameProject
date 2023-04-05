@@ -10,10 +10,11 @@ public class LaserJump : MonoBehaviour
 {
     private PlayerMovement playerMovement;
     private BoxCollider2D collider;
-    [SerializeField] private GameObject laser;
+    [SerializeField] private GameObject laserPrefab;
+    private GameObject laser;
 
-    private float hoverTimeReset = 2f;
-    [SerializeField] private float hoverTime;
+    public float hoverTimeReset { get; private set; }
+    public float hoverTime { get; private set; }
 
     private Vector2 centerRay;
 
@@ -28,7 +29,9 @@ public class LaserJump : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
         weponStats = GetComponent<LaserStats>();
+        hoverTimeReset = weponStats.ammo;
         hoverTime = hoverTimeReset;
+        laser = Instantiate(laserPrefab);
     }
 
     private void Update()
@@ -87,7 +90,14 @@ public class LaserJump : MonoBehaviour
                 // Draw the full length of the ray
                 Debug.DrawRay(rayOrigin, -Vector2.up * 20f, Color.green);
             }
-            hoverTime -= Time.deltaTime;
+            if(hoverTime != 0)
+            {
+                hoverTime -= Time.deltaTime;
+            }
+            if(hoverTime < 0)
+            {
+                hoverTime = 0;
+            }
         }
         else
         {

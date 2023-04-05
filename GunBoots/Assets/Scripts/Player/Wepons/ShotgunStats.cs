@@ -5,11 +5,12 @@ using UnityEngine;
 public class ShotgunStats : MonoBehaviour
 {
     [SerializeField] private float initDamage;
-    [SerializeField] private float initAmmo;
+    [SerializeField] private int initAmmo;
 
     private void Start()
     {
         damage = initDamage;
+        ammo = initAmmo;
     }
 
     public float damage { get; private set; }

@@ -6,29 +6,30 @@ using UnityEngine;
 //Player state where they can have extra jumps after the initial jump
 public class ShotgunJump : MonoBehaviour
 {
-    PlayerMovement playerMovement;
-    BoxCollider2D collider;
+    private PlayerMovement playerMovement;
+    private BoxCollider2D collider;
 
-    Vector2 centerRay;
+    private Vector2 centerRay;
 
-    int jumpCountReset = 2;
-    [SerializeField] int jumpCount;
+    public int jumpCountReset { get; private set; }
+    public int jumpCount { get; private set; }
 
     [SerializeField] private bool activeState = false;
 
-    [SerializeField] int shotCount = 4;
-    [SerializeField] float spread = 30f;
+    [SerializeField] private int shotCount = 5;
+    [SerializeField] private float spread = 30f;
 
-    [SerializeField] GameObject bulletClone;
-    GameObject[] bullets;
+    [SerializeField] private GameObject bulletClone;
+    private GameObject[] bullets;
 
     private ShotgunStats weponStats;
 
-    void Start()
+    private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
         weponStats = GetComponent<ShotgunStats>();
+        jumpCountReset = weponStats.ammo;
         bullets = new GameObject[shotCount];
 
         for(int i = 0; i < shotCount; i++)
@@ -59,7 +60,7 @@ public class ShotgunJump : MonoBehaviour
 
     //Generate shotCount random rays from the players feet to the closest hit object. The first ray is always straight down, the remaining rays
     //are in a random angle between -spread and spread. Activate each bullet to one of the rays for 0.07s and then deactivate them.
-    IEnumerator Shoot()
+    private IEnumerator Shoot()
     {
         UpdateRaycastOrigins();
         Vector2 rayOrigin = centerRay;
@@ -116,7 +117,7 @@ public class ShotgunJump : MonoBehaviour
         }
     }
 
-    void UpdateRaycastOrigins()
+    private void UpdateRaycastOrigins()
     {
         Bounds bounds = collider.bounds;
         centerRay = new Vector2(bounds.center.x, bounds.min.y - 0.01f);

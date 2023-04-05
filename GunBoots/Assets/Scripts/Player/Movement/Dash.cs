@@ -9,44 +9,37 @@ public class Dash : MonoBehaviour
     private PlayerMovement playerMovement;
     private Controller2D controller;
 
-    [SerializeField] private GameObject bombClone;
-    private GameObject[] bombs;
     private IEnumerator bombCoroutine;
 
-    [SerializeField] private int bombCount = 8;
-    [SerializeField] private float spawnDelay;
+    private GameObject bomb;
+    [SerializeField] private GameObject bombClone;
+    private static Queue<GameObject> pool = new Queue<GameObject>();
 
-    private bool activeState = false;
+    private DashStats weponStats;
+
+    [SerializeField] private float spawnDelay;
 
     private float dashBuffer = 0.2f;
     private float dashBufferCounter;
 
-    [SerializeField] private int dashCountReset = 2;
-    private int dashCount;
+    public int dashCountReset { get; private set; }
+    public int dashCount { get; private set; }
 
+    private bool activeState = false;
+    
     private bool isDashing = false;
 
-    private IEnumerator dashCoroutine;
-
-    
+    private IEnumerator dashCoroutine;  
     [SerializeField] private float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
 
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
         controller = GetComponent<Controller2D>();
+        weponStats = GetComponent<DashStats>();
         dashCoroutine = playerMovement.Dash(dashStats);
-        bombs = new GameObject[bombCount];
-        for (int i = 0; i < bombCount; i++)
-        {
-            bombs[i] = Instantiate(bombClone, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.Euler(0, 0, 0));
-            bombs[i].SetActive(false);
-        }
-        // Check if bombs array needs to be resized
-        if (bombs.Length != bombCount)
-        {
-            System.Array.Resize(ref bombs, bombCount);
-        }
+        dashCountReset = weponStats.ammo;
+        
     }
 
     private void Awake()
@@ -102,27 +95,13 @@ public class Dash : MonoBehaviour
 
     private IEnumerator Bomb()
     {
-        if (dashCount == 2)
+        for (int i = 0; i <= 4; i++)
         {
-            for (int i = 0; i < bombCount / 2; i++)
-            {
-                yield return new WaitForSeconds(spawnDelay);
-                Vector3 bombPosition = new Vector3(transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) /2), transform.position.z);
-                bombs[i].SetActive(true);
-                bombs[i].transform.position = bombPosition; 
-            }
+            yield return new WaitForSeconds(spawnDelay);
+            bomb = GetBomb();
+            bomb.transform.position = new Vector3(transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bomb.transform.localScale.y) /2), transform.position.z);
+            bomb.SetActive(true);
         }
-        else if (dashCount == 1)
-        {
-            for (int i = bombCount / 2; i < bombCount; i++)
-            {
-                yield return new WaitForSeconds(spawnDelay);
-                Vector3 bombPosition = new Vector3 (transform.position.x, transform.localPosition.y - ((transform.localScale.y / 2) + (bombs[i].transform.localScale.y) / 2), transform.position.z);
-                bombs[i].SetActive(true);
-                bombs[i].transform.position = bombPosition;
-            }
-        }
-
         yield return null;
     }
 
@@ -148,4 +127,23 @@ public class Dash : MonoBehaviour
     {
         isDashing = !isDashing;
     }
+
+    private GameObject GetBomb()
+    {
+        // check if there are any inactive bombs in the pool
+        foreach (GameObject bomb in pool)
+        {
+            if (!bomb.activeSelf)
+            {
+                // if an inactive bomb is found, return it
+                return bomb;
+            }
+        }
+
+        // if no inactive bombs are found, create a new one
+        bomb = Instantiate(bombClone);
+        pool.Enqueue(bomb);
+        return bomb;
+    }
+
 }

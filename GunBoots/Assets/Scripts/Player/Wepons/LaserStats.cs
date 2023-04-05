@@ -10,8 +10,9 @@ public class LaserStats : MonoBehaviour
     private void Start()
     {
         damage = initDamage;
+        ammo = initAmmo;
     }
 
     public float damage { get; private set; }
-    public int ammo { get; private set; }
+    public float ammo { get; private set; }
 }

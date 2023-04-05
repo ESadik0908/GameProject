@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6143137206396707503}
   - component: {fileID: 4805190320451415937}
   - component: {fileID: -1556556617396434484}
-  - component: {fileID: -6912893083384524955}
+  - component: {fileID: 4027634559698517962}
+  - component: {fileID: -8509086360821773470}
   m_Layer: 0
   m_Name: Bomb
   m_TagString: PlayerBullet
@@ -137,7 +138,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 07c1a5d2f2c90f54dbc686b2fde9b3fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-6912893083384524955
+--- !u!114 &4027634559698517962
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -149,5 +150,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445005a3a3876844590eced65b2047d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseDamage: 100
-  baseAmmo: 2
+  initDamage: 100
+  initAmmo: 2
+--- !u!114 &-8509086360821773470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6077302836250855532}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e7f1036ed3439e14d94a9456e4388a60, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  range: 3

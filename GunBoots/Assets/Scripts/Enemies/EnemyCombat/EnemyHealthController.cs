@@ -10,6 +10,14 @@ public class EnemyHealthController : MonoBehaviour, IEnemyStats
 
     private float damageBuffer = 0.1f;
 
+    public Vector3 Position
+    {
+        get
+        {
+            return transform.position;
+        }
+    }
+
     private void Start()
     {
         health = tmp;
