@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 258041154985776376}
   - component: {fileID: -4464189351805253044}
   m_Layer: 8
-  m_Name: FlyingEnemy
+  m_Name: EnemyMissile
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -164,6 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tmp: 10
+  _contactDamage: 0
 --- !u!1 &258041155117566638
 GameObject:
   m_ObjectHideFlags: 0

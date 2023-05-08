@@ -14,6 +14,9 @@ public class Unit : MonoBehaviour
 
     private Path path;
 
+    private Vector3 endPos;
+    private bool endFlight = false;
+
     private void Start()
     {
         target = GameObject.FindWithTag("Player").transform;
@@ -29,6 +32,34 @@ public class Unit : MonoBehaviour
             StopCoroutine("FollowPath");
             StartCoroutine("FollowPath");
         }
+    }
+
+    private void FixedUpdate()
+    {
+        transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
+    }
+
+    private void Update()
+    {
+        float distance = Vector3.Distance(transform.position, target.transform.position);
+
+        if (endFlight)
+        {
+            return;
+        }
+
+        if (distance < 1)
+        {
+            StopAllCoroutines();
+            endFlight = true;
+            endPos = target.transform.position;
+            transform.right = endPos - transform.position;
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        gameObject.SetActive(false);
     }
 
     private IEnumerator UpdatePath()
@@ -66,7 +97,9 @@ public class Unit : MonoBehaviour
             {
                 if(pathIndex == path.finishLineIndex)
                 {
-                    transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
+                    followingPath = false;
+                    break;
+                    
                 }
                 else
                 {
@@ -77,13 +110,9 @@ public class Unit : MonoBehaviour
             if (followingPath)
             {
                 transform.right = path.lookPoints[pathIndex] - transform.position;
-                
-                transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
-            }
 
+            }
             yield return null;
         }
     }
-
-    
 }
