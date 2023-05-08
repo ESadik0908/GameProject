@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class BasicMovement : MonoBehaviour
+public class JumpingEnemy : MonoBehaviour
 {
     private GameObject player;
 
@@ -22,7 +22,15 @@ public class BasicMovement : MonoBehaviour
 
     private Vector2[] origins;
 
+    [SerializeField] private float jumpTimer;
+    [SerializeField] private float jumpTimerReset;
+
     [SerializeField] private float speed;
+    [SerializeField] private float jumpHeight = 4f;
+    [SerializeField] private float timeToApex = 0.4f;
+    private float jumpForce;
+
+    private bool isJumping = false;
 
     private void Start()
     {
@@ -31,7 +39,8 @@ public class BasicMovement : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
-        
+        jumpForce = Mathf.Abs(gravity) * timeToApex;
+        jumpTimer = jumpTimerReset;
     }
 
     private void Update()
@@ -52,16 +61,31 @@ public class BasicMovement : MonoBehaviour
             velocity = Vector3.zero;
             return;
         }
-        
-        velocity.x = facing * speed;
-        if (hit.distance > 1)
+
+        if (isJumping && controller.collisions.below)
         {
-            velocity.x = 0;
+            velocity = Vector3.zero;
+            isJumping = false;
+            jumpTimer = jumpTimerReset;
         }
+
+
+        if (!isJumping && controller.collisions.below && jumpTimer <= 0)
+        {
+            velocity.x = speed * facing;
+            velocity.y = jumpForce;
+            isJumping = true;
+        }
+        
         
         if (velocity.y > -50)
         {
             velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (jumpTimer > 0)
+        {
+            jumpTimer -= Time.deltaTime;
         }
     }
 

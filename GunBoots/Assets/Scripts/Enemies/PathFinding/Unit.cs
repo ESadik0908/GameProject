@@ -66,8 +66,7 @@ public class Unit : MonoBehaviour
             {
                 if(pathIndex == path.finishLineIndex)
                 {
-                    followingPath = false;
-                    break;
+                    transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
                 }
                 else
                 {
