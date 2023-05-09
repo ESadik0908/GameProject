@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   collisionMask:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 384
   horizontalRayCount: 4
   verticalRayCount: 4
 --- !u!114 &8818829821804908882
@@ -340,6 +340,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b79447006de2a459f20862515a210a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 0
   damageBuffer: 1
 --- !u!1 &8818829821871352428
 GameObject:
