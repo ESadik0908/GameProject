@@ -21,6 +21,13 @@ public class EnemyAiming : MonoBehaviour
 
     private void Update()
     {
+        float distance = Vector3.Distance(target.position, transform.position);
+
+        if (distance > 30)
+        {
+            return;
+        }
+
         if(gunCooldown <= 0)
         {
             Fire();

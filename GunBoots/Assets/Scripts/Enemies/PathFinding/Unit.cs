@@ -17,13 +17,25 @@ public class Unit : MonoBehaviour
     private Vector3 endPos;
     private bool endFlight = false;
     private Vector3 targetPosition = Vector3.zero;
-    private bool follow = false;
     [SerializeField] private float initialFlightDuration;
+    private float flightDuration;
+
+
+    private Quaternion initialRotation;
 
     private void Start()
     {
+        flightDuration = initialFlightDuration;
         target = GameObject.FindWithTag("Player").transform;
-        StartCoroutine("UpdatePath");
+        StopCoroutine("UpdatePath");
+    }
+
+    private void OnEnable()
+    {
+        flightDuration = initialFlightDuration;
+        StopCoroutine("UpdatePath");
+        StartCoroutine("WaitForFlight");
+        endFlight = false;
     }
 
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
@@ -39,52 +51,48 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (initialFlightDuration > 0)
-        {
-            transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
-        }
-        
-        if (initialFlightDuration <= 0)
-        {
-            transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
-        }
-
+        transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
     }
 
     private void Update()
     {
-        if(initialFlightDuration > 0)
-        {
-            initialFlightDuration -= Time.deltaTime;
-            return;
-        }
-
-        follow = true;
-
-        targetPosition = target.position;
-        targetPosition.z = transform.position.z;
-        float distance = Vector3.Distance(transform.position, targetPosition);
-
         if (endFlight)
         {
             return;
         }
+
+        if (flightDuration > 0)
+        {
+            flightDuration -= Time.deltaTime;
+            return;
+        }
+        
+        targetPosition = target.position;
+        targetPosition.z = transform.position.z;
+        float distance = Vector3.Distance(transform.position, targetPosition);
 
         if (distance < 1)
         {
             StopAllCoroutines();
             endFlight = true;
             endPos = targetPosition;
-            transform.right = endPos - transform.position;
+            transform.up = endPos - transform.position;
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy")
         {
             return;
         }
+        StartCoroutine("DelayedDespawn");
+    }
+
+
+    private IEnumerator DelayedDespawn()
+    {
+        yield return new WaitForSeconds(0.01f);
         gameObject.SetActive(false);
     }
 
@@ -111,7 +119,6 @@ public class Unit : MonoBehaviour
 
     private IEnumerator FollowPath()
     {
-
         bool followingPath = true;
         int pathIndex = 0;
         transform.LookAt(path.lookPoints[0]);
@@ -135,10 +142,19 @@ public class Unit : MonoBehaviour
 
             if (followingPath)
             {
-                transform.right =  path.lookPoints[pathIndex] - transform.position;
+                transform.up =  path.lookPoints[pathIndex] - transform.position;
 
             }
             yield return null;
         }
+    }
+
+    private IEnumerator WaitForFlight()
+    {
+        while (flightDuration > 0)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        StartCoroutine("UpdatePath");
     }
 }

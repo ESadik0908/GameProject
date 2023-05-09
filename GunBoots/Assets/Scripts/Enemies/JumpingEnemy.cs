@@ -26,7 +26,6 @@ public class JumpingEnemy : MonoBehaviour
     [SerializeField] private float jumpTimerReset;
 
     [SerializeField] private float speed;
-    [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float timeToApex = 0.4f;
     private float jumpForce;
 
@@ -58,9 +57,14 @@ public class JumpingEnemy : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity);
 
-        if (yDifference > 5 && controller.collisions.below)
+        if (velocity.y > -50)
         {
-            velocity = Vector3.zero;
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (yDifference > 5)
+        {
+            velocity.x = 0;
             return;
         }
 
@@ -79,12 +83,6 @@ public class JumpingEnemy : MonoBehaviour
             isJumping = true;
         }
         
-        
-        if (velocity.y > -50)
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
-
         if (jumpTimer > 0)
         {
             jumpTimer -= Time.deltaTime;
@@ -93,6 +91,11 @@ public class JumpingEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
+        }
+
         controller.Move(velocity * Time.deltaTime);
     }
 

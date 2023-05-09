@@ -36,7 +36,7 @@ public class RangedEnemyMovement : MonoBehaviour
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
 
-        moveCooldown = Random.RandomRange(1f, 5f);
+        moveCooldown = Random.Range(1f, 5f);
     }
 
     private void Update()
@@ -53,9 +53,14 @@ public class RangedEnemyMovement : MonoBehaviour
 
         RaycastHit2D hit = Physics2D.Raycast(rayOrigin, Vector2.down, Mathf.Infinity);
 
-        if (yDifference > 5 && controller.collisions.below)
+        if (velocity.y > -50)
         {
-            velocity = Vector3.zero;  
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (yDifference > 5 )
+        {
+            velocity.x = 0;  
             return;
         }
 
@@ -63,7 +68,7 @@ public class RangedEnemyMovement : MonoBehaviour
         {
             moving = true;
             StartCoroutine("MoveRandomly");
-            moveCooldown = Random.RandomRange(1f, 5f);
+            moveCooldown = Random.Range(1, 5);
         }
 
         if (!moving)
@@ -76,14 +81,16 @@ public class RangedEnemyMovement : MonoBehaviour
             velocity.x = 0;
         }
         
-        if (velocity.y > -50)
-        {
-            velocity.y += gravity * Time.deltaTime;
-        }
+
     }
 
     private void FixedUpdate()
     {
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
+        }
+
         controller.Move(velocity * Time.deltaTime);
     }
 

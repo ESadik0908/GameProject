@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
-public class BasicMovement : MonoBehaviour
+public class HunterMovement : MonoBehaviour
 {
     private GameObject player;
 
     public float facing;
+    public float playerAboveOrBelow;
     private Controller2D controller;
     private PlayerMovement playerMovement;
 
@@ -23,6 +24,11 @@ public class BasicMovement : MonoBehaviour
     private Vector2[] origins;
 
     [SerializeField] private float speed;
+    [SerializeField] private float timeToApex = 0.4f;
+    private float jumpForce;
+
+    private float coyoteTime = 0.2f;
+    public float coyoteTimeCounter;
 
     private void Start()
     {
@@ -31,15 +37,17 @@ public class BasicMovement : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
-        
+        jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 
     private void Update()
     {
         float playerSide = player.transform.position.x - transform.position.x;
+        float playerYLoc = player.transform.position.y - transform.position.y;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
 
         facing = Mathf.Sign(playerSide);
+        playerAboveOrBelow = Mathf.Sign(playerYLoc);
 
         UpdateRaycastOrigins();
 
@@ -57,14 +65,32 @@ public class BasicMovement : MonoBehaviour
             velocity.x = 0;
             return;
         }
-        
-        velocity.x = facing * speed;
+
+        if (controller.collisions.below)
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
         if (hit.distance > 1)
         {
-            velocity.x = 0;
+            if(playerAboveOrBelow == 1)
+            {
+                if (coyoteTimeCounter > 0)
+                {
+                    velocity.y = jumpForce;
+                }
+                else
+                {
+                    velocity.x = 0;
+                }
+            }          
+            
         }
-        
-
+        velocity.x = facing * speed;
     }
 
     private void FixedUpdate()

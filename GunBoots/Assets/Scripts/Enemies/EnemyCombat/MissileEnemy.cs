@@ -18,7 +18,7 @@ public class MissileEnemy : MonoBehaviour
         if(gunCooldown <= 0)
         {
             Shoot();
-            gunCooldown = Random.RandomRange(minGunCooldown, maxGunCooldown);
+            gunCooldown = Random.Range(minGunCooldown, maxGunCooldown);
             return;
         }
 
@@ -29,7 +29,9 @@ public class MissileEnemy : MonoBehaviour
     {
         missile = GetMissile();
         Vector3 spawnPos = new Vector3(transform.position.x, transform.position.y + (transform.localScale.y / 2) + 0.1f, transform.position.z);
+        missile.transform.up = transform.up;
         missile.transform.position = spawnPos;
+        
         missile.SetActive(true);
     }
 
