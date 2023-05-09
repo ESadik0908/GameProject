@@ -140,10 +140,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  speed: 7
+  speed: 6
   turnDst: 0
   turnSpeed: 4
-  initialFlightDuration: 1
+  initialFlightDuration: 0.5
 --- !u!114 &-4464189351805253044
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -5,6 +5,13 @@ using UnityEngine;
 public class MissileEnemy : MonoBehaviour
 {
 
+    private Controller2D controller;
+    private PlayerMovement playerMovement;
+    private float gravity;
+    private Vector3 velocity;
+    private GameObject player;
+
+
     [SerializeField] private float minGunCooldown;
     [SerializeField] private float maxGunCooldown;
     private float gunCooldown = 3f;
@@ -13,9 +20,22 @@ public class MissileEnemy : MonoBehaviour
     private GameObject missile;
     private static Queue<GameObject> pool = new Queue<GameObject>();
 
+    private void Start()
+    {
+        player = GameObject.Find("Player");
+        playerMovement = player.GetComponent<PlayerMovement>();
+        controller = GetComponent<Controller2D>();
+        gravity = playerMovement.getGravity();
+    }
+
     private void Update()
     {
-        if(gunCooldown <= 0)
+        if (velocity.y > -50)
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (gunCooldown <= 0)
         {
             Shoot();
             gunCooldown = Random.Range(minGunCooldown, maxGunCooldown);
@@ -23,6 +43,18 @@ public class MissileEnemy : MonoBehaviour
         }
 
         gunCooldown -= Time.deltaTime;
+
+
+    }
+
+    private void FixedUpdate()
+    {
+        if (controller.collisions.above || controller.collisions.below)
+        {
+            velocity.y = 0;
+        }
+
+        controller.Move(velocity * Time.deltaTime);
     }
 
     private void Shoot()

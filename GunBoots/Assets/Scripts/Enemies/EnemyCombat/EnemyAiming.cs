@@ -32,7 +32,7 @@ public class EnemyAiming : MonoBehaviour
         {
             Fire();
             gunCooldown = gunCooldownReset;
-            return;
+            return; 
         }
 
         gunCooldown -= Time.deltaTime;
