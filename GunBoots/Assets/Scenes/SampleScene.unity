@@ -1002,6 +1002,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 45
       objectReference: {fileID: 0}
+    - target: {fileID: 1933192469951769483, guid: 6e3d9264cebcb9b4799980951ba8e52b, type: 3}
+      propertyPath: m_IsTrigger
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6e3d9264cebcb9b4799980951ba8e52b, type: 3}
 --- !u!1 &377814233
@@ -2268,10 +2272,6 @@ PrefabInstance:
     - target: {fileID: 2613699450407810127, guid: 45df28b39b9d30c459f062096f9df9da, type: 3}
       propertyPath: m_Name
       value: Archer
-      objectReference: {fileID: 0}
-    - target: {fileID: 7049058342151647067, guid: 45df28b39b9d30c459f062096f9df9da, type: 3}
-      propertyPath: speed
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45df28b39b9d30c459f062096f9df9da, type: 3}

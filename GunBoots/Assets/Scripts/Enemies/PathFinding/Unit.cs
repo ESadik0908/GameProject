@@ -16,6 +16,7 @@ public class Unit : MonoBehaviour
 
     private Vector3 endPos;
     private bool endFlight = false;
+    private Vector3 targetPosition = Vector3.zero;
 
     private void Start()
     {
@@ -41,7 +42,9 @@ public class Unit : MonoBehaviour
 
     private void Update()
     {
-        float distance = Vector3.Distance(transform.position, target.transform.position);
+        targetPosition = target.position;
+        targetPosition.z = transform.position.z;
+        float distance = Vector3.Distance(transform.position, targetPosition);
 
         if (endFlight)
         {
@@ -52,7 +55,7 @@ public class Unit : MonoBehaviour
         {
             StopAllCoroutines();
             endFlight = true;
-            endPos = target.transform.position;
+            endPos = targetPosition;
             transform.right = endPos - transform.position;
         }
     }
@@ -68,17 +71,17 @@ public class Unit : MonoBehaviour
         {
             yield return new WaitForSeconds(.3f);
         }
-        PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
+        PathRequestManager.RequestPath(new PathRequest(transform.position, targetPosition, OnPathFound));
         float sqrMoveThreshhold = pathUpdateMoveThreshold * pathUpdateMoveThreshold;
 
-        Vector3 targetPosOld = target.position;
+        Vector3 targetPosOld = targetPosition;
         while (true)
         {
             yield return new WaitForSeconds(minPathUpdateTime);
-            if((target.position - targetPosOld).sqrMagnitude > sqrMoveThreshhold)
+            if((targetPosition - targetPosOld).sqrMagnitude > sqrMoveThreshhold)
             {
-                PathRequestManager.RequestPath(new PathRequest(transform.position, target.position, OnPathFound));
-                targetPosOld = target.position;
+                PathRequestManager.RequestPath(new PathRequest(transform.position, targetPosition, OnPathFound));
+                targetPosOld = targetPosition;
             }
         }
     }
@@ -109,7 +112,7 @@ public class Unit : MonoBehaviour
 
             if (followingPath)
             {
-                transform.right = path.lookPoints[pathIndex] - transform.position;
+                transform.right =  path.lookPoints[pathIndex] - transform.position;
 
             }
             yield return null;
