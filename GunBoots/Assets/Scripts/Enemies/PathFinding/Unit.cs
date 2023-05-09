@@ -17,6 +17,8 @@ public class Unit : MonoBehaviour
     private Vector3 endPos;
     private bool endFlight = false;
     private Vector3 targetPosition = Vector3.zero;
+    private bool follow = false;
+    [SerializeField] private float initialFlightDuration;
 
     private void Start()
     {
@@ -37,11 +39,28 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
+        if (initialFlightDuration > 0)
+        {
+            transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
+        }
+        
+        if (initialFlightDuration <= 0)
+        {
+            transform.Translate(Vector3.right * Time.deltaTime * speed, Space.Self);
+        }
+
     }
 
     private void Update()
     {
+        if(initialFlightDuration > 0)
+        {
+            initialFlightDuration -= Time.deltaTime;
+            return;
+        }
+
+        follow = true;
+
         targetPosition = target.position;
         targetPosition.z = transform.position.z;
         float distance = Vector3.Distance(transform.position, targetPosition);
@@ -62,6 +81,10 @@ public class Unit : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if(collision.gameObject.tag == "Enemy")
+        {
+            return;
+        }
         gameObject.SetActive(false);
     }
 

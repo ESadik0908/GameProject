@@ -151,6 +151,7 @@ MonoBehaviour:
   speed: 3
   turnDst: 0
   turnSpeed: 4
+  initialFlightDuration: 2
 --- !u!114 &-4464189351805253044
 MonoBehaviour:
   m_ObjectHideFlags: 0
