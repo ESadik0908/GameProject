@@ -20,6 +20,11 @@ public class UIController : MonoBehaviour
     private Image healthBar;
     private Text healthText;
 
+    [SerializeField] private Text waveCounter;
+    [SerializeField] private Text enemiesRemaining;
+
+    [SerializeField] private GameObject gameController;
+    private GameStatsTracker gameStats;
 
     private GameObject player;
     private PlayerStatsTracker playerStats;
@@ -30,6 +35,8 @@ public class UIController : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player");
         playerStats = player.GetComponent<PlayerStatsTracker>();
         ammoCountSlider = laserAmmo.GetComponentInChildren<Slider>();
+
+        gameStats = gameController.GetComponent<GameStatsTracker>();
 
         shotgunAmmoCount = shotgunAmmo.GetComponentInChildren<Text>();
 
@@ -44,7 +51,8 @@ public class UIController : MonoBehaviour
     void Update()
     {
         UpdateHealth();
-        UpdateAmmo();             
+        UpdateAmmo();
+        UpdateProgress();
     }
 
     private void UpdateAmmo()
@@ -90,5 +98,11 @@ public class UIController : MonoBehaviour
 
         healthText.text = (playerHealthSlider.value.ToString() + " / " + playerHealthSlider.maxValue.ToString());
 
+    }
+
+    private void UpdateProgress()
+    {
+        waveCounter.text = ("Wave: " + gameStats.wave.ToString());
+        enemiesRemaining.text = ("Enemies Remaining: " + gameStats.enemiesRemaining.ToString());
     }
 }

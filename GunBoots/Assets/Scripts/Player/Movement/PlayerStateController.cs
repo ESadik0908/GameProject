@@ -46,6 +46,21 @@ public class PlayerStateController : MonoBehaviour
         }
     }
 
+    public void ShotgunUpgrade()
+    {
+        ChangeState(PlayerState.EXTRAJUMPS);
+    }
+
+    public void LaserUpgrade()
+    {
+        ChangeState(PlayerState.HOVER);
+    }
+
+    public void DashUpgrade()
+    {
+        ChangeState(PlayerState.DASH);
+    }
+
     public void loadState(Player player)
     {
         ChangeState(player.state);
@@ -61,37 +76,5 @@ public class PlayerStateController : MonoBehaviour
     {
         SendMessage("EnterState", newState, SendMessageOptions.DontRequireReceiver);
         currentState = newState;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "ExtraJumpsPickup")
-        {
-            extraJumpsChange = true;
-        }
-        if (collision.gameObject.tag == "HoverPickup")
-        {
-            hoverChange = true;
-        }
-        if (collision.gameObject.tag == "DashPickup")
-        {
-            dashChange = true;
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (collision.gameObject.tag == "ExtraJumpsPickup")
-        {
-            extraJumpsChange = false;
-        }
-        if (collision.gameObject.tag == "HoverPickup")
-        {
-            hoverChange = false;
-        }
-        if (collision.gameObject.tag == "DashPickup")
-        {
-            dashChange = false;
-        }
     }
 }

@@ -11,6 +11,7 @@ public class Unit : MonoBehaviour
     public float speed = 20;
     public float turnDst = 5;
     public float turnSpeed = 3;
+    private EnemyProjectileStats stats;
 
     private Path path;
 
@@ -28,6 +29,7 @@ public class Unit : MonoBehaviour
         flightDuration = initialFlightDuration;
         target = GameObject.FindWithTag("Player").transform;
         StopCoroutine("UpdatePath");
+        stats = GetComponent<EnemyProjectileStats>();
     }
 
     private void OnEnable()
@@ -36,6 +38,7 @@ public class Unit : MonoBehaviour
         StopCoroutine("UpdatePath");
         StartCoroutine("WaitForFlight");
         endFlight = false;
+        stats = GetComponent<EnemyProjectileStats>();
     }
 
     public void OnPathFound(Vector3[] waypoints, bool pathSuccessful)
@@ -80,22 +83,26 @@ public class Unit : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "PlayerBullet")
         {
             return;
         }
-        StartCoroutine("DelayedDespawn");
-    }
 
+        if (collision.gameObject.tag == "Player")
+        {
 
-    private IEnumerator DelayedDespawn()
-    {
-        yield return new WaitForSeconds(0.01f);
+            GameObject player = collision.gameObject;
+            if (player.TryGetComponent(out PlayerHealthController playerHealth))
+            {
+                playerHealth.Damage(stats.contactDamage);
+                Debug.Log(stats.contactDamage);
+            }
+        }
         gameObject.SetActive(false);
     }
-
+    
     private IEnumerator UpdatePath()
     {
         if(Time.timeSinceLevelLoad < 0.3f)

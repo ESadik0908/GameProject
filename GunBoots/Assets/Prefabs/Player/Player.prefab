@@ -223,6 +223,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   laserPrefab: {fileID: 1992036690078213337, guid: 0aad35c983f193543b19bb687c83027c, type: 3}
   activeState: 0
+  damageBufferReset: 0.01
 --- !u!114 &8818829821804908874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,7 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 212cb4a85d02c1541aae2077656e8b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingState: 3
+  startingState: 2
   extraJumpsChange: 0
   hoverChange: 0
   dashChange: 0
@@ -282,8 +283,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44d7fa1d298cc5b499c265167674b17e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initDamage: 1
-  initAmmo: 2
+  initDamage: 2
+  initAmmo: 1
 --- !u!114 &-1781901926373724487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -296,7 +297,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c0c68d1a6551f94e982d5ebd322c4fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initDamage: 20
+  initDamage: 12
   initAmmo: 2
 --- !u!114 &5664660190701852635
 MonoBehaviour:
@@ -310,7 +311,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 445005a3a3876844590eced65b2047d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  initDamage: 100
+  initDamage: 12
   initAmmo: 2
 --- !u!114 &1702208436242159612
 MonoBehaviour:
@@ -327,7 +328,7 @@ MonoBehaviour:
   ammo: 0
   maxAmmo: 0
   health: 0
-  maxHealth: 100
+  maxHealth: 0
 --- !u!114 &481360027085640318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -340,8 +341,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b79447006de2a459f20862515a210a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  damageBuffer: 1
+  maxHealth: 100
+  damageBuffer: 0.5
 --- !u!1 &8818829821871352428
 GameObject:
   m_ObjectHideFlags: 0

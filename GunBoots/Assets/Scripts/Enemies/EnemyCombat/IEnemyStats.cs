@@ -6,7 +6,7 @@ public interface IEnemyStats
 {
     Vector3 Position { get; }
 
-    float contactDamage { get; }
+    int contactDamage { get; }
 
     void Damage(float damage);
 

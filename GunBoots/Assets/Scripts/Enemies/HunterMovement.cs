@@ -24,10 +24,10 @@ public class HunterMovement : MonoBehaviour
     private Vector2[] origins;
 
     [SerializeField] private float speed;
-    [SerializeField] private float timeToApex = 0.4f;
+    [SerializeField] private float timeToApex = 0.8f;
     private float jumpForce;
 
-    private float coyoteTime = 0.2f;
+    private float coyoteTime = 0.1f;
     public float coyoteTimeCounter;
 
     private void Start()
@@ -45,6 +45,9 @@ public class HunterMovement : MonoBehaviour
         float playerSide = player.transform.position.x - transform.position.x;
         float playerYLoc = player.transform.position.y - transform.position.y;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
+        float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
+
+        
 
         facing = Mathf.Sign(playerSide);
         playerAboveOrBelow = Mathf.Sign(playerYLoc);
@@ -60,12 +63,6 @@ public class HunterMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        if (yDifference > 5)
-        {
-            velocity.x = 0;
-            return;
-        }
-
         if (controller.collisions.below)
         {
             coyoteTimeCounter = coyoteTime;
@@ -74,6 +71,19 @@ public class HunterMovement : MonoBehaviour
         {
             coyoteTimeCounter -= Time.deltaTime;
         }
+
+        if (xDifference < 5)
+        {
+            if (playerAboveOrBelow == 1)
+            {
+                if (coyoteTimeCounter > 0)
+                {
+                    velocity.y = jumpForce;
+                }
+            }
+        }
+
+        
 
         if (hit.distance > 1)
         {

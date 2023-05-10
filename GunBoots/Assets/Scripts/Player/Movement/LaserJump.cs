@@ -24,6 +24,9 @@ public class LaserJump : MonoBehaviour
 
     private LaserStats weponStats;
 
+    [SerializeField] private float damageBufferReset = 0.1f;
+    private float damageBuffer;
+
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -32,10 +35,23 @@ public class LaserJump : MonoBehaviour
         hoverTimeReset = weponStats.ammo;
         hoverTime = hoverTimeReset;
         laser = Instantiate(laserPrefab);
+        damageBuffer = damageBufferReset;
+    }
+
+    private void OnEnable()
+    {
+        playerMovement = GetComponent<PlayerMovement>();
+        collider = GetComponent<BoxCollider2D>();
+        weponStats = GetComponent<LaserStats>();
+        hoverTimeReset = weponStats.ammo;
+        hoverTime = hoverTimeReset;
+        laser = Instantiate(laserPrefab);
+        damageBuffer = damageBufferReset;
     }
 
     private void Update()
     {
+        damageBuffer -= Time.deltaTime;
         if (!activeState)
         {
             laser.SetActive(false);
@@ -72,10 +88,20 @@ public class LaserJump : MonoBehaviour
 
                 if (hit.collider.gameObject.tag == "Enemy")
                 {
-                    GameObject enemy = hit.collider.gameObject;
-                    if (enemy.TryGetComponent<EnemyStatController>(out EnemyStatController enemyHealth))
+                    if(damageBuffer <= 0)
                     {
-                        enemyHealth.Damage(weponStats.damage);
+                        GameObject enemy = hit.collider.gameObject;
+                        if (enemy.TryGetComponent(out EnemyStatController enemyHealth))
+                        {
+                            enemyHealth.Damage(weponStats.damage);
+                            damageBuffer = damageBufferReset;
+                        }
+
+                        if (enemy.TryGetComponent(out EnemyProjectileStats flyingEnemyStats))
+                        {
+                            flyingEnemyStats.Damage(weponStats.damage);
+                            damageBuffer = damageBufferReset;
+                        }
                     }
                 }
                 

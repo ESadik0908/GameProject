@@ -12,8 +12,8 @@ public class Controller2D : MonoBehaviour
     public int horizontalRayCount = 4;
     public int verticalRayCount = 4;
 
-    private float maxClimbAngle = 80f;
-    private float maxDecendAngle = 70f;
+    private float maxClimbAngle = 45f;
+    private float maxDecendAngle = 45f;
 
     private float horizontalRaySpacing;
     private float verticalRaySpacing;

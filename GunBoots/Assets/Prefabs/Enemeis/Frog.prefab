@@ -129,7 +129,6 @@ MonoBehaviour:
   jumpTimer: 0
   jumpTimerReset: 2
   speed: 5
-  jumpHeight: 4
   timeToApex: 0.4
 --- !u!114 &816989745982864854
 MonoBehaviour:
@@ -160,5 +159,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b03ce314cf56f74d8a2eac7517a2f4c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmp: 100
+  maxHealth: 50
+  tmp: 0
   _contactDamage: 2

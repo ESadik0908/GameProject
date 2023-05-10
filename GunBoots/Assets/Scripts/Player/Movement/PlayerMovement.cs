@@ -128,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
     public void Hover()
     {
         gravity = -1f;
-        velocity.y = 0;
+        velocity.y = jumpForce / 2;
     }
 
     public IEnumerator Dash(float[] dashStats)

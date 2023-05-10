@@ -33,7 +33,6 @@ public class PlayerCam : MonoBehaviour
         offset = new Vector3((playerMovement.facing / 2), 0, -10);
         if (playerVelocity.y < -20)
         {
-            Debug.Log("speed");
             offset = new Vector3(playerMovement.facing / 2, yOffset, -2);
             if (yOffset > -5)
             {

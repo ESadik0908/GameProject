@@ -62,11 +62,6 @@ public class JumpingEnemy : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        if (yDifference > 5)
-        {
-            velocity.x = 0;
-            return;
-        }
 
         if (isJumping && controller.collisions.below)
         {
@@ -78,9 +73,9 @@ public class JumpingEnemy : MonoBehaviour
 
         if (!isJumping && controller.collisions.below && jumpTimer <= 0)
         {
+            isJumping = true;
             velocity.x = Mathf.Clamp(xDifference, 0, 5) * facing;
             velocity.y = jumpForce;
-            isJumping = true;
         }
         
         if (jumpTimer > 0)
@@ -91,7 +86,7 @@ public class JumpingEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (controller.collisions.above || controller.collisions.below)
+        if ((controller.collisions.above || controller.collisions.below) && !isJumping)
         {
             velocity.y = 0;
         }

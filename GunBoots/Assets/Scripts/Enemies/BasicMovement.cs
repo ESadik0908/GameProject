@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(BoxCollider2D))]
+[RequireComponent(typeof(Controller2D))]
 public class BasicMovement : MonoBehaviour
 {
     private GameObject player;

@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class EnemySpawner : MonoBehaviour
 {
+    public bool suspend = false;
+
     private float x;
     private float y;
     private float z;
@@ -13,6 +15,9 @@ public class EnemySpawner : MonoBehaviour
     private float maxX;
     private float minY;
     private float maxY;
+
+    private GameObject gameTracker;
+    private GameStatsTracker gameStatsTrackerScript;
 
     [SerializeField] private GameObject zombieClone;
     private GameObject zombie;
@@ -36,9 +41,10 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private Vector2 gridWorldSize;
 
-    [SerializeField] private int enemyCount;
+    public int enemyCount;
 
     [SerializeField] private int maxEnemies;
+    public int enemiesRemaining;
 
     private void OnDrawGizmos()
     {
@@ -48,15 +54,23 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
-        minX = gridWorldSize.x / 2 + 10;
+        gameTracker = GameObject.FindGameObjectWithTag("GameController");
+        gameStatsTrackerScript = gameTracker.GetComponent<GameStatsTracker>();
+
+        maxEnemies = gameStatsTrackerScript.maxEnemyCount;
+        enemiesRemaining = gameStatsTrackerScript.enemiesRemaining;
+
+        minX = -gridWorldSize.x / 2 + 10;
         maxX = gridWorldSize.x / 2 - 10;
-        minY = gridWorldSize.y / 2 + 10;
+        minY = -gridWorldSize.y / 2 + 10;
         maxY = gridWorldSize.y / 2 - 10;
         StartCoroutine("SpawnEnemies");
     }
 
     private void Update()
     {
+        maxEnemies = gameStatsTrackerScript.maxEnemyCount;
+        enemiesRemaining = gameStatsTrackerScript.enemiesRemaining;
         enemyCount = GetEnemyCount();
     }
     
@@ -64,22 +78,52 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            while (enemyCount < maxEnemies)
+            if (!suspend && !PauseMenu.GameIsPaused)
             {
-                zombie = GetZombie();
-                x = Random.Range(minX, maxX);
-                y = Random.Range(minY, maxY);
-                z = 0;
-                pos = new Vector3(x, y, z);
-                zombie.transform.position = pos;
-                zombie.SetActive(true);
                 yield return new WaitForEndOfFrame();
+                if (enemiesRemaining - enemyCount <= 0)
+                {
+                    continue;
+                }
+                if (enemyCount < maxEnemies)
+                {
+                    yield return new WaitForSeconds(2);
+                    GameObject enemy = ChooseRandomEnemy();
+                    x = Random.Range(minX, maxX);
+                    y = Random.Range(minY, maxY);
+                    z = 0;
+                    pos = new Vector3(x, y, z);
+                    enemy.transform.position = pos;
+                    enemy.SetActive(true);
+                    yield return new WaitForSeconds(1);
+                }
             }
             yield return new WaitForEndOfFrame();
         }
-
+       
     }
+    
+    private GameObject ChooseRandomEnemy()
+    {
+        int enemyChoice = Random.Range(1, 6);
 
+        switch (enemyChoice)
+        {
+            case (1):
+                return GetZombie();
+            case (2):
+                return GetArcher();
+            case (3):
+                return GetFrog();
+            case (4):
+                return GetHunter();
+            case (5):
+                return GetMissile();
+        }
+        Debug.Log("Error");
+        return GetZombie();
+    }
+    #region EnemyPoolingFunctions
     private GameObject GetZombie()
     {
         foreach (GameObject zombie in zombiePool)
@@ -94,6 +138,62 @@ public class EnemySpawner : MonoBehaviour
         return zombie;
     }
 
+    private GameObject GetArcher()
+    {
+        foreach (GameObject archer in archerPool)
+        {
+            if (!archer.activeSelf)
+            {
+                return archer;
+            }
+        }
+        archer = Instantiate(archerClone);
+        archerPool.Enqueue(archer);
+        return archer;
+    }
+
+    private GameObject GetFrog()
+    {
+        foreach (GameObject frog in frogPool)
+        {
+            if (!frog.activeSelf)
+            {
+                return frog;
+            }
+        }
+        frog = Instantiate(frogClone);
+        frogPool.Enqueue(frog);
+        return frog;
+    }
+
+    private GameObject GetHunter()
+    {
+        foreach (GameObject hunter in hunterPool)
+        {
+            if (!hunter.activeSelf)
+            {
+                return hunter;
+            }
+        }
+        hunter = Instantiate(hunterClone);
+        hunterPool.Enqueue(hunter);
+        return hunter;
+    }
+
+    private GameObject GetMissile ()
+    {
+        foreach (GameObject missile in missilePool)
+        {
+            if (!missile.activeSelf)
+            {
+                return missile;
+            }
+        }
+        missile = Instantiate(missileClone);
+        missilePool.Enqueue(missile);
+        return missile;
+    }
+    #endregion
     private int GetEnemyCount()
     {
         int count = 0;

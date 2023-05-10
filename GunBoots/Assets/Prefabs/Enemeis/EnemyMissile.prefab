@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 258041154985776372}
   - component: {fileID: 258041154985776373}
   - component: {fileID: 258041154985776376}
-  - component: {fileID: -4464189351805253044}
+  - component: {fileID: 5171423967903164724}
   m_Layer: 8
   m_Name: EnemyMissile
   m_TagString: Enemy
@@ -144,7 +144,7 @@ MonoBehaviour:
   turnDst: 0
   turnSpeed: 4
   initialFlightDuration: 0.5
---- !u!114 &-4464189351805253044
+--- !u!114 &5171423967903164724
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -153,11 +153,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 258041154985776374}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4b03ce314cf56f74d8a2eac7517a2f4c, type: 3}
+  m_Script: {fileID: 11500000, guid: d89c5abc761cdd4448ba8c589521b4f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tmp: 10
-  _contactDamage: 10
+  maxHealth: 1
+  tmp: 0
+  _contactDamage: 5
 --- !u!1 &258041155117566638
 GameObject:
   m_ObjectHideFlags: 0

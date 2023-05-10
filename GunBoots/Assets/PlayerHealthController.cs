@@ -6,6 +6,7 @@ public class PlayerHealthController : MonoBehaviour
 {
     public float health { get; private set; }
     public float maxHealth;
+    public int extraLives = 1;
 
     [SerializeField] private float damageBuffer;
     private float damageBufferCounter;
@@ -24,19 +25,23 @@ public class PlayerHealthController : MonoBehaviour
         }
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    public void Damage(int damage)
     {
-        if (collision.gameObject.tag == "Enemy")
+        if (damageBufferCounter <= 0 && health > 0)
         {
-            GameObject enemy = collision.gameObject;
-            if (enemy.TryGetComponent<EnemyStatController>(out EnemyStatController enemyStat))
+            health -= damage;
+            damageBufferCounter = damageBuffer;
+        }
+
+        if(health <= 0)
+        {
+            if(extraLives == 0)
             {
-                if (damageBufferCounter <= 0 && health > 0)
-                {
-                    health -= enemyStat.contactDamage;
-                    damageBufferCounter = damageBuffer;
-                }
+                gameObject.SetActive(false);
+                //Game Over Screen
             }
+            extraLives -= 1;
+            health = maxHealth;
         }
     }
 }

@@ -5,24 +5,42 @@ using UnityEngine;
 public class EnemyBulletMovement : MonoBehaviour
 {
     [SerializeField] private float speed;
+    private EnemyProjectileStats stats;
+
+
+
+    private void Start()
+    {
+        stats = GetComponent<EnemyProjectileStats>();
+    }
+
+    private void OnEnable()
+    {
+        stats = GetComponent<EnemyProjectileStats>();
+    }
+
     private void FixedUpdate()
     {
         transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if(collision.gameObject.tag == "Enemy")
+        if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "PlayerBullet")
         {
             return;
         }
-        StartCoroutine("DelayedDespawn");
-    }
 
+        if (collision.gameObject.tag == "Player")
+        {
 
-    private IEnumerator DelayedDespawn()
-    {
-        yield return new WaitForSeconds(0.01f);
+            GameObject player = collision.gameObject;
+            if (player.TryGetComponent(out PlayerHealthController playerHealth))
+            {
+                playerHealth.Damage(stats.contactDamage);
+                Debug.Log(stats.contactDamage);
+            }
+        }
         gameObject.SetActive(false);
     }
 }
