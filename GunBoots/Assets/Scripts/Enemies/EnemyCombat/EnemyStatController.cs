@@ -17,6 +17,8 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
 
 
 
+
+
     public int contactDamage
     {
         get
@@ -62,7 +64,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "PlayerBullet")
         {
@@ -72,10 +74,16 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
         if (collision.gameObject.tag == "Player")
         {
             GameObject player = collision.gameObject;
+            float side = Mathf.Sign(player.transform.position.x - transform.position.x);
+            Debug.Log(side);
             if (player.TryGetComponent(out PlayerHealthController playerHealth))
             {
                 playerHealth.Damage(contactDamage);
-                Debug.Log(contactDamage);
+            }
+
+            if(player.TryGetComponent(out PlayerMovement playerMovement))
+            {
+                playerMovement.KnockBack((contactDamage*2) * side);
             }
         }
     }

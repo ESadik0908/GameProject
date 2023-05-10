@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2613699450407810096}
   - component: {fileID: 2613699450407810102}
   - component: {fileID: -6585946053236279085}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: MissileEnemy
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxHealth: 100
   tmp: 0
-  _contactDamage: 2
+  _contactDamage: 5
 --- !u!114 &2613699450407810102
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 258041154985776373}
   - component: {fileID: 258041154985776376}
   - component: {fileID: 5171423967903164724}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: EnemyMissile
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 258041155117566637}
   - component: {fileID: 258041155117566636}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 7645188220045078382}
   - component: {fileID: 8376219738753281560}
   - component: {fileID: 786504087388898720}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: Quad
   m_TagString: Untagged
   m_Icon: {fileID: 0}

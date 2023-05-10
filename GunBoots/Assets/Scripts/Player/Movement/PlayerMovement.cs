@@ -10,6 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float timeToApex = 0.4f;
     [SerializeField] private float defaultMoveSpeed = 6;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private float knockback;
 
     private float accelerationTimeAir = 0.2f;
     private float accelerationTimeGround = 0.1f;
@@ -127,7 +128,7 @@ public class PlayerMovement : MonoBehaviour
 
     public void ResetGravity()
     {
-        gravity = -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
+        gravity = getGravity();
         jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 
@@ -183,5 +184,10 @@ public class PlayerMovement : MonoBehaviour
     public float getGravity()
     {
         return -(2 * jumpHeight) / Mathf.Pow(timeToApex, 2);
+    }
+
+    public void KnockBack(float force)
+    {
+        velocity.x = force;
     }
 }
