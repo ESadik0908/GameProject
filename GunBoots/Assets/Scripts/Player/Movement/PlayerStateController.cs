@@ -17,33 +17,12 @@ public class PlayerStateController : MonoBehaviour
 
     public PlayerState currentState { get; private set; }
 
-    [SerializeField] private bool extraJumpsChange = false;
-    [SerializeField] private bool hoverChange = false;
-    [SerializeField] private bool dashChange = false;
-
     Player player;
 
     private void Start()
     {
         FindAnyObjectByType<Player>().loadEvent += loadState;
         ChangeState(startingState);
-    }
-
-    //Change the player state when they are in a state change area and press I, eventually this will be used to change state based on current item
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E) && extraJumpsChange == true)
-        {
-            ChangeState(PlayerState.EXTRAJUMPS);
-        }
-        if (Input.GetKeyDown(KeyCode.E) && hoverChange == true)
-        {
-            ChangeState(PlayerState.HOVER);
-        }
-        if (Input.GetKeyDown(KeyCode.E) && dashChange == true)
-        {
-            ChangeState(PlayerState.DASH);
-        }
     }
 
     public void ShotgunUpgrade()

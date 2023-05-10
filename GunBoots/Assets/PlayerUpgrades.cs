@@ -4,10 +4,10 @@ using UnityEngine;
 
 public class PlayerUpgrades : MonoBehaviour
 {
-    public int ammo { get; private set; }
-    public int damage { get; private set; }
-    public int speed { get; private set; }
-    public int health { get; private set; }
+    public int ammo;
+    public int damage;
+    public int speed;
+    public int health;
 
     public void UpgradeAmmo()
     {
@@ -21,11 +21,11 @@ public class PlayerUpgrades : MonoBehaviour
 
     public void UpgradeHealth()
     {
-        health += 10;
+        health += 1;
     }
 
     public void UpgradeDamage()
     {
-        damage += 10;
+        damage += 1;
     }
 }

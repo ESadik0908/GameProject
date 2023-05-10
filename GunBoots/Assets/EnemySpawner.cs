@@ -44,7 +44,7 @@ public class EnemySpawner : MonoBehaviour
     public int enemyCount;
 
     [SerializeField] private int maxEnemies;
-    public int enemiesRemaining;
+    public int enemiesRemaining = 0;
 
     private void OnDrawGizmos()
     {
@@ -78,7 +78,7 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            if (!suspend && !PauseMenu.GameIsPaused)
+            if (!UpgradeMenu.GameIsPaused && !PauseMenu.GameIsPaused)
             {
                 yield return new WaitForEndOfFrame();
                 if (enemiesRemaining - enemyCount <= 0)

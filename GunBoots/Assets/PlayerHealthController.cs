@@ -5,14 +5,19 @@ using UnityEngine;
 public class PlayerHealthController : MonoBehaviour
 {
     public float health { get; private set; }
+    [SerializeField] private float defaultHealth = 100;
     public float maxHealth;
     public int extraLives = 1;
 
     [SerializeField] private float damageBuffer;
     private float damageBufferCounter;
 
+    private PlayerUpgrades playerUpgrades;
+
     private void Start()
     {
+        maxHealth = defaultHealth;
+        playerUpgrades = GetComponent<PlayerUpgrades>();
         health = maxHealth;
         damageBufferCounter = damageBuffer;
     }
@@ -22,6 +27,12 @@ public class PlayerHealthController : MonoBehaviour
         if(damageBufferCounter > 0)
         {
             damageBufferCounter -= Time.deltaTime;
+        }
+        float oldHealth = maxHealth;
+        maxHealth = defaultHealth + (playerUpgrades.health * 10);
+        if(oldHealth != maxHealth)
+        {
+            health += (playerUpgrades.health * 10);
         }
     }
 

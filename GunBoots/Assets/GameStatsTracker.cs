@@ -4,22 +4,23 @@ using UnityEngine;
 
 public class GameStatsTracker : MonoBehaviour
 {
-    public static bool upgrade = false;
-    public int wave = 5;
-    public int enemiesRemaining;
+    public int wave = 1;
+    public int enemiesRemaining = 0;
     public int maxEnemyCount { get; private set; }
     [SerializeField] GameObject enemySpawner;
     private EnemySpawner enemyTracker;
     public GameObject Ui;
     private UpgradeMenu upgradeMenuUi;
 
+
     private void Start()
     {
         upgradeMenuUi = Ui.GetComponent<UpgradeMenu>();
         enemyTracker = enemySpawner.GetComponent<EnemySpawner>();
-        wave = 5;
+        wave = 1;
         enemiesRemaining = 2 * wave;
         maxEnemyCount = wave;
+        upgradeMenuUi.ShowUpgrades();
     }
 
     private void Update()
@@ -28,17 +29,12 @@ public class GameStatsTracker : MonoBehaviour
         {
             if (wave % 5 == 0)
             {
-                enemyTracker.suspend = true;
                 upgradeMenuUi.ShowUpgrades();
             }
-            upgrade = false;
             wave += 1;
             enemiesRemaining = 2 * wave;
             maxEnemyCount = Mathf.RoundToInt(enemiesRemaining / 2);
-            
         }
-
-        
     }
 
 

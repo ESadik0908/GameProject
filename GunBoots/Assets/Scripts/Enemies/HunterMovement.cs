@@ -74,7 +74,7 @@ public class HunterMovement : MonoBehaviour
 
         if (xDifference < 5)
         {
-            if (playerAboveOrBelow == 1)
+            if (playerAboveOrBelow == 1 && yDifference > 1)
             {
                 if (coyoteTimeCounter > 0)
                 {

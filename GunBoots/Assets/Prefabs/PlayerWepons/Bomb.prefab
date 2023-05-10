@@ -152,6 +152,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initDamage: 12
   initAmmo: 2
+  tempAmmo: 0
+  tempDamage: 0
 --- !u!114 &-8509086360821773470
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -164,4 +166,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e7f1036ed3439e14d94a9456e4388a60, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 3
+  range: 1.5

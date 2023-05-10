@@ -31,7 +31,7 @@ public class Dash : MonoBehaviour
 
     private IEnumerator dashCoroutine;  
     [SerializeField] private float[] dashStats = new float[] {30f, 0.2f, 0.2f};//Speed, Duration, Gravity reset
-
+    
     private void Start()
     {
         playerMovement = GetComponent<PlayerMovement>();
@@ -120,6 +120,7 @@ public class Dash : MonoBehaviour
         {
             Debug.Log("Enter dash mode");
             activeState = true;
+            dashCountReset = weponStats.ammo;
         }
     }
 
@@ -145,5 +146,4 @@ public class Dash : MonoBehaviour
         pool.Enqueue(bomb);
         return bomb;
     }
-
 }

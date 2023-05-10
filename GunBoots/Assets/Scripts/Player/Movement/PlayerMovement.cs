@@ -8,8 +8,8 @@ public class PlayerMovement : MonoBehaviour
     //Player movement stats  that can be changed in the editor
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float timeToApex = 0.4f;
-    [SerializeField] private float moveSpeed = 6;
-
+    [SerializeField] private float defaultMoveSpeed = 6;
+    [SerializeField] private float moveSpeed;
 
     private float accelerationTimeAir = 0.2f;
     private float accelerationTimeGround = 0.1f;
@@ -36,8 +36,12 @@ public class PlayerMovement : MonoBehaviour
 
     private Controller2D controller;
 
+    private PlayerUpgrades playerUpgrades;
+
     private void Start()
     {
+        playerUpgrades = GetComponent<PlayerUpgrades>();
+        moveSpeed = defaultMoveSpeed;
         controller = GetComponent<Controller2D>();
 
         FindAnyObjectByType<Player>().loadEvent += loadPlayer;
@@ -50,6 +54,8 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         if (isDashing) return;
+
+        moveSpeed = defaultMoveSpeed + playerUpgrades.speed;
 
         input = Input.GetAxisRaw("Horizontal");
 

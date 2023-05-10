@@ -24,6 +24,7 @@ public class LaserJump : MonoBehaviour
 
     private LaserStats weponStats;
 
+
     [SerializeField] private float damageBufferReset = 0.1f;
     private float damageBuffer;
 
@@ -137,6 +138,7 @@ public class LaserJump : MonoBehaviour
         {
             Debug.Log("Exit Hover Mode");
             activeState = false;
+            hoverTimeReset = weponStats.ammo;
         } 
     }
 

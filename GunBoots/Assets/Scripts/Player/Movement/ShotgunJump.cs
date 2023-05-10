@@ -14,7 +14,7 @@ public class ShotgunJump : MonoBehaviour
     public int jumpCountReset { get; private set; }
     public int jumpCount { get; private set; }
 
-    [SerializeField] private bool activeState = false;
+    private bool activeState = false;
 
     [SerializeField] private int shotCount = 5;
     [SerializeField] private float spread = 30f;
@@ -24,8 +24,11 @@ public class ShotgunJump : MonoBehaviour
 
     private ShotgunStats weponStats;
 
+
+
     private void Start()
     {
+
         playerMovement = GetComponent<PlayerMovement>();
         collider = GetComponent<BoxCollider2D>();
         weponStats = GetComponent<ShotgunStats>();
@@ -114,6 +117,7 @@ public class ShotgunJump : MonoBehaviour
         {
             Debug.Log("Enter hover mode");
             activeState = true;
+            jumpCountReset = weponStats.ammo;
         }
     }
 
