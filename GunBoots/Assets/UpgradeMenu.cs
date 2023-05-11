@@ -20,7 +20,7 @@ public class UpgradeMenu : MonoBehaviour
     private Color laserColour = new Color(0.67f, 1.00f, 0.60f);
 
     private System.Action[] weapons = new System.Action[3];
-    private System.Action[] upgrades = new System.Action[4];
+    private System.Action[] upgrades = new System.Action[5];
 
     private GameObject player;
     private PlayerStateController playerState;
@@ -41,6 +41,7 @@ public class UpgradeMenu : MonoBehaviour
         upgrades[1] = playerUpgrades.UpgradeHealth;
         upgrades[2] = playerUpgrades.UpgradeSpeed;
         upgrades[3] = playerUpgrades.UpgradeAmmo;
+        upgrades[4] = playerUpgrades.UpgradeLives;
     }
 
 
@@ -102,19 +103,23 @@ public class UpgradeMenu : MonoBehaviour
         
         if(randomUpgrade == 0)
         {
-            upgradeText += ("\n + \n Damage");
+            upgradeText += ("\n+\nDamage");
         }
         else if(randomUpgrade == 1)
         {
-            upgradeText += (" \n + \n Max Health");
+            upgradeText += ("\n+\nMax Health");
         }
         else if (randomUpgrade == 2)
         {
-            upgradeText += (" \n + \n Move Speed");
+            upgradeText += ("\n+\nMove Speed");
+        }
+        else if (randomUpgrade == 3)
+        {
+            upgradeText += ("\n+\nMax Ammo");
         }
         else
         {
-            upgradeText += (" \n + \n Max Ammo");
+            upgradeText += ("\n+\nExtra Life");
         }
 
 

@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2613699450407810096}
   - component: {fileID: 2613699450407810102}
   - component: {fileID: -6585946053236279085}
+  - component: {fileID: 7656872193496865873}
   m_Layer: 0
   m_Name: MissileEnemy
   m_TagString: Enemy
@@ -160,3 +161,16 @@ MonoBehaviour:
   minGunCooldown: 5
   maxGunCooldown: 10
   missileClone: {fileID: 258041154985776374, guid: a9c7d679d2ea4ff40b6ae87e1af941e7, type: 3}
+--- !u!114 &7656872193496865873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2613699450407810127}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af81435e8443c12449b48f82e7ff7f67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 8818829821804908883, guid: 590aeb8c93f2d2e48a35f305da64659b, type: 3}

@@ -51,7 +51,7 @@ public class Dash : MonoBehaviour
     {
         if (!activeState) return;
 
-        
+        dashCountReset = weponStats.ammo;
         dashBufferCounter -= Time.deltaTime;
         
 
@@ -95,7 +95,7 @@ public class Dash : MonoBehaviour
 
     private IEnumerator Bomb()
     {
-        for (int i = 0; i <= 4; i++)
+        for (int i = 0; i < 4; i++)
         {
             yield return new WaitForSeconds(spawnDelay);
             bomb = GetBomb();

@@ -15,6 +15,7 @@ public class PlayerStatsTracker : MonoBehaviour
     public float maxAmmo;
     public float health;
     public float maxHealth;
+    public int lives;
 
     private void Start()
     {
@@ -29,6 +30,7 @@ public class PlayerStatsTracker : MonoBehaviour
     {
         maxHealth = playerHealth.maxHealth;
         health = playerHealth.health;
+        lives = playerHealth.extraLives;
         GetAmmoCount();
     }
 

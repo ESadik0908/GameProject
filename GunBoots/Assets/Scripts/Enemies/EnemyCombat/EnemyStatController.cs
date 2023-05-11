@@ -16,7 +16,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
     private GameStatsTracker gameStatsTrackerScript;
 
 
-
+    private EnemyTimeBody unitTimeBody;
 
 
     public int contactDamage
@@ -39,6 +39,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
     {
         gameTracker = GameObject.FindGameObjectWithTag("GameController");
         gameStatsTrackerScript = gameTracker.GetComponent<GameStatsTracker>();
+        unitTimeBody = GetComponent<EnemyTimeBody>();
         health = maxHealth;
     }
 
@@ -47,11 +48,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
         health = maxHealth;
     }
 
-    private void Update()
-    {
-        tmp = health;
-        
-    }
+    
 
     public void Damage(float damage)
     {
@@ -75,7 +72,6 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
         {
             GameObject player = collision.gameObject;
             float side = Mathf.Sign(player.transform.position.x - transform.position.x);
-            Debug.Log(side);
             if (player.TryGetComponent(out PlayerHealthController playerHealth))
             {
                 playerHealth.Damage(contactDamage);
@@ -90,6 +86,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
 
     public void Die()
     {
+        unitTimeBody.ResetHistory(true);
         transform.position = new Vector3(-50000, -50000);
         gameStatsTrackerScript.EnemyDied();
         gameObject.SetActive(false);

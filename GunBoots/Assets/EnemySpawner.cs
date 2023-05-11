@@ -54,6 +54,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        ClearQueues();
         gameTracker = GameObject.FindGameObjectWithTag("GameController");
         gameStatsTrackerScript = gameTracker.GetComponent<GameStatsTracker>();
 
@@ -69,6 +70,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void Update()
     {
+        if (UpgradeMenu.GameIsPaused || PauseMenu.GameIsPaused || GameOverMenu.GameIsPaused || TimeBody.isRewinding)
+        {
+            return;
+        }
         maxEnemies = gameStatsTrackerScript.maxEnemyCount;
         enemiesRemaining = gameStatsTrackerScript.enemiesRemaining;
         enemyCount = GetEnemyCount();
@@ -78,7 +83,7 @@ public class EnemySpawner : MonoBehaviour
     {
         while (true)
         {
-            if (!UpgradeMenu.GameIsPaused && !PauseMenu.GameIsPaused)
+            if (!UpgradeMenu.GameIsPaused || !PauseMenu.GameIsPaused || !GameOverMenu.GameIsPaused || TimeBody.isRewinding)
             {
                 yield return new WaitForEndOfFrame();
                 if (enemiesRemaining - enemyCount <= 0)
@@ -101,6 +106,15 @@ public class EnemySpawner : MonoBehaviour
             yield return new WaitForEndOfFrame();
         }
        
+    }
+
+    private void ClearQueues()
+    {
+        zombiePool.Clear();
+        archerPool.Clear();
+        frogPool.Clear();
+        hunterPool.Clear();
+        missilePool.Clear();
     }
     
     private GameObject ChooseRandomEnemy()
@@ -196,6 +210,11 @@ public class EnemySpawner : MonoBehaviour
     #endregion
     private int GetEnemyCount()
     {
+
+        if(PauseMenu.GameIsPaused || UpgradeMenu.GameIsPaused || GameOverMenu.GameIsPaused)
+        {
+            return 999999;
+        }
         int count = 0;
 
         foreach(GameObject zombie in zombiePool)

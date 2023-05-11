@@ -13,23 +13,27 @@ public class GameStatsTracker : MonoBehaviour
     private UpgradeMenu upgradeMenuUi;
     private SaveSystem saveSystem;
 
+    private bool saving = false;
 
     private void Start()
     {
         saveSystem = GetComponent<SaveSystem>();
         upgradeMenuUi = Ui.GetComponent<UpgradeMenu>();
         enemyTracker = enemySpawner.GetComponent<EnemySpawner>();
-
+        GameOverMenu.GameIsPaused = false;
+        UpgradeMenu.GameIsPaused = false;
+        PauseMenu.GameIsPaused = false;
+        Time.timeScale = 1f;
         if (!HasSavedData())
         {
+            saveSystem.LoadDefault();
             upgradeMenuUi.ShowUpgrades();
-            LoadGame(1);
         }
         else
         {
             saveSystem.Load();
         }
-        saveSystem.Save();
+        StartCoroutine("DelayedSave");
     }
 
     private void Update()
@@ -38,10 +42,11 @@ public class GameStatsTracker : MonoBehaviour
         {
             if (wave % 5 == 0)
             {
+                
                 upgradeMenuUi.ShowUpgrades();
+                StartCoroutine("DelayedSave");
             }
             wave += 1;
-            saveSystem.Save();
             enemiesRemaining = 2 * wave;
             maxEnemyCount = Mathf.RoundToInt(enemiesRemaining / 2);
         }
@@ -67,10 +72,16 @@ public class GameStatsTracker : MonoBehaviour
 
     private IEnumerator DelayedSave()
     {
+        if (saving)
+        {
+            yield return null;
+        }
+        saving = true;
         while (UpgradeMenu.GameIsPaused)
         {
             yield return new WaitForEndOfFrame();
         }
         saveSystem.Save();
+        saving = false;
     }
 }

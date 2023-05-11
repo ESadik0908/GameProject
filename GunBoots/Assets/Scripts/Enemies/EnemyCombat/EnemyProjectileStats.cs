@@ -14,6 +14,7 @@ public class EnemyProjectileStats : MonoBehaviour, IEnemyStats
 
     private GameObject gameTracker;
     private GameStatsTracker gameStatsTrackerScript;
+    private EnemyTimeBody unitTimeBody;
 
     public int contactDamage
     {
@@ -35,6 +36,7 @@ public class EnemyProjectileStats : MonoBehaviour, IEnemyStats
     {
         gameTracker = GameObject.FindGameObjectWithTag("GameController");
         gameStatsTrackerScript = gameTracker.GetComponent<GameStatsTracker>();
+        unitTimeBody = GetComponent<EnemyTimeBody>();
         health = maxHealth;
     }
 
@@ -43,11 +45,6 @@ public class EnemyProjectileStats : MonoBehaviour, IEnemyStats
         health = maxHealth;
     }
 
-    private void Update()
-    {
-        tmp = health;
-        
-    }
 
     public void Damage(float damage)
     {
@@ -61,7 +58,8 @@ public class EnemyProjectileStats : MonoBehaviour, IEnemyStats
     }
 
     public void Die()
-    {  
+    {
+        unitTimeBody.ResetHistory(true);
         gameObject.SetActive(false);
     }
 }

@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 1702208436242159612}
   - component: {fileID: 481360027085640318}
   - component: {fileID: 1685417517}
+  - component: {fileID: 6112925867425287996}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -192,7 +193,6 @@ MonoBehaviour:
   timeToApex: 0.4
   defaultMoveSpeed: 6
   moveSpeed: 6
-  knockback: 10
   jump: 0
   coyoteTimeCounter: 0
 --- !u!114 &8818829821804908884
@@ -320,6 +320,7 @@ MonoBehaviour:
   maxAmmo: 0
   health: 0
   maxHealth: 0
+  lives: 0
 --- !u!114 &481360027085640318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -352,6 +353,20 @@ MonoBehaviour:
   damage: 0
   speed: 0
   health: 0
+  lives: 0
+--- !u!114 &6112925867425287996
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818829821804908883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 20efbb3aa2f07fb44a6689f5764326d9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rewindDuation: 3
 --- !u!1 &8818829821871352428
 GameObject:
   m_ObjectHideFlags: 0

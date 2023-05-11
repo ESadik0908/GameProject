@@ -41,6 +41,7 @@ public class RangedEnemyMovement : MonoBehaviour
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
         float playerSide = player.transform.position.x - transform.position.x;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
 
@@ -86,6 +87,7 @@ public class RangedEnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) return;
         if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0;

@@ -10,7 +10,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float timeToApex = 0.4f;
     [SerializeField] private float defaultMoveSpeed = 6;
     [SerializeField] private float moveSpeed;
-    [SerializeField] private float knockback;
+
 
     private float accelerationTimeAir = 0.2f;
     private float accelerationTimeGround = 0.1f;
@@ -39,6 +39,7 @@ public class PlayerMovement : MonoBehaviour
 
     private PlayerUpgrades playerUpgrades;
 
+    private bool knockback = false;
     private void Start()
     {
         playerUpgrades = GetComponent<PlayerUpgrades>();
@@ -52,6 +53,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
+
         if (isDashing) return;
 
         moveSpeed = defaultMoveSpeed + playerUpgrades.speed;
@@ -100,7 +103,8 @@ public class PlayerMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(controller.collisions.above || controller.collisions.below)
+        if (TimeBody.isRewinding) return;
+        if ((controller.collisions.above || controller.collisions.below) && !knockback)
         {
             velocity.y = 0;
         }
@@ -181,6 +185,16 @@ public class PlayerMovement : MonoBehaviour
 
     public void KnockBack(float force)
     {
+        StartCoroutine("KnockBackHandler", force);
+    }
+
+    private IEnumerator KnockBackHandler(float force)
+    {
+        knockback = true;
+        yield return new WaitForEndOfFrame();
         velocity.x = force;
+        velocity.y = Mathf.Abs(force) * 0.5f;
+        yield return new WaitForEndOfFrame();
+        knockback = false;
     }
 }

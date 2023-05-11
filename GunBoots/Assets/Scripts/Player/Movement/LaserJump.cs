@@ -58,6 +58,7 @@ public class LaserJump : MonoBehaviour
             laser.SetActive(false);
             return;
         }
+        hoverTimeReset = weponStats.ammo;
         UpdateRaycastOrigins();
         if (playerMovement.coyoteTimeCounter < 0 && hoverTime > 0 && Input.GetButtonDown("Jump"))
         {

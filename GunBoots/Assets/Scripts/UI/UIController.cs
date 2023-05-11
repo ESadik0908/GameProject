@@ -10,19 +10,20 @@ public class UIController : MonoBehaviour
     private Slider ammoCountSlider;
 
     [SerializeField] private GameObject shotgunAmmo;
-    private Text shotgunAmmoCount;
+    private TMP_Text shotgunAmmoCount;
 
     [SerializeField] private GameObject bombAmmo;
-    private Text bombAmmoCount;
+    private TMP_Text bombAmmoCount;
 
     [SerializeField] private GameObject playerHealth;
     private Slider playerHealthSlider;
     [SerializeField] private Gradient healthBarGradient;
     private Image healthBar;
-    private Text healthText;
+    [SerializeField] private TMP_Text healthText;
+    [SerializeField] private TMP_Text playerLives;
 
-    [SerializeField] private Text waveCounter;
-    [SerializeField] private Text enemiesRemaining;
+    [SerializeField] private TMP_Text waveCounter;
+    [SerializeField] private TMP_Text enemiesRemaining;
 
     [SerializeField] private GameObject gameController;
     private GameStatsTracker gameStats;
@@ -43,13 +44,12 @@ public class UIController : MonoBehaviour
 
         gameStats = gameController.GetComponent<GameStatsTracker>();
 
-        shotgunAmmoCount = shotgunAmmo.GetComponentInChildren<Text>();
+        shotgunAmmoCount = shotgunAmmo.GetComponentInChildren<TMP_Text>();
 
-        bombAmmoCount = bombAmmo.GetComponentInChildren<Text>();
+        bombAmmoCount = bombAmmo.GetComponentInChildren<TMP_Text>();
 
         playerHealthSlider = playerHealth.GetComponentInChildren<Slider>();
         healthBar = playerHealth.GetComponentInChildren<Image>();
-        healthText = playerHealth.GetComponentInChildren<Text>();
     }
 
     // Update is called once per frame
@@ -110,11 +110,11 @@ public class UIController : MonoBehaviour
     {
         playerHealthSlider.maxValue = playerStats.maxHealth;
         playerHealthSlider.value = playerStats.health;
+        playerLives.text = playerStats.lives.ToString();
 
         healthBar.color = healthBarGradient.Evaluate(playerHealthSlider.normalizedValue);
 
         healthText.text = (playerHealthSlider.value.ToString() + " / " + playerHealthSlider.maxValue.ToString());
-
     }
 
     private void UpdateProgress()

@@ -54,13 +54,21 @@ public class Unit : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) stats.Die();
         transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
     }
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
         if (endFlight)
         {
+            return;
+        }
+
+        if (target == null)
+        {
+            StopAllCoroutines();
             return;
         }
 
@@ -97,15 +105,15 @@ public class Unit : MonoBehaviour
             if (player.TryGetComponent(out PlayerHealthController playerHealth))
             {
                 playerHealth.Damage(stats.contactDamage);
-                Debug.Log(stats.contactDamage);
             }
         }
-        gameObject.SetActive(false);
+        stats.Die();
     }
     
     private IEnumerator UpdatePath()
     {
-        if(Time.timeSinceLevelLoad < 0.3f)
+        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
+        if (Time.timeSinceLevelLoad < 0.3f)
         {
             yield return new WaitForSeconds(.3f);
         }
@@ -126,6 +134,7 @@ public class Unit : MonoBehaviour
 
     private IEnumerator FollowPath()
     {
+        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
         bool followingPath = true;
         int pathIndex = 0;
         transform.LookAt(path.lookPoints[0]);
@@ -158,6 +167,7 @@ public class Unit : MonoBehaviour
 
     private IEnumerator WaitForFlight()
     {
+        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
         while (flightDuration > 0)
         {
             yield return new WaitForEndOfFrame();

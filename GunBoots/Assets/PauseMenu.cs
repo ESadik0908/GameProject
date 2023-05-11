@@ -17,6 +17,10 @@ public class PauseMenu : MonoBehaviour
     }
     private void Update()
     {
+        if (GameOverMenu.GameIsPaused)
+        {
+            return;
+        }
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (GameIsPaused)
@@ -32,11 +36,10 @@ public class PauseMenu : MonoBehaviour
     public void Resume()
     {
         pauseMenuUi.SetActive(false);
-
+        GameIsPaused = false;
         if (UpgradeMenu.GameIsPaused)
         {            
             upgradeUi.SetActive(true);
-            GameIsPaused = false;
             return;
         }
         else
@@ -65,7 +68,6 @@ public class PauseMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        Debug.Log("Quit");
         Application.Quit();
     }
 }

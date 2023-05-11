@@ -8,7 +8,6 @@ public class EnemyBulletMovement : MonoBehaviour
     private EnemyProjectileStats stats;
 
 
-
     private void Start()
     {
         stats = GetComponent<EnemyProjectileStats>();
@@ -21,6 +20,7 @@ public class EnemyBulletMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) stats.Die();
         transform.Translate(Vector3.up * Time.deltaTime * speed, Space.Self);
     }
 
@@ -38,9 +38,8 @@ public class EnemyBulletMovement : MonoBehaviour
             if (player.TryGetComponent(out PlayerHealthController playerHealth))
             {
                 playerHealth.Damage(stats.contactDamage);
-                Debug.Log(stats.contactDamage);
             }
         }
-        gameObject.SetActive(false);
+        stats.Die();
     }
 }

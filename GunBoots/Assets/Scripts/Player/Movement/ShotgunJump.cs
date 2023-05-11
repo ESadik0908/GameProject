@@ -47,6 +47,8 @@ public class ShotgunJump : MonoBehaviour
     {
         if (!activeState) return;
 
+        jumpCountReset = weponStats.ammo;
+
         if (playerMovement.coyoteTimeCounter < 0 && Input.GetButtonDown("Jump") && jumpCount != 0) // Coyote timer is > 0 when player is grounded
         {
 

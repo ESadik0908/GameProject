@@ -44,6 +44,7 @@ public class JumpingEnemy : MonoBehaviour
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
         float playerSide = player.transform.position.x - transform.position.x;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
         float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
@@ -86,6 +87,7 @@ public class JumpingEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) return;
         if ((controller.collisions.above || controller.collisions.below) && !isJumping)
         {
             velocity.y = 0;
