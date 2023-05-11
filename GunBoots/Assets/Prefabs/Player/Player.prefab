@@ -20,12 +20,12 @@ GameObject:
   - component: {fileID: 8818829821804908875}
   - component: {fileID: 8818829821804908874}
   - component: {fileID: 8818829821804908878}
-  - component: {fileID: 8818829821804908877}
   - component: {fileID: 4410360793958996465}
   - component: {fileID: -1781901926373724487}
   - component: {fileID: 5664660190701852635}
   - component: {fileID: 1702208436242159612}
   - component: {fileID: 481360027085640318}
+  - component: {fileID: 1685417517}
   m_Layer: 6
   m_Name: Player
   m_TagString: Player
@@ -188,9 +188,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a9268a9880381b4088b7d0ccb0b3693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpHeight: 2.5
+  jumpHeight: 3
   timeToApex: 0.4
+  defaultMoveSpeed: 6
   moveSpeed: 6
+  knockback: 10
   jump: 0
   coyoteTimeCounter: 0
 --- !u!114 &8818829821804908884
@@ -205,7 +207,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e38c57041aab5849afa47bff6d72835, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  activeState: 0
   shotCount: 4
   spread: 20
   bulletClone: {fileID: 5167011329570190112, guid: 56f203c036143f84fbd711ebfc508862, type: 3}
@@ -236,10 +237,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 212cb4a85d02c1541aae2077656e8b72, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startingState: 2
-  extraJumpsChange: 0
-  hoverChange: 0
-  dashChange: 0
+  startingState: 0
 --- !u!114 &8818829821804908878
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,19 +256,6 @@ MonoBehaviour:
   - 20
   - 0.2
   - 0.2
---- !u!114 &8818829821804908877
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8818829821804908883}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: af1973b51d131ae4893e3aebeec50470, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  state: 0
 --- !u!114 &4410360793958996465
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +270,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initDamage: 2
   initAmmo: 1
+  tempAmmo: 0
+  tempDamage: 0
 --- !u!114 &-1781901926373724487
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -299,6 +286,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initDamage: 12
   initAmmo: 2
+  tempAmmo: 0
+  tempDamage: 0
 --- !u!114 &5664660190701852635
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,6 +302,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initDamage: 12
   initAmmo: 2
+  tempAmmo: 0
+  tempDamage: 0
 --- !u!114 &1702208436242159612
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -341,8 +332,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 25b79447006de2a459f20862515a210a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultHealth: 100
   maxHealth: 100
-  damageBuffer: 0.5
+  extraLives: 1
+  damageBuffer: 1
+--- !u!114 &1685417517
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8818829821804908883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfc139ebc95d83140bd26302d9e55d0e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ammo: 0
+  damage: 0
+  speed: 0
+  health: 0
 --- !u!1 &8818829821871352428
 GameObject:
   m_ObjectHideFlags: 0

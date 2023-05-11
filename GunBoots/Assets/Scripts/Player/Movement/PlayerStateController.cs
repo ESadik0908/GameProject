@@ -16,13 +16,29 @@ public class PlayerStateController : MonoBehaviour
     [SerializeField] private PlayerState startingState;
 
     public PlayerState currentState { get; private set; }
-
-    Player player;
-
-    private void Start()
+    
+    public string GetState()
     {
-        FindAnyObjectByType<Player>().loadEvent += loadState;
-        ChangeState(startingState);
+        return currentState.ToString();
+    }
+
+    public void LoadState(string state)
+    {
+        if(state == "EXTRAJUMPS")
+        {
+            ShotgunUpgrade();
+            return;
+        }
+        if (state == "HOVER")
+        {
+            LaserUpgrade();
+            return;
+        }
+        if (state == "DASH")
+        {
+            DashUpgrade();
+            return;
+        }
     }
 
     public void ShotgunUpgrade()
@@ -39,12 +55,7 @@ public class PlayerStateController : MonoBehaviour
     {
         ChangeState(PlayerState.DASH);
     }
-
-    public void loadState(Player player)
-    {
-        ChangeState(player.state);
-    }
-
+    
     private void ChangeState(PlayerState newState)
     {
         SendMessage("ExitState", currentState, SendMessageOptions.DontRequireReceiver);

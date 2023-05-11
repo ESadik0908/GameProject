@@ -18,22 +18,17 @@ public class PlayerHealthController : MonoBehaviour
     {
         maxHealth = defaultHealth;
         playerUpgrades = GetComponent<PlayerUpgrades>();
-        health = maxHealth;
+        playerUpgrades.OnHealthUpgrade += HandleHealthUpgrade;
         damageBufferCounter = damageBuffer;
     }
-
+    
     private void Update()
     {
-        if(damageBufferCounter > 0)
+        if (damageBufferCounter > 0)
         {
             damageBufferCounter -= Time.deltaTime;
         }
-        float oldHealth = maxHealth;
-        maxHealth = defaultHealth + (playerUpgrades.health * 10);
-        if(oldHealth != maxHealth)
-        {
-            health += (playerUpgrades.health * 10);
-        }
+
     }
 
     public void Damage(int damage)
@@ -44,15 +39,32 @@ public class PlayerHealthController : MonoBehaviour
             damageBufferCounter = damageBuffer;
         }
 
-        if(health <= 0)
+        if (health <= 0)
         {
-            if(extraLives == 0)
+            if (extraLives == 0)
             {
                 gameObject.SetActive(false);
-                //Game Over Screen
+                PlayerPrefs.DeleteAll();
+                PlayerPrefs.Save();
             }
             extraLives -= 1;
             health = maxHealth;
         }
+    }
+
+    public void LoadHealth(float _curHealth, float _maxHealth)
+    {
+        health = _curHealth;
+    }
+
+    private void HandleHealthUpgrade(int healthIncrease)
+    {
+        maxHealth += healthIncrease;
+        health += healthIncrease;
+    }
+
+    public bool HasSavedData()
+    {
+        return PlayerPrefs.HasKey("PlayerCurrentHealth");
     }
 }

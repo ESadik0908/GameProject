@@ -45,8 +45,6 @@ public class PlayerMovement : MonoBehaviour
         moveSpeed = defaultMoveSpeed;
         controller = GetComponent<Controller2D>();
 
-        FindAnyObjectByType<Player>().loadEvent += loadPlayer;
-
         ResetGravity();
 
         facing = 1;
@@ -174,11 +172,6 @@ public class PlayerMovement : MonoBehaviour
     public Vector3 getVelocity()
     {
         return velocity;
-    }
-
-    private void loadPlayer(Player player)
-    {
-        ResetGravity();
     }
 
     public float getGravity()

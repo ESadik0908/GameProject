@@ -11,16 +11,25 @@ public class GameStatsTracker : MonoBehaviour
     private EnemySpawner enemyTracker;
     public GameObject Ui;
     private UpgradeMenu upgradeMenuUi;
+    private SaveSystem saveSystem;
 
 
     private void Start()
     {
+        saveSystem = GetComponent<SaveSystem>();
         upgradeMenuUi = Ui.GetComponent<UpgradeMenu>();
         enemyTracker = enemySpawner.GetComponent<EnemySpawner>();
-        wave = 1;
-        enemiesRemaining = 2 * wave;
-        maxEnemyCount = wave;
-        upgradeMenuUi.ShowUpgrades();
+
+        if (!HasSavedData())
+        {
+            upgradeMenuUi.ShowUpgrades();
+            LoadGame(1);
+        }
+        else
+        {
+            saveSystem.Load();
+        }
+        saveSystem.Save();
     }
 
     private void Update()
@@ -32,6 +41,7 @@ public class GameStatsTracker : MonoBehaviour
                 upgradeMenuUi.ShowUpgrades();
             }
             wave += 1;
+            saveSystem.Save();
             enemiesRemaining = 2 * wave;
             maxEnemyCount = Mathf.RoundToInt(enemiesRemaining / 2);
         }
@@ -43,4 +53,24 @@ public class GameStatsTracker : MonoBehaviour
         enemiesRemaining -= 1;
     }
 
+    public void LoadGame(int _wave)
+    {
+        wave = _wave;
+        enemiesRemaining = 2 * wave;
+        maxEnemyCount = wave;
+    }
+
+    public bool HasSavedData()
+    {
+        return PlayerPrefs.HasKey("PlayerCurrentHealth");
+    }
+
+    private IEnumerator DelayedSave()
+    {
+        while (UpgradeMenu.GameIsPaused)
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        saveSystem.Save();
+    }
 }
