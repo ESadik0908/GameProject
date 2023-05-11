@@ -2012,6 +2012,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   defaultMaxHealth: 100
   defaultExtraLives: 1
+  defaultPlayerState: NONE
   defaultLivesUpgrades: 0
   defaultDamageUpgrades: 0
   defaultHealthUpgrades: 0

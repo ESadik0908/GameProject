@@ -63,7 +63,10 @@ public class PlayerHealthController : MonoBehaviour
             {
                 StartCoroutine("Despawn");
             }
-            timeBody.StartRewind();
+            else
+            {
+                timeBody.StartRewind();
+            }
             extraLives -= 1;
             health = maxHealth;
         }
@@ -98,7 +101,5 @@ public class PlayerHealthController : MonoBehaviour
         yield return new WaitForEndOfFrame();
         yield return new WaitForEndOfFrame();
         gameObject.SetActive(false);
-        PlayerPrefs.DeleteAll();
-        PlayerPrefs.Save();
     }
 }

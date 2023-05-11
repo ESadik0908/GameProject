@@ -52,6 +52,7 @@ public class LaserJump : MonoBehaviour
 
     private void Update()
     {
+        if (PauseMenu.GameIsPaused || UpgradeMenu.GameIsPaused || GameOverMenu.GameIsPaused || TimeBody.isRewinding) return;
         damageBuffer -= Time.deltaTime;
         if (!activeState)
         {

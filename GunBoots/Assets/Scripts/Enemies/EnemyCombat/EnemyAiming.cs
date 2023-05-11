@@ -17,10 +17,17 @@ public class EnemyAiming : MonoBehaviour
     {
         target = GameObject.FindWithTag("Player").transform;
         gunCooldown = gunCooldownReset;
+        pool.Clear();
+    }
+
+    private void OnEnable()
+    {
+        pool.Clear();
     }
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
         float distance = Vector3.Distance(target.position, transform.position);
 
         if (distance > 30)
@@ -41,6 +48,7 @@ public class EnemyAiming : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) return;
         Vector3 targetPosition = target.position;
         targetPosition.z = transform.position.z; // Set the target's z position to be the same as the enemy's
 

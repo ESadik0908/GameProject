@@ -51,6 +51,8 @@ public class Dash : MonoBehaviour
     {
         if (!activeState) return;
 
+        if (PauseMenu.GameIsPaused || UpgradeMenu.GameIsPaused || GameOverMenu.GameIsPaused || TimeBody.isRewinding) return;
+
         dashCountReset = weponStats.ammo;
         dashBufferCounter -= Time.deltaTime;
         

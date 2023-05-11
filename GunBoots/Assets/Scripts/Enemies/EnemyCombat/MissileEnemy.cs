@@ -26,10 +26,17 @@ public class MissileEnemy : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
+        pool.Clear();
+    }
+
+    private void OnEnable()
+    {
+        pool.Clear();
     }
 
     private void Update()
     {
+        if (TimeBody.isRewinding) return;
         if (velocity.y > -50)
         {
             velocity.y += gravity * Time.deltaTime;
@@ -49,6 +56,7 @@ public class MissileEnemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (TimeBody.isRewinding) return;
         if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0;

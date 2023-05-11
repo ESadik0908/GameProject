@@ -13,16 +13,18 @@ public class SaveSystem : MonoBehaviour
 
     private GameStatsTracker gameStats;
 
-    [SerializeField] float defaultMaxHealth;
-    [SerializeField] int defaultExtraLives;
+    public static float defaultMaxHealth = 100;
+    public static int defaultExtraLives = 1;
 
-    [SerializeField] int defaultLivesUpgrades;
-    [SerializeField] int defaultDamageUpgrades;
-    [SerializeField] int defaultHealthUpgrades;
-    [SerializeField] int defaultAmmoUpgrades;
-    [SerializeField] int defaultSpeedUpgrades;
+    public static string defaultPlayerState = "NONE";
 
-    [SerializeField] int defaultWave;
+    public static int defaultLivesUpgrades = 0;
+    public static int defaultDamageUpgrades = 0;
+    public static int defaultHealthUpgrades = 0;
+    public static int defaultAmmoUpgrades = 0;
+    public static int defaultSpeedUpgrades = 0;
+
+    public static int defaultWave = 1;
     
     private void Start()
     {
@@ -33,12 +35,14 @@ public class SaveSystem : MonoBehaviour
         playerHealth = player.GetComponent<PlayerHealthController>();
         playerUpgrades = player.GetComponent<PlayerUpgrades>();
 
+        playerHealth.PlayerHasDied += DeleteSavedData;
+
         gameStats = gameController.GetComponent<GameStatsTracker>();
     }
 
     public void Save()
     {
-        // Save player data
+        PlayerPrefs.SetInt("NewRun", 0);
         PlayerPrefs.SetString("PlayerState", stateController.GetState());
 
         PlayerPrefs.SetFloat("PlayerCurrentHealth", playerHealth.health);
@@ -60,11 +64,6 @@ public class SaveSystem : MonoBehaviour
 
     public void Load()
     {
-        if (!HasSavedData())
-        {
-            LoadDefault();
-            return;
-        }
         // Retrieve player data
         string playerState = PlayerPrefs.GetString("PlayerState");
 
@@ -87,40 +86,27 @@ public class SaveSystem : MonoBehaviour
         playerUpgrades.LoadUpgrades(ammoUpgrades, damageUpgrades, speedUpgrades, healthUpgrades, livesUpgrades);
         gameStats.LoadGame(waveCount);
     }
-
-    public void LoadDefault()
-    {
-
-        // Retrieve player data
-        string playerState = "NONE";
-
-        float maxHealth = defaultMaxHealth;
-        float currentHealth = defaultMaxHealth;
-
-        int damageUpgrades = defaultDamageUpgrades;
-        int healthUpgrades = defaultHealthUpgrades;
-        int ammoUpgrades = defaultAmmoUpgrades;
-        int speedUpgrades = defaultSpeedUpgrades;
-        int livesUpgrades = defaultLivesUpgrades;
-
-        // Retrieve game controller data
-        int waveCount = defaultWave;
-
-        // Load the data into the appropriate scripts
-        stateController.LoadState(playerState);
-        playerHealth.LoadHealth(currentHealth, maxHealth, defaultExtraLives);
-        playerUpgrades.LoadUpgrades(ammoUpgrades, damageUpgrades, speedUpgrades, healthUpgrades, livesUpgrades);
-        gameStats.LoadGame(waveCount);
-    }
     
-    public void DeleteSavedData()
+    public void DeleteSavedData(bool reset)
     {
-        PlayerPrefs.DeleteAll();
+        PlayerPrefs.SetInt("NewRun", 1);
+        PlayerPrefs.SetString("PlayerState", defaultPlayerState);
+
+        PlayerPrefs.SetFloat("PlayerCurrentHealth", defaultMaxHealth);
+        PlayerPrefs.SetFloat("PlayerMaxHealth", defaultMaxHealth);
+        PlayerPrefs.SetInt("PlayerExtraLives", defaultExtraLives);
+
+        PlayerPrefs.SetInt("PlayerDamageUpgrades", defaultDamageUpgrades);
+        PlayerPrefs.SetInt("PlayerHealthUpgrades", defaultHealthUpgrades);
+        PlayerPrefs.SetInt("PlayerAmmoUpgrades", defaultAmmoUpgrades);
+        PlayerPrefs.SetInt("PlayerSpeedUpgrades", defaultSpeedUpgrades);
+        PlayerPrefs.SetInt("PlayerLivesUpgrades", defaultLivesUpgrades);
+
+        // Save game controller data
+        PlayerPrefs.SetInt("WaveCount", defaultWave);
+
+        // Save the PlayerPrefs to disk
         PlayerPrefs.Save();
     }
-
-    public bool HasSavedData()
-    {
-        return PlayerPrefs.HasKey("PlayerCurrentHealth");
-    }
+    
 }

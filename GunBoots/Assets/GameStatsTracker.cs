@@ -24,15 +24,12 @@ public class GameStatsTracker : MonoBehaviour
         UpgradeMenu.GameIsPaused = false;
         PauseMenu.GameIsPaused = false;
         Time.timeScale = 1f;
+        saveSystem.Load();
         if (!HasSavedData())
         {
-            saveSystem.LoadDefault();
             upgradeMenuUi.ShowUpgrades();
         }
-        else
-        {
-            saveSystem.Load();
-        }
+
         StartCoroutine("DelayedSave");
     }
 
@@ -67,7 +64,7 @@ public class GameStatsTracker : MonoBehaviour
 
     public bool HasSavedData()
     {
-        return PlayerPrefs.HasKey("PlayerCurrentHealth");
+        return PlayerPrefs.GetInt("NewRun") == 0;
     }
 
     private IEnumerator DelayedSave()

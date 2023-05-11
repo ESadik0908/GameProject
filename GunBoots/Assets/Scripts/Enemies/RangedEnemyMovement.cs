@@ -81,8 +81,6 @@ public class RangedEnemyMovement : MonoBehaviour
         {
             velocity.x = 0;
         }
-        
-
     }
 
     private void FixedUpdate()
@@ -105,6 +103,7 @@ public class RangedEnemyMovement : MonoBehaviour
 
     private IEnumerator MoveRandomly()
     {
+        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
         float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
 
         while (true)
@@ -122,7 +121,6 @@ public class RangedEnemyMovement : MonoBehaviour
             }
         }
         
-
         float delay = Random.Range(1, 5);
         yield return new WaitForSeconds(delay);
         moving = false;
