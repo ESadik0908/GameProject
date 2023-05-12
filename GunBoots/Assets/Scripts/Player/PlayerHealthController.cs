@@ -6,17 +6,23 @@ using System;
 public class PlayerHealthController : MonoBehaviour
 {
     public event Action<bool> PlayerHasDied;
+    public static event Action<string> NoDamage;
 
     public float health { get; private set; }
     [SerializeField] private float defaultHealth = 100;
     public float maxHealth;
     public int extraLives = 1;
     private TimeBody timeBody;
-
+    
     [SerializeField] private float damageBuffer;
-    private float damageBufferCounter;
+
+    private bool canTakeDamage = true;
 
     private PlayerUpgrades playerUpgrades;
+
+    private int lastWaveDamaged;
+
+    [SerializeField] Material material;
 
     private void Start()
     {
@@ -26,14 +32,14 @@ public class PlayerHealthController : MonoBehaviour
         playerUpgrades.OnHealthUpgrade += HandleHealthUpgrade;
         playerUpgrades.OnUpgradeLives += HandleLivesUpgrade;
         playerUpgrades.OnTakeUpgrade += Heal;
-        damageBufferCounter = damageBuffer;
+        lastWaveDamaged = GameStatsTracker.wave;
     }
     
     private void Update()
     {
-        if (damageBufferCounter > 0)
+        if(GameStatsTracker.wave - lastWaveDamaged >= 5)
         {
-            damageBufferCounter -= Time.deltaTime;
+            NoDamage?.Invoke("UNTOUCHABLE");
         }
     }
 
@@ -51,10 +57,11 @@ public class PlayerHealthController : MonoBehaviour
     public void Damage(int damage)
     {
         if (TimeBody.isRewinding) return;
-        if (damageBufferCounter <= 0 && health > 0)
+        if (canTakeDamage && health > 0)
         {
+            lastWaveDamaged = GameStatsTracker.wave;
             health -= damage;
-            damageBufferCounter = damageBuffer;
+            StartCoroutine(Invunrable());
         }
 
         if (health <= 0)
@@ -94,6 +101,34 @@ public class PlayerHealthController : MonoBehaviour
     {
         return PlayerPrefs.HasKey("PlayerCurrentHealth");
     }
+
+    private IEnumerator Invunrable()
+    {
+        canTakeDamage = false;
+
+        float timeElapsed = 0f;
+        float interval = damageBuffer / 10;
+        int index = 0;
+
+        while(index < 10)
+        {
+            Color colourBlock1 = material.color;
+            colourBlock1.a = index % 2;
+            material.color = colourBlock1;
+            timeElapsed += Time.deltaTime;
+            index++;
+            yield return new WaitForSeconds(interval);
+        }
+
+        Color colourBlock = material.color;
+        colourBlock.a = 1;
+        material.color = colourBlock;
+
+        canTakeDamage = true;
+    }
+
+
+
 
     private IEnumerator Despawn()
     {

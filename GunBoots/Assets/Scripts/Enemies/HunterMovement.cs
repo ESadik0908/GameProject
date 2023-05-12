@@ -51,6 +51,12 @@ public class HunterMovement : MonoBehaviour
         
 
         facing = Mathf.Sign(playerSide);
+
+        Vector3 theScale = transform.localScale;
+        theScale.x = Mathf.Sign(velocity.x) * 0.7f;
+        transform.localScale = theScale;
+
+
         playerAboveOrBelow = Mathf.Sign(playerYLoc);
 
         UpdateRaycastOrigins();
@@ -62,6 +68,12 @@ public class HunterMovement : MonoBehaviour
         if (velocity.y > -50)
         {
             velocity.y += gravity * Time.deltaTime;
+        }
+
+        if (xDifference < 0.1)
+        {
+            velocity.x = 0;
+            return;
         }
 
         if (controller.collisions.below)

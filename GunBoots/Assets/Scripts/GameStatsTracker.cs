@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class GameStatsTracker : MonoBehaviour
 {
-    public int wave = 1;
+    public static Action<int> ActionUsedToTrackEnemyDeathsForAchivement;
+
+    public static int wave;
     public int enemiesRemaining = 0;
     public int maxEnemyCount { get; private set; }
     [SerializeField] GameObject enemySpawner;
@@ -12,11 +15,12 @@ public class GameStatsTracker : MonoBehaviour
     public GameObject Ui;
     private UpgradeMenu upgradeMenuUi;
     private SaveSystem saveSystem;
-
+    private string profile;
     private bool saving = false;
 
     private void Start()
     {
+        profile = PlayerPrefs.GetString("Profile");
         saveSystem = GetComponent<SaveSystem>();
         upgradeMenuUi = Ui.GetComponent<UpgradeMenu>();
         enemyTracker = enemySpawner.GetComponent<EnemySpawner>();
@@ -53,6 +57,7 @@ public class GameStatsTracker : MonoBehaviour
     public void EnemyDied()
     {
         enemiesRemaining -= 1;
+        ActionUsedToTrackEnemyDeathsForAchivement?.Invoke(1);
     }
 
     public void LoadGame(int _wave)
@@ -64,7 +69,7 @@ public class GameStatsTracker : MonoBehaviour
 
     public bool HasSavedData()
     {
-        return PlayerPrefs.GetInt("NewRun") == 0;
+        return PlayerPrefs.GetInt(profile + "NewRun") == 1;
     }
 
     private IEnumerator DelayedSave()

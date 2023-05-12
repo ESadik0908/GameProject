@@ -119,7 +119,7 @@ public class UIController : MonoBehaviour
 
     private void UpdateProgress()
     {
-        waveCounter.text = ("Wave: " + gameStats.wave.ToString());
+        waveCounter.text = ("Wave: " + GameStatsTracker.wave.ToString());
         enemiesRemaining.text = ("Enemies Remaining: " + gameStats.enemiesRemaining.ToString());
     }
 }

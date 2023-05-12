@@ -47,20 +47,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
     {
         health = maxHealth;
     }
-
     
-
-    public void Damage(float damage)
-    {
-        
-        health -= damage;
-        
-        if (health <= 0)
-        {
-            Die();
-        }
-    }
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.tag == "Enemy" || collision.gameObject.tag == "PlayerBullet")
@@ -81,6 +68,17 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
             {
                 playerMovement.KnockBack((contactDamage*2) * side);
             }
+        }
+    }
+
+    public void Damage(float damage)
+    {
+
+        health -= damage;
+
+        if (health <= 0)
+        {
+            Die();
         }
     }
 

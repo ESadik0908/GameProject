@@ -25,12 +25,14 @@ public class UpgradeMenu : MonoBehaviour
     private GameObject player;
     private PlayerStateController playerState;
     private PlayerUpgrades playerUpgrades;
+    private PlayerMovement playerMovement;
 
     private void Start()
     {
         player = GameObject.Find("Player");
         playerState = player.GetComponent<PlayerStateController>();
         playerUpgrades = player.GetComponent<PlayerUpgrades>();
+        playerMovement = player.GetComponent<PlayerMovement>();
 
         // Assign the functions to functionGroup1
         weapons[0] = playerState.ShotgunUpgrade;
@@ -128,10 +130,12 @@ public class UpgradeMenu : MonoBehaviour
        
         // Assign a random function from functionGroup1 to button1
         System.Action resume = Resume;
+        System.Action resetGravity = playerMovement.ResetGravity;
         button.onClick.RemoveAllListeners();
         button.onClick.AddListener(() => resume.Invoke());
         button.onClick.AddListener(() => weapons[randomWepon].Invoke());
         button.onClick.AddListener(() => upgrades[randomUpgrade].Invoke());
+        button.onClick.AddListener(() => resetGravity.Invoke());
     }
 
 }

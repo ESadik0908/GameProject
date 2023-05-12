@@ -39,12 +39,13 @@ public class Dash : MonoBehaviour
         weponStats = GetComponent<DashStats>();
         dashCoroutine = playerMovement.Dash(dashStats);
         dashCountReset = weponStats.ammo;
-        
+        pool.Clear();
     }
 
     private void Awake()
     {
         dashBufferCounter = 0;
+        pool.Clear();
     }
 
     private void Update()

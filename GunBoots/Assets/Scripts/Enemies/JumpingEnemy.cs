@@ -52,6 +52,10 @@ public class JumpingEnemy : MonoBehaviour
 
         facing = Mathf.Sign(playerSide);
 
+        Vector3 theScale = transform.localScale;
+        theScale.x = facing;
+        transform.localScale = theScale;
+
         UpdateRaycastOrigins();
 
         Vector2 rayOrigin = (facing == -1) ? bottomLeft : bottomRight;
@@ -62,7 +66,7 @@ public class JumpingEnemy : MonoBehaviour
         {
             velocity.y += gravity * Time.deltaTime;
         }
-
+        
 
         if (isJumping && controller.collisions.below)
         {

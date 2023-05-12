@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 [RequireComponent(typeof(Controller2D))]
 public class PlayerMovement : MonoBehaviour
 {
+    public static Action<string> MonitorAirTime;
+    public static Action<string> MultiKill;
+
     //Player movement stats  that can be changed in the editor
     [SerializeField] private float jumpHeight = 4f;
     [SerializeField] private float timeToApex = 0.4f;
@@ -40,20 +44,63 @@ public class PlayerMovement : MonoBehaviour
     private PlayerUpgrades playerUpgrades;
 
     private bool knockback = false;
+
+    public int remainingEnemies = 3;
+
     private void Start()
     {
         playerUpgrades = GetComponent<PlayerUpgrades>();
         moveSpeed = defaultMoveSpeed;
         controller = GetComponent<Controller2D>();
-
+        
         ResetGravity();
 
         facing = 1;
     }
 
+    private void OnEnable()
+    {
+        GameStatsTracker.ActionUsedToTrackEnemyDeathsForAchivement += CountEnemyDeath;
+    }
+
+    private void OnDisable()
+    {
+        GameStatsTracker.ActionUsedToTrackEnemyDeathsForAchivement -= CountEnemyDeath;
+    }
+
+    private void CountEnemyDeath(int i)
+    {
+        if (controller.collisions.below)
+        {
+            return;
+        }
+        remainingEnemies -= i;
+    }
+
     private void Update()
     {
         if (TimeBody.isRewinding) return;
+
+        #region Achievments
+        //Airtime achive
+        if (coyoteTimeCounter <= -10)
+        {
+            MonitorAirTime?.Invoke("AIRTIME");
+        }
+
+        if (!controller.collisions.below)
+        {
+            if (remainingEnemies <= 0)
+            {
+                MultiKill?.Invoke("MULTIKILL");
+            }
+        }
+        else
+        {
+            remainingEnemies = 3;
+        }
+        #endregion
+
 
         if (isDashing) return;
 
@@ -98,7 +145,8 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = velocity.y * 0.5f;
         }
         #endregion
-        
+
+
     }
 
     private void FixedUpdate()
@@ -107,6 +155,7 @@ public class PlayerMovement : MonoBehaviour
         if ((controller.collisions.above || controller.collisions.below) && !knockback)
         {
             velocity.y = 0;
+            
         }
         
         if (jump)

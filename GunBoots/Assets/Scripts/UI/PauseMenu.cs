@@ -10,14 +10,24 @@ public class PauseMenu : MonoBehaviour
     public GameObject normalUi;
     public GameObject upgradeUi;
 
+    public Animator transition;
 
-    private void Start()
+    public static float transitionTime = 1f;
+
+    private bool transitioning = false;
+
+    public IEnumerator LoadLevel(int sceneIndex)
     {
-
+        transitioning = true;
+        transition.SetTrigger("Start");
+        yield return new WaitForSecondsRealtime(transitionTime);
+        transitioning = false;
+        SceneManager.LoadScene(sceneIndex);
     }
+    
     private void Update()
     {
-        if (GameOverMenu.GameIsPaused)
+        if (GameOverMenu.GameIsPaused || transitioning)
         {
             return;
         }
@@ -63,7 +73,8 @@ public class PauseMenu : MonoBehaviour
 
     public void LoadMenu()
     {
-        SceneManager.LoadScene("Menu");
+        GameIsPaused = false;
+        StartCoroutine(LoadLevel(2));
     }
 
     public void QuitGame()

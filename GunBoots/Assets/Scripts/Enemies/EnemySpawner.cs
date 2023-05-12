@@ -41,7 +41,7 @@ public class EnemySpawner : MonoBehaviour
 
     [SerializeField] private Vector2 gridWorldSize;
 
-    public int enemyCount;
+    public static int enemyCount;
 
     [SerializeField] private int maxEnemies;
     public int enemiesRemaining = 0;

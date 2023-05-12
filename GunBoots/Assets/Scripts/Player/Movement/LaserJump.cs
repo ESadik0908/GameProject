@@ -52,7 +52,12 @@ public class LaserJump : MonoBehaviour
 
     private void Update()
     {
-        if (PauseMenu.GameIsPaused || UpgradeMenu.GameIsPaused || GameOverMenu.GameIsPaused || TimeBody.isRewinding) return;
+        if (PauseMenu.GameIsPaused || UpgradeMenu.GameIsPaused || GameOverMenu.GameIsPaused || TimeBody.isRewinding)
+        {
+            laser.SetActive(false);
+            return;
+        }
+
         damageBuffer -= Time.deltaTime;
         if (!activeState)
         {
@@ -66,7 +71,7 @@ public class LaserJump : MonoBehaviour
             playerMovement.Hover();
             hovering = true;
         }
-        if (Input.GetButtonUp("Jump") || hoverTime <= 0)
+        if (!Input.GetButton("Jump") || hoverTime <= 0)
         {
             hovering = false;
 

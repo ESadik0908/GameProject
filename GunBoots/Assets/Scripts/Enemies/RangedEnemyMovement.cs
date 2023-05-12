@@ -44,9 +44,15 @@ public class RangedEnemyMovement : MonoBehaviour
         if (TimeBody.isRewinding) return;
         float playerSide = player.transform.position.x - transform.position.x;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
-
+        float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
 
         facing = Mathf.Sign(playerSide);
+
+
+        Vector3 theScale = transform.localScale;
+        theScale.x = facing;
+        transform.localScale = theScale;
+
 
         UpdateRaycastOrigins();
 
@@ -59,11 +65,6 @@ public class RangedEnemyMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        if (yDifference > 5 )
-        {
-            velocity.x = 0;  
-            return;
-        }
 
         if (moveCooldown <= 0)
         {

@@ -18,6 +18,8 @@ public class SaveSystem : MonoBehaviour
 
     public static string defaultPlayerState = "NONE";
 
+    private string profile;
+
     public static int defaultLivesUpgrades = 0;
     public static int defaultDamageUpgrades = 0;
     public static int defaultHealthUpgrades = 0;
@@ -28,6 +30,7 @@ public class SaveSystem : MonoBehaviour
     
     private void Start()
     {
+        profile = PlayerPrefs.GetString("Profile");
         player = GameObject.FindGameObjectWithTag("Player");
         gameController = GameObject.FindGameObjectWithTag("GameController");
 
@@ -42,21 +45,21 @@ public class SaveSystem : MonoBehaviour
 
     public void Save()
     {
-        PlayerPrefs.SetInt("NewRun", 0);
-        PlayerPrefs.SetString("PlayerState", stateController.GetState());
+        PlayerPrefs.SetInt(profile + "NewRun", 1);
+        PlayerPrefs.SetString(profile + "PlayerState", stateController.GetState());
 
-        PlayerPrefs.SetFloat("PlayerCurrentHealth", playerHealth.health);
-        PlayerPrefs.SetFloat("PlayerMaxHealth", playerHealth.maxHealth);
-        PlayerPrefs.SetInt("PlayerExtraLives", playerHealth.extraLives);
+        PlayerPrefs.SetFloat(profile + "PlayerCurrentHealth", playerHealth.health);
+        PlayerPrefs.SetFloat(profile + "PlayerMaxHealth", playerHealth.maxHealth);
+        PlayerPrefs.SetInt(profile + "PlayerExtraLives", playerHealth.extraLives);
 
-        PlayerPrefs.SetInt("PlayerDamageUpgrades", playerUpgrades.damage);        
-        PlayerPrefs.SetInt("PlayerHealthUpgrades", playerUpgrades.health);
-        PlayerPrefs.SetInt("PlayerAmmoUpgrades", playerUpgrades.ammo);
-        PlayerPrefs.SetInt("PlayerSpeedUpgrades", playerUpgrades.speed);
-        PlayerPrefs.SetInt("PlayerLivesUpgrades", playerUpgrades.lives);
+        PlayerPrefs.SetInt(profile + "PlayerDamageUpgrades", playerUpgrades.damage);        
+        PlayerPrefs.SetInt(profile + "PlayerHealthUpgrades", playerUpgrades.health);
+        PlayerPrefs.SetInt(profile + "PlayerAmmoUpgrades", playerUpgrades.ammo);
+        PlayerPrefs.SetInt(profile + "PlayerSpeedUpgrades", playerUpgrades.speed);
+        PlayerPrefs.SetInt(profile + "PlayerLivesUpgrades", playerUpgrades.lives);
 
         // Save game controller data
-        PlayerPrefs.SetInt("WaveCount", gameStats.wave);
+        PlayerPrefs.SetInt(profile + "WaveCount", GameStatsTracker.wave);
 
         // Save the PlayerPrefs to disk
         PlayerPrefs.Save();
@@ -65,20 +68,20 @@ public class SaveSystem : MonoBehaviour
     public void Load()
     {
         // Retrieve player data
-        string playerState = PlayerPrefs.GetString("PlayerState");
+        string playerState = PlayerPrefs.GetString(profile + "PlayerState");
 
-        float currentHealth = PlayerPrefs.GetFloat("PlayerCurrentHealth");
-        float maxHealth = PlayerPrefs.GetFloat("PlayerMaxHealth");
-        int extraLives = PlayerPrefs.GetInt("PlayerExtraLives");
+        float currentHealth = PlayerPrefs.GetFloat(profile + "PlayerCurrentHealth");
+        float maxHealth = PlayerPrefs.GetFloat(profile + "PlayerMaxHealth");
+        int extraLives = PlayerPrefs.GetInt(profile + "PlayerExtraLives");
 
-        int damageUpgrades = PlayerPrefs.GetInt("PlayerDamageUpgrades");
-        int healthUpgrades = PlayerPrefs.GetInt("PlayerHealthUpgrades");
-        int ammoUpgrades = PlayerPrefs.GetInt("PlayerAmmoUpgrades");
-        int speedUpgrades = PlayerPrefs.GetInt("PlayerSpeedUpgrades");
-        int livesUpgrades = PlayerPrefs.GetInt("PlayerLivesUpgrades");
+        int damageUpgrades = PlayerPrefs.GetInt(profile + "PlayerDamageUpgrades");
+        int healthUpgrades = PlayerPrefs.GetInt(profile + "PlayerHealthUpgrades");
+        int ammoUpgrades = PlayerPrefs.GetInt(profile + "PlayerAmmoUpgrades");
+        int speedUpgrades = PlayerPrefs.GetInt(profile + "PlayerSpeedUpgrades");
+        int livesUpgrades = PlayerPrefs.GetInt(profile + "PlayerLivesUpgrades");
 
         // Retrieve game controller data
-        int waveCount = PlayerPrefs.GetInt("WaveCount");
+        int waveCount = PlayerPrefs.GetInt(profile + "WaveCount");
 
         // Load the data into the appropriate scripts
         stateController.LoadState(playerState);
@@ -89,21 +92,21 @@ public class SaveSystem : MonoBehaviour
     
     public void DeleteSavedData(bool reset)
     {
-        PlayerPrefs.SetInt("NewRun", 1);
-        PlayerPrefs.SetString("PlayerState", defaultPlayerState);
+        PlayerPrefs.SetInt(profile + "NewRun", 0);
+        PlayerPrefs.SetString(profile + "PlayerState", defaultPlayerState);
 
-        PlayerPrefs.SetFloat("PlayerCurrentHealth", defaultMaxHealth);
-        PlayerPrefs.SetFloat("PlayerMaxHealth", defaultMaxHealth);
-        PlayerPrefs.SetInt("PlayerExtraLives", defaultExtraLives);
+        PlayerPrefs.SetFloat(profile + "PlayerCurrentHealth", defaultMaxHealth);
+        PlayerPrefs.SetFloat(profile + "PlayerMaxHealth", defaultMaxHealth);
+        PlayerPrefs.SetInt(profile + "PlayerExtraLives", defaultExtraLives);
 
-        PlayerPrefs.SetInt("PlayerDamageUpgrades", defaultDamageUpgrades);
-        PlayerPrefs.SetInt("PlayerHealthUpgrades", defaultHealthUpgrades);
-        PlayerPrefs.SetInt("PlayerAmmoUpgrades", defaultAmmoUpgrades);
-        PlayerPrefs.SetInt("PlayerSpeedUpgrades", defaultSpeedUpgrades);
-        PlayerPrefs.SetInt("PlayerLivesUpgrades", defaultLivesUpgrades);
+        PlayerPrefs.SetInt(profile + "PlayerDamageUpgrades", defaultDamageUpgrades);
+        PlayerPrefs.SetInt(profile + "PlayerHealthUpgrades", defaultHealthUpgrades);
+        PlayerPrefs.SetInt(profile + "PlayerAmmoUpgrades", defaultAmmoUpgrades);
+        PlayerPrefs.SetInt(profile + "PlayerSpeedUpgrades", defaultSpeedUpgrades);
+        PlayerPrefs.SetInt(profile + "PlayerLivesUpgrades", defaultLivesUpgrades);
 
         // Save game controller data
-        PlayerPrefs.SetInt("WaveCount", defaultWave);
+        PlayerPrefs.SetInt(profile + "WaveCount", defaultWave);
 
         // Save the PlayerPrefs to disk
         PlayerPrefs.Save();
