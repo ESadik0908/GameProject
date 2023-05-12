@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Movement for the archer enemy, moves back from the player if too close and towards the player if too far in random intervals
 [RequireComponent(typeof(BoxCollider2D))]
-public class JumpingEnemy : MonoBehaviour
+public class RangedEnemyMovement : MonoBehaviour
 {
     private GameObject player;
 
@@ -22,14 +22,11 @@ public class JumpingEnemy : MonoBehaviour
 
     private Vector2[] origins;
 
-    [SerializeField] private float jumpTimer;
-    [SerializeField] private float jumpTimerReset;
-
     [SerializeField] private float speed;
-    [SerializeField] private float timeToApex = 0.4f;
-    private float jumpForce;
 
-    private bool isJumping = false;
+    private bool moving = false;
+
+    private float moveCooldown;
 
     private void Start()
     {
@@ -38,8 +35,8 @@ public class JumpingEnemy : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
-        jumpForce = Mathf.Abs(gravity) * timeToApex;
-        jumpTimer = jumpTimerReset;
+
+        moveCooldown = Random.Range(1f, 5f);
     }
 
     private void Update()
@@ -49,12 +46,13 @@ public class JumpingEnemy : MonoBehaviour
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
         float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
 
-
         facing = Mathf.Sign(playerSide);
+
 
         Vector3 theScale = transform.localScale;
         theScale.x = facing;
         transform.localScale = theScale;
+
 
         UpdateRaycastOrigins();
 
@@ -66,33 +64,30 @@ public class JumpingEnemy : MonoBehaviour
         {
             velocity.y += gravity * Time.deltaTime;
         }
-        
 
-        if (isJumping && controller.collisions.below)
+
+        if (moveCooldown <= 0)
         {
-            velocity = Vector3.zero;
-            isJumping = false;
-            jumpTimer = jumpTimerReset;
+            moving = true;
+            StartCoroutine("MoveRandomly");
+            moveCooldown = Random.Range(1, 5);
         }
 
-
-        if (!isJumping && controller.collisions.below && jumpTimer <= 0)
+        if (!moving)
         {
-            isJumping = true;
-            velocity.x = Mathf.Clamp(xDifference, 0, 5) * facing;
-            velocity.y = jumpForce;
+            moveCooldown -= Time.deltaTime;
         }
-        
-        if (jumpTimer > 0)
+ 
+        if (hit.distance > 1)
         {
-            jumpTimer -= Time.deltaTime;
+            velocity.x = 0;
         }
     }
 
     private void FixedUpdate()
     {
         if (TimeBody.isRewinding) return;
-        if ((controller.collisions.above || controller.collisions.below) && !isJumping)
+        if (controller.collisions.above || controller.collisions.below)
         {
             velocity.y = 0;
         }
@@ -105,5 +100,31 @@ public class JumpingEnemy : MonoBehaviour
         Bounds bounds = collider.bounds;
         bottomLeft = new Vector2(bounds.min.x + 0.1f, bounds.min.y - 0.01f);
         bottomRight = new Vector2(bounds.max.x - 0.1f, bounds.min.y - 0.01f);
+    }
+
+    private IEnumerator MoveRandomly()
+    {
+        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
+        float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
+
+        while (true)
+        {
+            if (xDifference > 10)
+            {
+                velocity.x = facing * speed;
+                break;
+            }
+
+            if (xDifference < 10)
+            {
+                velocity.x = -facing * speed;
+                break;
+            }
+        }
+        
+        float delay = Random.Range(1, 5);
+        yield return new WaitForSeconds(delay);
+        moving = false;
+        velocity.x = 0;
     }
 }

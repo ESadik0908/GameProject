@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Used to get a path for a unit
 public class Path
 {
     public readonly Vector3[] lookPoints;

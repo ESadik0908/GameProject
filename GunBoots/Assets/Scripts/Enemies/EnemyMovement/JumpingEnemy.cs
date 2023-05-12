@@ -1,14 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Class for the movement of the Frog enemy, it will jump towards the player up to a maximum of 5 units every few seconds.
 [RequireComponent(typeof(BoxCollider2D))]
-public class HunterMovement : MonoBehaviour
+public class JumpingEnemy : MonoBehaviour
 {
     private GameObject player;
 
     public float facing;
-    public float playerAboveOrBelow;
     private Controller2D controller;
     private PlayerMovement playerMovement;
 
@@ -23,12 +22,14 @@ public class HunterMovement : MonoBehaviour
 
     private Vector2[] origins;
 
+    [SerializeField] private float jumpTimer;
+    [SerializeField] private float jumpTimerReset;
+
     [SerializeField] private float speed;
-    [SerializeField] private float timeToApex = 0.8f;
+    [SerializeField] private float timeToApex = 0.4f;
     private float jumpForce;
 
-    private float coyoteTime = 0.1f;
-    public float coyoteTimeCounter;
+    private bool isJumping = false;
 
     private void Start()
     {
@@ -38,26 +39,22 @@ public class HunterMovement : MonoBehaviour
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
         jumpForce = Mathf.Abs(gravity) * timeToApex;
+        jumpTimer = jumpTimerReset;
     }
 
     private void Update()
     {
         if (TimeBody.isRewinding) return;
         float playerSide = player.transform.position.x - transform.position.x;
-        float playerYLoc = player.transform.position.y - transform.position.y;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
         float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
 
-        
 
         facing = Mathf.Sign(playerSide);
 
         Vector3 theScale = transform.localScale;
-        theScale.x = Mathf.Sign(velocity.x) * 0.7f;
+        theScale.x = facing;
         transform.localScale = theScale;
-
-
-        playerAboveOrBelow = Mathf.Sign(playerYLoc);
 
         UpdateRaycastOrigins();
 
@@ -69,57 +66,33 @@ public class HunterMovement : MonoBehaviour
         {
             velocity.y += gravity * Time.deltaTime;
         }
-
-        if (xDifference < 0.1)
-        {
-            velocity.x = 0;
-            return;
-        }
-
-        if (controller.collisions.below)
-        {
-            coyoteTimeCounter = coyoteTime;
-        }
-        else
-        {
-            coyoteTimeCounter -= Time.deltaTime;
-        }
-
-        if (xDifference < 5)
-        {
-            if (playerAboveOrBelow == 1 && yDifference > 1)
-            {
-                if (coyoteTimeCounter > 0)
-                {
-                    velocity.y = jumpForce;
-                }
-            }
-        }
-
         
 
-        if (hit.distance > 1)
+        if (isJumping && controller.collisions.below)
         {
-            if(playerAboveOrBelow == 1)
-            {
-                if (coyoteTimeCounter > 0)
-                {
-                    velocity.y = jumpForce;
-                }
-                else
-                {
-                    velocity.x = 0;
-                }
-            }          
-            
+            velocity = Vector3.zero;
+            isJumping = false;
+            jumpTimer = jumpTimerReset;
         }
-        velocity.x = facing * speed;
+
+
+        if (!isJumping && controller.collisions.below && jumpTimer <= 0)
+        {
+            isJumping = true;
+            velocity.x = Mathf.Clamp(xDifference, 0, 5) * facing;
+            velocity.y = jumpForce;
+        }
+        
+        if (jumpTimer > 0)
+        {
+            jumpTimer -= Time.deltaTime;
+        }
     }
 
     private void FixedUpdate()
     {
         if (TimeBody.isRewinding) return;
-        if (controller.collisions.above || controller.collisions.below)
+        if ((controller.collisions.above || controller.collisions.below) && !isJumping)
         {
             velocity.y = 0;
         }

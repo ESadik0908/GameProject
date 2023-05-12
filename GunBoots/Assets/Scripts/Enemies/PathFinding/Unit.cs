@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections;
-
+//Class responsible for the missile projectile. A* algorithm is used until very close
+//When the missile is close to the enemy it will stop using A*
 public class Unit : MonoBehaviour
 {
 

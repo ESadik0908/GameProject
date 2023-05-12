@@ -50,8 +50,6 @@ public class MissileEnemy : MonoBehaviour
         }
 
         gunCooldown -= Time.deltaTime;
-
-
     }
 
     private void FixedUpdate()

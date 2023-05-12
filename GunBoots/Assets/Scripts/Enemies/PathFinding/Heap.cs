@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System;
-
+//Heap used for multi threading
 public class Heap<T> where T : IHeapItem<T>
 {
 

@@ -12,7 +12,7 @@ public class EnemyAiming : MonoBehaviour
 
     private float gunCooldown;
     [SerializeField] private float gunCooldownReset;
-    // Start is called before the first frame update
+
     void Start()
     {
         target = GameObject.FindWithTag("Player").transform;
@@ -50,7 +50,7 @@ public class EnemyAiming : MonoBehaviour
     {
         if (TimeBody.isRewinding) return;
         Vector3 targetPosition = target.position;
-        targetPosition.z = transform.position.z; // Set the target's z position to be the same as the enemy's
+        targetPosition.z = transform.position.z;
 
         transform.up = targetPosition - transform.position;
         
@@ -66,17 +66,14 @@ public class EnemyAiming : MonoBehaviour
 
     private GameObject GetBullet()
     {
-        // check if there are any inactive bombs in the pool
         foreach (GameObject bullet in pool)
         {
             if (!bullet.activeSelf)
             {
-                // if an inactive bomb is found, return it
                 return bullet;
             }
         }
 
-        // if no inactive bombs are found, create a new one
         bullet = Instantiate(bulletClone);
         pool.Enqueue(bullet);
         return bullet;

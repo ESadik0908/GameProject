@@ -27,6 +27,7 @@ public class PlayerCam : MonoBehaviour
         playerVelocity = playerMovement.getVelocity();
     }
 
+    //Camera follows player with offset towards the players direction
     private void FixedUpdate()
     {
         camFollowTime = (Mathf.Abs(playerVelocity.x) > 8.5) ? 0.05f : 0.1f;

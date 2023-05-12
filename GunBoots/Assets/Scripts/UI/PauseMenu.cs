@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-
+//Game can be paused and resumed with escape key, game cannot be paused during animations and in the game over screen
 public class PauseMenu : MonoBehaviour
 {
     public static bool GameIsPaused = false;

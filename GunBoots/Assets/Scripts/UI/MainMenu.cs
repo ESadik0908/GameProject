@@ -82,8 +82,7 @@ public class MainMenu : MonoBehaviour
     {
         StartCoroutine(TransitionMenu(3));
     }
-
-
+    
     public void DeleteSavedData(bool reset)
     {
         PlayerPrefs.SetInt(profile + "NewRun", 0);

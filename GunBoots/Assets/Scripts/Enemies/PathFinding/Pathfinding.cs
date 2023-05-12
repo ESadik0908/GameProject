@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System;
-
+//A* algorithm to find a path between two gameobjects
 public class Pathfinding : MonoBehaviour
 {
     private Grid grid;

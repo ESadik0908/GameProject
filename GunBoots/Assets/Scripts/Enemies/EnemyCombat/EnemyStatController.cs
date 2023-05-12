@@ -55,6 +55,7 @@ public class EnemyStatController : MonoBehaviour, IEnemyStats
             return;
         }
 
+        //Damage and knockback the player based on contact damage
         if (collision.gameObject.tag == "Player")
         {
             GameObject player = collision.gameObject;

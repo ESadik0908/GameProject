@@ -1,7 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//The Save system. The players profile is loaded when they click the profile button and all data is saved and loaded based on which profile is currently loaded.
+//Deleting data resets the values to default
 public class SaveSystem : MonoBehaviour
 {
     private GameObject player;

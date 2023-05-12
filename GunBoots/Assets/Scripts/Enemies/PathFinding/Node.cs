@@ -3,7 +3,6 @@ using System.Collections;
 
 public class Node : IHeapItem<Node>
 {
-
     public bool walkable;
     public Vector3 worldPosition;
     public int gridX;

@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//This class handles all movement of the hunter enemy type
 [RequireComponent(typeof(BoxCollider2D))]
-[RequireComponent(typeof(Controller2D))]
-public class BasicMovement : MonoBehaviour
+public class HunterMovement : MonoBehaviour
 {
     private GameObject player;
 
     public float facing;
+    public float playerAboveOrBelow;
     private Controller2D controller;
     private PlayerMovement playerMovement;
 
@@ -24,6 +24,11 @@ public class BasicMovement : MonoBehaviour
     private Vector2[] origins;
 
     [SerializeField] private float speed;
+    [SerializeField] private float timeToApex = 0.8f;
+    private float jumpForce;
+
+    private float coyoteTime = 0.1f;
+    public float coyoteTimeCounter;
 
     private void Start()
     {
@@ -32,23 +37,26 @@ public class BasicMovement : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
-        
+        jumpForce = Mathf.Abs(gravity) * timeToApex;
     }
 
     private void Update()
     {
         if (TimeBody.isRewinding) return;
+
         float playerSide = player.transform.position.x - transform.position.x;
+        float playerYLoc = player.transform.position.y - transform.position.y;
         float yDifference = Mathf.Abs(player.transform.position.y - transform.position.y);
         float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
-
+        
         facing = Mathf.Sign(playerSide);
 
-
+        //Flip the sprite to face the direction of movement
         Vector3 theScale = transform.localScale;
-        theScale.x = Mathf.Sign(velocity.x);
+        theScale.x = Mathf.Sign(velocity.x) * 0.7f;
         transform.localScale = theScale;
-
+        
+        playerAboveOrBelow = Mathf.Sign(playerYLoc);
 
         UpdateRaycastOrigins();
 
@@ -61,19 +69,50 @@ public class BasicMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        if (yDifference > 10 || xDifference < 0.1)
+        if (xDifference < 0.1)
         {
             velocity.x = 0;
             return;
         }
-        
-        velocity.x = facing * speed;
-        if (hit.distance > 1)
+
+        if (controller.collisions.below)
         {
-            velocity.x = 0;
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        //Jump if the player is above and close
+        if (xDifference < 5)
+        {
+            if (playerAboveOrBelow == 1 && yDifference > 1)
+            {
+                if (coyoteTimeCounter > 0)
+                {
+                    velocity.y = jumpForce;
+                }
+            }
         }
         
-
+        //jump if we reach the edge of a platform and the player is above
+        if (hit.distance > 1)
+        {
+            if(playerAboveOrBelow == 1)
+            {
+                if (coyoteTimeCounter > 0)
+                {
+                    velocity.y = jumpForce;
+                }
+                else
+                {
+                    velocity.x = 0;
+                }
+            }          
+            
+        }
+        velocity.x = facing * speed;
     }
 
     private void FixedUpdate()

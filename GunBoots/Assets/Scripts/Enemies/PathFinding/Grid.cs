@@ -1,7 +1,7 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-
+//The Grid used for the A* pathfinding of the enemy missiles terrain is set as unwalkable so it is avoided
 public class Grid : MonoBehaviour
 {
 
@@ -55,8 +55,6 @@ public class Grid : MonoBehaviour
                 {
                     movementPenalty += obstacleProximityPenalty;
                 }
-
-
                 grid[x, y] = new Node(walkable, worldPoint, x, y, movementPenalty);
             }
         }

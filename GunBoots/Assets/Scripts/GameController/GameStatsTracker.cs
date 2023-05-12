@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
-
+//Tracks how many enemies are remaining in the current wave as well as the wavecount;
 public class GameStatsTracker : MonoBehaviour
 {
     public static Action<int> ActionUsedToTrackEnemyDeathsForAchivement;
@@ -52,7 +52,6 @@ public class GameStatsTracker : MonoBehaviour
             maxEnemyCount = Mathf.RoundToInt(enemiesRemaining / 2);
         }
     }
-
 
     public void EnemyDied()
     {

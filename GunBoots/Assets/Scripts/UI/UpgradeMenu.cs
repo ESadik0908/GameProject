@@ -46,7 +46,7 @@ public class UpgradeMenu : MonoBehaviour
         upgrades[4] = playerUpgrades.UpgradeLives;
     }
 
-
+    //Game pauses in upgrade menu
     public void ShowUpgrades()
     {
         ChooseButtonUpgrade(upgradeButton1);
@@ -70,6 +70,7 @@ public class UpgradeMenu : MonoBehaviour
         GameIsPaused = false;
     }
 
+    //Randomly chooses a weapon and an upgrade and displays it to that button
     public void ChooseButtonUpgrade(Button button)
     {
         int randomWepon = Random.Range(0, weapons.Length);

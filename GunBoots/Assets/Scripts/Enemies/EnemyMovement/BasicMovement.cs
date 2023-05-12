@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+//Movement for the Zombie enemy, just moves towards the player if they are a similar x axis (to avoid blocking edges)
 [RequireComponent(typeof(BoxCollider2D))]
-public class RangedEnemyMovement : MonoBehaviour
+[RequireComponent(typeof(Controller2D))]
+public class BasicMovement : MonoBehaviour
 {
     private GameObject player;
 
@@ -24,10 +25,6 @@ public class RangedEnemyMovement : MonoBehaviour
 
     [SerializeField] private float speed;
 
-    private bool moving = false;
-
-    private float moveCooldown;
-
     private void Start()
     {
         player = GameObject.Find("Player");
@@ -35,8 +32,7 @@ public class RangedEnemyMovement : MonoBehaviour
         collider = GetComponent<BoxCollider2D>();
         controller = GetComponent<Controller2D>();
         gravity = playerMovement.getGravity();
-
-        moveCooldown = Random.Range(1f, 5f);
+        
     }
 
     private void Update()
@@ -50,7 +46,7 @@ public class RangedEnemyMovement : MonoBehaviour
 
 
         Vector3 theScale = transform.localScale;
-        theScale.x = facing;
+        theScale.x = Mathf.Sign(velocity.x);
         transform.localScale = theScale;
 
 
@@ -65,23 +61,19 @@ public class RangedEnemyMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-
-        if (moveCooldown <= 0)
+        if (yDifference > 10 || xDifference < 0.1)
         {
-            moving = true;
-            StartCoroutine("MoveRandomly");
-            moveCooldown = Random.Range(1, 5);
+            velocity.x = 0;
+            return;
         }
-
-        if (!moving)
-        {
-            moveCooldown -= Time.deltaTime;
-        }
- 
+        
+        velocity.x = facing * speed;
         if (hit.distance > 1)
         {
             velocity.x = 0;
         }
+        
+
     }
 
     private void FixedUpdate()
@@ -100,31 +92,5 @@ public class RangedEnemyMovement : MonoBehaviour
         Bounds bounds = collider.bounds;
         bottomLeft = new Vector2(bounds.min.x + 0.1f, bounds.min.y - 0.01f);
         bottomRight = new Vector2(bounds.max.x - 0.1f, bounds.min.y - 0.01f);
-    }
-
-    private IEnumerator MoveRandomly()
-    {
-        if (TimeBody.isRewinding) yield return new WaitForEndOfFrame();
-        float xDifference = Mathf.Abs(player.transform.position.x - transform.position.x);
-
-        while (true)
-        {
-            if (xDifference > 10)
-            {
-                velocity.x = facing * speed;
-                break;
-            }
-
-            if (xDifference < 10)
-            {
-                velocity.x = -facing * speed;
-                break;
-            }
-        }
-        
-        float delay = Random.Range(1, 5);
-        yield return new WaitForSeconds(delay);
-        moving = false;
-        velocity.x = 0;
     }
 }
