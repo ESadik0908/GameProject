@@ -46,19 +46,23 @@ public class ProfileSelectMenu : MonoBehaviour
 
     public void SelectProfileOne()
     {
-        PlayerPrefs.SetString("Profile", "Profile_1");
+
+        SaveSystem.profile = profile1;
+        Debug.Log(profile1 +" selected");
         StartCoroutine(LoadLevel(2));
     }
 
     public void SelectProfileTwo()
     {
-        PlayerPrefs.SetString("Profile", "Profile_2");
+        SaveSystem.profile = profile2;
+        Debug.Log(profile2 + " selected");
         StartCoroutine(LoadLevel(2));
     }
 
     public void SelectProfileThree()
     {
-        PlayerPrefs.SetString("Profile", "Profile_3");
+        SaveSystem.profile = profile3;
+        Debug.Log(profile3 + " selected");
         StartCoroutine(LoadLevel(2));
     }
 

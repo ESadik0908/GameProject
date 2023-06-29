@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.Runtime.Serialization.Formatters.Binary;
 //The Save system. The players profile is loaded when they click the profile button and all data is saved and loaded based on which profile is currently loaded.
 //Deleting data resets the values to default
 public class SaveSystem : MonoBehaviour
@@ -19,7 +20,7 @@ public class SaveSystem : MonoBehaviour
 
     public static string defaultPlayerState = "NONE";
 
-    private string profile;
+    public static string profile;
 
     public static int defaultLivesUpgrades = 0;
     public static int defaultDamageUpgrades = 0;
@@ -31,7 +32,6 @@ public class SaveSystem : MonoBehaviour
     
     private void Start()
     {
-        profile = PlayerPrefs.GetString("Profile");
         player = GameObject.FindGameObjectWithTag("Player");
         gameController = GameObject.FindGameObjectWithTag("GameController");
 

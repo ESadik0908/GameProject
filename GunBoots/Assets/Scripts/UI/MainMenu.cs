@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
         {
             DeleteSavedData(true);
         }
-        profile = PlayerPrefs.GetString("Profile");
+        profile = SaveSystem.profile;
     }
 
     public IEnumerator TransitionMenu(int sceneIndex)
