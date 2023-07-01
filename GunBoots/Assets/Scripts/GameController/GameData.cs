@@ -14,22 +14,22 @@ public class GameData
 
     private GameStatsTracker gameStats;
 
-    int newRun;
+    public int newRun;
 
-    string playerState;
+    public string playerState;
 
-    float currentHealth;
-    float maxHealth;
-    int extraLives;
+    public float currentHealth;
+    public float maxHealth;
+    public int extraLives;
 
-    int damageUpgrades;
-    int healthUpgrades;
-    int ammoUpgrades;
-    int speedUpgrades;
-    int livesUpgrades;
+    public int damageUpgrades;
+    public int healthUpgrades;
+    public int ammoUpgrades;
+    public int speedUpgrades;
+    public int livesUpgrades;
 
     // Retrieve game controller data
-    int waveCount;
+    public int waveCount;
     
     public GameData(GameObject player, GameObject gameController)
     {
@@ -39,7 +39,7 @@ public class GameData
         gameStats = gameController.GetComponent<GameStatsTracker>();
 
         newRun = 1;
-        stateController.GetState();
+        playerState = stateController.GetState();
 
         currentHealth = playerHealth.health;
         maxHealth = playerHealth.maxHealth;

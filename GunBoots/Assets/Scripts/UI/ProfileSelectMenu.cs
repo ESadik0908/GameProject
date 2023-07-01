@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
+using System.Runtime.Serialization.Formatters.Binary;
 
 
 public class ProfileSelectMenu : MonoBehaviour
@@ -87,19 +89,45 @@ public class ProfileSelectMenu : MonoBehaviour
     private void UpdateProfile(string profile, TMP_Text buttonText)
     {
         string numberOfAchievements = CheckAchives(profile).ToString();
-        if (PlayerPrefs.HasKey(profile + "WaveCount"))
+
+        string path = Application.persistentDataPath + $"/{profile}.txt";
+
+        if (File.Exists(path))
         {
-            if(PlayerPrefs.GetString(profile + "PlayerState") == "NONE")
+            BinaryFormatter formatter = new BinaryFormatter();
+            FileStream stream = new FileStream(path, FileMode.Open);
+
+            GameData data = formatter.Deserialize(stream) as GameData;
+
+            stream.Close();
+
+
+            if (data.playerState == "NONE")
             {
                 buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nNo Active Run";
                 return;
             }
-            buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nWave: " + PlayerPrefs.GetInt(profile + "WaveCount").ToString() + "\n" + "Weapon: " + StateToString(PlayerPrefs.GetString(profile + "PlayerState"));
+            buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nWave: " + data.waveCount + "\n" + "Weapon: " + data.playerState;
+
         }
         else
         {
             buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nNo Active Run";
         }
+
+        //if (PlayerPrefs.HasKey(profile + "WaveCount"))
+        //{
+        //    if(PlayerPrefs.GetString(profile + "PlayerState") == "NONE")
+        //    {
+        //        buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nNo Active Run";
+        //        return;
+        //    }
+        //    buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nWave: " + PlayerPrefs.GetInt(profile + "WaveCount").ToString() + "\n" + "Weapon: " + StateToString(PlayerPrefs.GetString(profile + "PlayerState"));
+        //}
+        //else
+        //{
+        //    buttonText.text = profile + " " + numberOfAchievements + "/3" + "\nNo Active Run";
+        //}
     }
 
     private string StateToString(string state)
@@ -134,29 +162,8 @@ public class ProfileSelectMenu : MonoBehaviour
         return numberOfAchievements;
     }
 
-    public void DeleteSavedData(string profile)
+    public void DeleteSavedData(string _profile)
     {
-        PlayerPrefs.SetInt(profile + "NewRun", 0);
-        PlayerPrefs.SetString(profile + "PlayerState", SaveSystem.defaultPlayerState);
-
-        PlayerPrefs.SetFloat(profile + "PlayerCurrentHealth", SaveSystem.defaultMaxHealth);
-        PlayerPrefs.SetFloat(profile + "PlayerMaxHealth", SaveSystem.defaultMaxHealth);
-        PlayerPrefs.SetInt(profile + "PlayerExtraLives", SaveSystem.defaultExtraLives);
-
-        PlayerPrefs.SetInt(profile + "PlayerDamageUpgrades", SaveSystem.defaultDamageUpgrades);
-        PlayerPrefs.SetInt(profile + "PlayerHealthUpgrades", SaveSystem.defaultHealthUpgrades);
-        PlayerPrefs.SetInt(profile + "PlayerAmmoUpgrades", SaveSystem.defaultAmmoUpgrades);
-        PlayerPrefs.SetInt(profile + "PlayerSpeedUpgrades", SaveSystem.defaultSpeedUpgrades);
-        PlayerPrefs.SetInt(profile + "PlayerLivesUpgrades", SaveSystem.defaultLivesUpgrades);
-
-        // Save game controller data
-        PlayerPrefs.SetInt(profile + "WaveCount", SaveSystem.defaultWave);
-
-        PlayerPrefs.SetInt(profile + "AIRTIME", 0);
-        PlayerPrefs.SetInt(profile + "UNTOUCHABLE", 0);
-        PlayerPrefs.SetInt(profile + "MULTIKILL", 0);
-
-        // Save the PlayerPrefs to disk
-        PlayerPrefs.Save();
+        File.Delete(Application.persistentDataPath + $"/{_profile}.txt");
     }
 }

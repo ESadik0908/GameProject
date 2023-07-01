@@ -1637,13 +1637,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5db798bcd879f8144aa946cadf395378, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  displayGridGizmos: 0
+  displayGridGizmos: 1
   unwalkableMask:
     serializedVersion: 2
     m_Bits: 128
   gridWorldSize: {x: 100, y: 50}
-  nodeRadius: 0.2
-  obstacleProximityPenalty: 25
+  nodeRadius: 0.5
+  obstacleProximityPenalty: 10
 --- !u!4 &462715856
 Transform:
   m_ObjectHideFlags: 0
@@ -1857,18 +1857,18 @@ MonoBehaviour:
   playerHealth: {fileID: 138134331}
   healthBarGradient:
     serializedVersion: 2
-    key0: {r: 1, g: 0, b: 0, a: 1}
-    key1: {r: 1, g: 0.9606119, b: 0, a: 1}
-    key2: {r: 0, g: 1, b: 0.0575552, a: 0}
-    key3: {r: 0, g: 1, b: 0.0575552, a: 0}
+    key0: {r: 1, g: 1, b: 1, a: 1}
+    key1: {r: 1, g: 1, b: 1, a: 1}
+    key2: {r: 0, g: 0, b: 0, a: 0}
+    key3: {r: 0, g: 0, b: 0, a: 0}
     key4: {r: 0, g: 0, b: 0, a: 0}
     key5: {r: 0, g: 0, b: 0, a: 0}
     key6: {r: 0, g: 0, b: 0, a: 0}
     key7: {r: 0, g: 0, b: 0, a: 0}
-    ctime0: 13173
-    ctime1: 32741
-    ctime2: 65535
-    ctime3: 65535
+    ctime0: 0
+    ctime1: 65535
+    ctime2: 0
+    ctime3: 0
     ctime4: 0
     ctime5: 0
     ctime6: 0
@@ -1881,8 +1881,8 @@ MonoBehaviour:
     atime5: 0
     atime6: 0
     atime7: 0
-    m_Mode: 1
-    m_NumColorKeys: 3
+    m_Mode: 0
+    m_NumColorKeys: 2
     m_NumAlphaKeys: 2
   healthText: {fileID: 1457210361}
   playerLives: {fileID: 904909083}
@@ -2471,7 +2471,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 14.674988, y: -49.569763}
+  m_AnchoredPosition: {x: 14.675049, y: -49.569763}
   m_SizeDelta: {x: 202.49, y: 14.7317}
   m_Pivot: {x: 0, y: 1}
 --- !u!4 &620991314 stripped
@@ -4119,9 +4119,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 052b3bc21b25a5a4b8b42fc7b3bf040a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 8818829821804908883, guid: 590aeb8c93f2d2e48a35f305da64659b, type: 3}
-  offset: {x: 0, y: 0, z: -1}
-  camFollowTime: 0.06
+  player: {fileID: 0}
+  offset: {x: 0, y: 0, z: -10}
+  camFollowTime: 0.1
 --- !u!1 &972211756
 GameObject:
   m_ObjectHideFlags: 0
@@ -4362,7 +4362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 59.8, y: -132.4}
+  m_AnchoredPosition: {x: 59.80005, y: -132.40002}
   m_SizeDelta: {x: 83.793, y: 87.0447}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1001 &1025206812
@@ -4465,11 +4465,6 @@ PrefabInstance:
 --- !u!224 &1025206813 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 951512139437817525, guid: c849bbdba1012544587a949c255c116b, type: 3}
-  m_PrefabInstance: {fileID: 1025206812}
-  m_PrefabAsset: {fileID: 0}
---- !u!95 &1025206814 stripped
-Animator:
-  m_CorrespondingSourceObject: {fileID: 951512139437817522, guid: c849bbdba1012544587a949c255c116b, type: 3}
   m_PrefabInstance: {fileID: 1025206812}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1049566062
@@ -7085,7 +7080,7 @@ MonoBehaviour:
   pauseMenuUi: {fileID: 1570432504}
   normalUi: {fileID: 1620304573}
   upgradeUi: {fileID: 943508314}
-  transition: {fileID: 1025206814}
+  transition: {fileID: 0}
 --- !u!114 &1619606976
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7098,7 +7093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 304320de48587804baade2857c58773c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pauseMenuUi: {fileID: 1620304573}
+  pauseMenuUi: {fileID: 1570432504}
   normalUi: {fileID: 1620304573}
   upgradeUi: {fileID: 943508314}
   upgradeButton1: {fileID: 1721081949}
@@ -7120,7 +7115,7 @@ MonoBehaviour:
   normalUi: {fileID: 1620304573}
   upgradeUi: {fileID: 943508314}
   gameOverUi: {fileID: 1281156901}
-  player: {fileID: 1930408806}
+  player: {fileID: 8818829821804908883, guid: 590aeb8c93f2d2e48a35f305da64659b, type: 3}
 --- !u!114 &1619606978
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7206,14 +7201,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5cd2a35076bb0114db16a2b6994cfd2e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  suspend: 1
+  suspend: 0
   zombieClone: {fileID: 2613699450407810127, guid: a7d70382f8c9cb24c8d5b54a73296367, type: 3}
   archerClone: {fileID: 3597356618782654831, guid: 45df28b39b9d30c459f062096f9df9da, type: 3}
   frogClone: {fileID: 816989745982864877, guid: 71f96629edff1c643b34db67ddac91a8, type: 3}
   hunterClone: {fileID: 2613699450407810127, guid: e8de528a8b0b2594dbbd9b19ea66a06b, type: 3}
   missileClone: {fileID: 2613699450407810127, guid: 4101cf4ecd65e2a49b434157a2e06e56, type: 3}
-  gridWorldSize: {x: 100, y: 50}
-  maxEnemies: 5
+  gridWorldSize: {x: 100, y: 45}
+  maxEnemies: 0
   enemiesRemaining: 0
 --- !u!4 &1637758199
 Transform:
@@ -8387,11 +8382,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1891792838}
   m_CullTransparentMesh: 1
---- !u!1 &1930408806 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8818829821804908883, guid: 590aeb8c93f2d2e48a35f305da64659b, type: 3}
-  m_PrefabInstance: {fileID: 212090749}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1952764337 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1933192469951769480, guid: 6e3d9264cebcb9b4799980951ba8e52b, type: 3}
